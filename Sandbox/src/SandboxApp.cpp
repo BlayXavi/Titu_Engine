@@ -3,7 +3,7 @@
 class Sandbox : public TituEngine::Application
 {
 public:
-	Sandbox()
+ 	Sandbox()
 	{
 
 	}

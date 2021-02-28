@@ -6,9 +6,9 @@ TituEngine::Application* TituEngine::CreateApplication();
 
 int main(int argc, char** argv)
 {
-	printf("Titu Engine launched!\n");
+	TituEngine::Log::Init();
 
-	auto app = TituEngine::CreateApplication();
+	TituEngine::Application* app = TituEngine::CreateApplication();
 	app->Run();
 	delete app;
 	return 0;

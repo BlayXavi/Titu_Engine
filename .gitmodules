@@ -1,0 +1,3 @@
+[submodule "TituEngine/vendor/spdlog"]
+	path = TituEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog
