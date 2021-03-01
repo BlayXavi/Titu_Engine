@@ -9,3 +9,5 @@
 #else
 	#error TituEngine only supports windows!
 #endif //  TE_PLATFORM_WINDOWS
+
+#define BIT(x) (1<<x)

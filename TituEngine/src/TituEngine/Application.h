@@ -16,4 +16,3 @@ namespace TituEngine
 	//To be defined in CLIENT
 	Application* CreateApplication();
 }
-
