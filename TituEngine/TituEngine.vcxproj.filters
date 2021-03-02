@@ -34,6 +34,11 @@
     <ClInclude Include="src\TituEngine\Log.h">
       <Filter>TituEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Window.h">
+      <Filter>TituEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tepch.h" />
+    <ClInclude Include="src\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
@@ -42,5 +47,7 @@
     <ClCompile Include="src\TituEngine\Log.cpp">
       <Filter>TituEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\tepch.cpp" />
+    <ClCompile Include="src\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>

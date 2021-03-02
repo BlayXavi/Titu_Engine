@@ -12,11 +12,11 @@ namespace TituEngine
 		static void Init();
 
 		static inline std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-		static inline std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_CllientLogger; }
+		static inline std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
 
 	private:
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
-		static std::shared_ptr<spdlog::logger> s_CllientLogger;
+		static std::shared_ptr<spdlog::logger> s_ClientLogger;
 	};
 }
 

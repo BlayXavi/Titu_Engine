@@ -1,3 +1,6 @@
 [submodule "TituEngine/vendor/spdlog"]
 	path = TituEngine/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "TituEngine/vendor/GLFW"]
+	path = TituEngine/vendor/GLFW
+	url = https://github.com/TheCherno/glfw
