@@ -155,16 +155,16 @@
     <ClInclude Include="src\TituEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\TituEngine\Log.h" />
     <ClInclude Include="src\TituEngine\Window.h" />
-    <ClInclude Include="src\tepch.h" />
     <ClInclude Include="src\WindowsWindow.h" />
+    <ClInclude Include="src\tepch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp" />
     <ClCompile Include="src\TituEngine\Log.cpp" />
+    <ClCompile Include="src\WindowsWindow.cpp" />
     <ClCompile Include="src\tepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

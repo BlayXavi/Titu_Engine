@@ -1,6 +1,5 @@
 #include "tepch.h"
 #include "WindowsWindow.h"
-#include "TituEngine/Log.h"
 
 namespace TituEngine
 {
