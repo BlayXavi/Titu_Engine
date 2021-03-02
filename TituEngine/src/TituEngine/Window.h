@@ -4,7 +4,6 @@
 
 #include "Core.h"
 #include "Events/Event.h"
-#include "Log.h"
 
 namespace TituEngine
 {

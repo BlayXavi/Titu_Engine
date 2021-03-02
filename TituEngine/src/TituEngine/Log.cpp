@@ -1,5 +1,4 @@
 #include "tepch.h"
-#include "Log.h"
 
 namespace TituEngine
 {
