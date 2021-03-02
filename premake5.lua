@@ -10,6 +10,12 @@ workspace "TituEngine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "TituEngine/vendor/GLFW/include "
+
+--like c++ this will COPY the content of the GLFW here
+include "TituEngine/vendor/GLFW"
+
 project "TituEngine"
 	location "TituEngine"
 	kind "SharedLib"
@@ -17,6 +23,9 @@ project "TituEngine"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "tepch.h"
+	pchsource "TituEngine/src/tepch.cpp"
 
 	files
 	{
@@ -27,7 +36,14 @@ project "TituEngine"
 	includedirs
 	{
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -38,7 +54,7 @@ project "TituEngine"
 		defines
 		{
 			"TE_BUILD_DLL",
-			"TE_PLATFORM_WINDOWS"
+			"TE_PLATFORM_WINDOWS",
 		}
 
 		postbuildcommands
@@ -47,6 +63,7 @@ project "TituEngine"
 		}
 
 	filter "configurations:Debug"
+		defines "TE_ENABLE_ASSERTS"
 		defines "TE_DEBUG"
 		symbols "On"
 
