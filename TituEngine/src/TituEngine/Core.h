@@ -17,4 +17,4 @@
 #endif
 
 #define BIT(x) (1<<x)
-typedef unsigned int uint;
+using uint = unsigned int;
