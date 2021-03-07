@@ -11,9 +11,11 @@ workspace "TituEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
-IncludeDir["GLFW"] = "TituEngine/vendor/GLFW/include "
+IncludeDir["GLFW"] = "TituEngine/vendor/GLFW/include"
+IncludeDir["Glad"] = "TituEngine/vendor/Glad/include"
 
---like c++ this will COPY the content of the GLFW here
+--like c++ this will COPY the content of the path here
+include "TituEngine/vendor/Glad"
 include "TituEngine/vendor/GLFW"
 
 project "TituEngine"
@@ -37,12 +39,14 @@ project "TituEngine"
 	{
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
 	}
 
@@ -55,6 +59,7 @@ project "TituEngine"
 		{
 			"TE_BUILD_DLL",
 			"TE_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
