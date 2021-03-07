@@ -84,6 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -109,6 +110,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -132,6 +134,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -153,6 +156,8 @@
     <ClInclude Include="src\TituEngine\Events\Event.h" />
     <ClInclude Include="src\TituEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\TituEngine\Events\MouseEvent.h" />
+    <ClInclude Include="src\TituEngine\Layer\Layer.h" />
+    <ClInclude Include="src\TituEngine\Layer\LayerStack.h" />
     <ClInclude Include="src\TituEngine\Log.h" />
     <ClInclude Include="src\TituEngine\Window.h" />
     <ClInclude Include="src\WindowsWindow.h" />
@@ -160,6 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp" />
+    <ClCompile Include="src\TituEngine\Layer\Layer.cpp" />
+    <ClCompile Include="src\TituEngine\Layer\LayerStack.cpp" />
     <ClCompile Include="src\TituEngine\Log.cpp" />
     <ClCompile Include="src\WindowsWindow.cpp" />
     <ClCompile Include="src\tepch.cpp">

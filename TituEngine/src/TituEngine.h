@@ -1,9 +1,8 @@
 #pragma once
 
 //For use by TituEngine Applications	
-#include <stdio.h>
 #include "TituEngine/Application.h"
-#include "TituEngine/Events/Event.h"
+#include "TituEngine/Layer/Layer.h"
 
 //--- ENTRY POINT ---
 #include "TituEngine/EntryPoint.h"
