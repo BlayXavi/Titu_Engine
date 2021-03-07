@@ -4,3 +4,6 @@
 [submodule "TituEngine/vendor/GLFW"]
 	path = TituEngine/vendor/GLFW
 	url = https://github.com/TheCherno/glfw
+[submodule "TituEngine/vendor/imgui"]
+	path = TituEngine/vendor/imgui
+	url = https://github.com/TheCherno/imgui

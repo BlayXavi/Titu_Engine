@@ -7,8 +7,17 @@
     <Filter Include="TituEngine\Events">
       <UniqueIdentifier>{857DF785-F193-F51B-3A0B-813DA660C6A3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TituEngine\ImGui">
+      <UniqueIdentifier>{AB16D613-970F-F565-C041-DAEAAC99D471}</UniqueIdentifier>
+    </Filter>
     <Filter Include="TituEngine\Layer">
       <UniqueIdentifier>{4D9E0614-3997-2566-62C9-0AEB4E210572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TituEngine\Platform">
+      <UniqueIdentifier>{35FAEAFD-A15B-C80B-2AC9-0EBE9629FFCA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TituEngine\Platform\Windows">
+      <UniqueIdentifier>{6F091672-DB16-4458-64FD-3F43D009100F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +43,9 @@
     <ClInclude Include="src\TituEngine\Events\MouseEvent.h">
       <Filter>TituEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\ImGui\ImGuiLayer.h">
+      <Filter>TituEngine\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Layer\Layer.h">
       <Filter>TituEngine\Layer</Filter>
     </ClInclude>
@@ -43,15 +55,21 @@
     <ClInclude Include="src\TituEngine\Log.h">
       <Filter>TituEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h">
+      <Filter>TituEngine\Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Window.h">
       <Filter>TituEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\WindowsWindow.h" />
     <ClInclude Include="src\tepch.h" />
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
       <Filter>TituEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp">
+      <Filter>TituEngine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Layer\Layer.cpp">
       <Filter>TituEngine\Layer</Filter>
@@ -62,7 +80,10 @@
     <ClCompile Include="src\TituEngine\Log.cpp">
       <Filter>TituEngine</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowsWindow.cpp" />
+    <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp">
+      <Filter>TituEngine\Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\tepch.cpp" />
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>

@@ -13,10 +13,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "TituEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "TituEngine/vendor/Glad/include"
+IncludeDir["ImGui"] = "TituEngine/vendor/imgui"
 
 --like c++ this will COPY the content of the path here
 include "TituEngine/vendor/Glad"
 include "TituEngine/vendor/GLFW"
+include "TituEngine/vendor/imgui"
 
 project "TituEngine"
 	location "TituEngine"
@@ -40,13 +42,15 @@ project "TituEngine"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
