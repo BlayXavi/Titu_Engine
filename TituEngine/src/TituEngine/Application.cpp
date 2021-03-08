@@ -25,8 +25,6 @@ namespace TituEngine
 
 	void Application::OnEvent(Event& e)
 	{
-		TE_CORE_TRACE(e.ToString());
-
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowsClosed));
 
