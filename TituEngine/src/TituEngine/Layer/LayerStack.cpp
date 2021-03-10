@@ -8,9 +8,9 @@ TituEngine::LayerStack::LayerStack()
 
 TituEngine::LayerStack::~LayerStack()
 {
-	for (size_t i = 0; i < m_Layers.size(); i++)
+	for (Layer* layer : m_Layers)
 	{
-		Layer* layer = m_Layers[i];
+		layer->OnDetach();
 		delete layer;
 		layer = NULL;
 	}

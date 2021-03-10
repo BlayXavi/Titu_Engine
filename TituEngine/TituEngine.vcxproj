@@ -36,7 +36,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
@@ -83,7 +83,8 @@
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -108,7 +109,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -131,7 +133,8 @@
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -154,6 +157,7 @@
     <ClInclude Include="src\TituEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\TituEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\TituEngine\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\TituEngine\Input\Input.h" />
     <ClInclude Include="src\TituEngine\Layer\Layer.h" />
     <ClInclude Include="src\TituEngine\Layer\LayerStack.h" />
     <ClInclude Include="src\TituEngine\Log.h" />
@@ -165,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp" />
     <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\TituEngine\Input\Input.cpp" />
     <ClCompile Include="src\TituEngine\Layer\Layer.cpp" />
     <ClCompile Include="src\TituEngine\Layer\LayerStack.cpp" />
     <ClCompile Include="src\TituEngine\Log.cpp" />

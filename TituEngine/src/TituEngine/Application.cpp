@@ -1,7 +1,9 @@
 #include "tepch.h"
 #include "Application.h"
 
+
 #include "glad/glad.h"
+#include "Input/Input.h"
 
 namespace TituEngine
 {
@@ -59,6 +61,9 @@ namespace TituEngine
 			{
 				layer->OnUpdate();
 			}
+
+			auto [x, y] = InputBridge::GetMousePosition();
+			TE_CORE_TRACE("{0}, {1}", x, y);
 
 			m_Window->OnUpdate();
 		}

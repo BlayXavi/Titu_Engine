@@ -10,6 +10,9 @@
     <Filter Include="TituEngine\ImGui">
       <UniqueIdentifier>{AB16D613-970F-F565-C041-DAEAAC99D471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TituEngine\Input">
+      <UniqueIdentifier>{8051D713-6C4A-F665-957C-DBEA81D4D571}</UniqueIdentifier>
+    </Filter>
     <Filter Include="TituEngine\Layer">
       <UniqueIdentifier>{4D9E0614-3997-2566-62C9-0AEB4E210572}</UniqueIdentifier>
     </Filter>
@@ -49,6 +52,9 @@
     <ClInclude Include="src\TituEngine\ImGui\ImGuiLayer.h">
       <Filter>TituEngine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Input\Input.h">
+      <Filter>TituEngine\Input</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Layer\Layer.h">
       <Filter>TituEngine\Layer</Filter>
     </ClInclude>
@@ -75,6 +81,9 @@
     </ClCompile>
     <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp">
       <Filter>TituEngine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\Input\Input.cpp">
+      <Filter>TituEngine\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Layer\Layer.cpp">
       <Filter>TituEngine\Layer</Filter>

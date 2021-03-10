@@ -166,8 +166,6 @@ namespace TituEngine
 
 	bool ImGuiLayer::OnWindowResizedEvent(WindowResizeEvent& e)
 	{
-		TE_CORE_TRACE(e.ToString());
-
 		ImGuiIO& io = ImGui::GetIO();
 
 		io.DisplaySize = ImVec2(e.GetWidth(), e.GetHeight());
