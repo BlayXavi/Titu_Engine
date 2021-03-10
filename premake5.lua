@@ -26,7 +26,6 @@ project "TituEngine"
 	location "TituEngine"
 	kind "SharedLib"
 	language "C++"
-	staticruntime "off"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -60,6 +59,7 @@ project "TituEngine"
 	filter "system:windows"
 		cppdialect "C++17"
 		systemversion "latest"
+		staticruntime "on"
 
 		defines
 		{
@@ -76,17 +76,17 @@ project "TituEngine"
 	filter "configurations:Debug"
 		defines "TE_ENABLE_ASSERTS"
 		defines "TE_DEBUG"
-		runtime "Debug"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "TE_RELEASE"
-		runtime "Release"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "TE_DIST"
-		runtime "Release"
+		buildoptions "/MD"
 		symbols "On"
 
 project "Sandbox"
@@ -128,15 +128,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "TE_DEBUG"
-		runtime "Debug"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "TE_RELEASE"
-		runtime "Release"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "TE_DIST"
-		runtime "Release"
+		buildoptions "/MD"
 		symbols "On"
