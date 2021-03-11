@@ -74,6 +74,7 @@
       <Filter>TituEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\tepch.h" />
+    <ClInclude Include="src\TituEngine\Input\KeyboardMouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">

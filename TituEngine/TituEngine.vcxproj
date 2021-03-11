@@ -158,6 +158,7 @@
     <ClInclude Include="src\TituEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\TituEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\TituEngine\Input\Input.h" />
+    <ClInclude Include="src\TituEngine\Input\KeyboardMouseCodes.h" />
     <ClInclude Include="src\TituEngine\Layer\Layer.h" />
     <ClInclude Include="src\TituEngine\Layer\LayerStack.h" />
     <ClInclude Include="src\TituEngine\Log.h" />
