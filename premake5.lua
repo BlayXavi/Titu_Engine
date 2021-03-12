@@ -16,6 +16,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "TituEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "TituEngine/vendor/Glad/include"
 IncludeDir["ImGui"] = "TituEngine/vendor/imgui"
+IncludeDir["glm"] = "TituEngine/vendor/glm"
 
 --like c++ this will COPY the content of the path here
 include "TituEngine/vendor/Glad"
@@ -36,7 +37,9 @@ project "TituEngine"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	includedirs
@@ -45,7 +48,8 @@ project "TituEngine"
 		"%{prj.name}/src",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -108,7 +112,9 @@ project "Sandbox"
 	includedirs
 	{
 		"TituEngine/vendor/spdlog/include",
-		"TituEngine/src"
+		"TituEngine/src",
+		"%{IncludeDir.glm}"
+
 	}
 
 	links
