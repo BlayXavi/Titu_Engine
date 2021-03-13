@@ -27,7 +27,6 @@ public:
 	Sandbox()
 	{
 		PushLayer(new SandboxLayer());
-		PushOverlay(new TituEngine::ImGuiLayer());
 	}
 
 	~Sandbox()

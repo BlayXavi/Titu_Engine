@@ -162,7 +162,6 @@
     <ClInclude Include="src\TituEngine\Layer\Layer.h" />
     <ClInclude Include="src\TituEngine\Layer\LayerStack.h" />
     <ClInclude Include="src\TituEngine\Log.h" />
-    <ClInclude Include="src\TituEngine\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\TituEngine\Window.h" />
     <ClInclude Include="src\tepch.h" />
@@ -582,12 +581,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp" />
+    <ClCompile Include="src\TituEngine\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\TituEngine\Input\Input.cpp" />
     <ClCompile Include="src\TituEngine\Layer\Layer.cpp" />
     <ClCompile Include="src\TituEngine\Layer\LayerStack.cpp" />
     <ClCompile Include="src\TituEngine\Log.cpp" />
-    <ClCompile Include="src\TituEngine\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\tepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -607,4 +606,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project>
+</Project> 

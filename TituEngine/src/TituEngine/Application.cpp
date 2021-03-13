@@ -18,6 +18,9 @@ namespace TituEngine
 
 		m_Window = std::unique_ptr< Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -58,9 +61,12 @@ namespace TituEngine
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack) //compiler undertand it because of implementation of begin() & end()
-			{
 				layer->OnUpdate();
-			}
+
+			m_ImGuiLayer->BeginRender();
+			for (Layer* layer : m_LayerStack) //compiler undertand it because of implementation of begin() & end()
+				layer->OnImGuiRender();
+			m_ImGuiLayer->EndRender();
 
 			m_Window->OnUpdate();
 		}

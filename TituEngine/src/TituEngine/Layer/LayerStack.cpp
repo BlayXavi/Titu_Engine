@@ -3,7 +3,7 @@
 
 TituEngine::LayerStack::LayerStack()
 {
-	m_LayerInsert = m_Layers.begin();
+	m_LayerInsertIndex = 0;
 }
 
 TituEngine::LayerStack::~LayerStack()
@@ -18,7 +18,8 @@ TituEngine::LayerStack::~LayerStack()
 
 void TituEngine::LayerStack::PushLayer(Layer* layer)
 {
-	m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
+	m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
+	m_LayerInsertIndex++;
 }
 
 void TituEngine::LayerStack::PushOverlay(Layer* overlay)
@@ -32,7 +33,7 @@ void TituEngine::LayerStack::PopLayer(Layer* layer)
 	if (it != m_Layers.end())
 	{
 		m_Layers.erase(it);
-		m_LayerInsert--;
+		m_LayerInsertIndex--;
 	}
 }
 
