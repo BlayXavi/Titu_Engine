@@ -5,6 +5,7 @@
 #include "Events/Event.h"
 #include "Layer/LayerStack.h"
 #include "Events/ApplicationEvent.h"
+#include "TituEngine/ImGui/ImGuiLayer.h"
 
 namespace TituEngine
 {
@@ -24,6 +25,7 @@ namespace TituEngine
 		inline Window& GetWindow() { return *m_Window; }
 
 		inline static Application& Instance() { return *s_Instance; }
+		ImGuiLayer* m_ImGuiLayer;
 
 	private:
 		bool OnWindowsClosed(WindowCloseEvent& e);

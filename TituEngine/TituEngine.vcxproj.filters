@@ -19,9 +19,6 @@
     <Filter Include="TituEngine\Platform">
       <UniqueIdentifier>{35FAEAFD-A15B-C80B-2AC9-0EBE9629FFCA}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TituEngine\Platform\OpenGL">
-      <UniqueIdentifier>{C9758B08-B585-37D9-1E3F-9CF70A6E2672}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TituEngine\Platform\Windows">
       <UniqueIdentifier>{6F091672-DB16-4458-64FD-3F43D009100F}</UniqueIdentifier>
     </Filter>
@@ -55,6 +52,9 @@
     <ClInclude Include="src\TituEngine\Input\Input.h">
       <Filter>TituEngine\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Input\KeyboardMouseCodes.h">
+      <Filter>TituEngine\Input</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Layer\Layer.h">
       <Filter>TituEngine\Layer</Filter>
     </ClInclude>
@@ -64,9 +64,6 @@
     <ClInclude Include="src\TituEngine\Log.h">
       <Filter>TituEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Platform\OpenGL\ImGuiOpenGLRenderer.h">
-      <Filter>TituEngine\Platform\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h">
       <Filter>TituEngine\Platform\Windows</Filter>
     </ClInclude>
@@ -74,11 +71,13 @@
       <Filter>TituEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\tepch.h" />
-    <ClInclude Include="src\TituEngine\Input\KeyboardMouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
       <Filter>TituEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\ImGui\ImGuiBuild.cpp">
+      <Filter>TituEngine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp">
       <Filter>TituEngine\ImGui</Filter>
@@ -94,9 +93,6 @@
     </ClCompile>
     <ClCompile Include="src\TituEngine\Log.cpp">
       <Filter>TituEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TituEngine\Platform\OpenGL\ImGuiOpenGLRenderer.cpp">
-      <Filter>TituEngine\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp">
       <Filter>TituEngine\Platform\Windows</Filter>

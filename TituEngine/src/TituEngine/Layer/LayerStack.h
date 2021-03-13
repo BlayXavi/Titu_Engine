@@ -20,7 +20,7 @@ namespace TituEngine
 
 	private:
 		std::vector<Layer*> m_Layers;
-		std::vector<Layer*>::iterator m_LayerInsert;
+		uint m_LayerInsertIndex = 0;
 
 	};
 }
