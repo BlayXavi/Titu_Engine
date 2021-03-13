@@ -7,11 +7,20 @@
 #include <glm/ext/matrix_clip_space.hpp> // glm::perspective
 #include <glm/ext/scalar_constants.hpp> // glm::pi
 
+#include "imgui/imgui.h"
+
 class SandboxLayer : public TituEngine::Layer
 {
 public:
 	SandboxLayer() : Layer("SBLayer") 
 	{
+	}
+
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World");
+		ImGui::End();
 	}
 
 	void OnUpdate() override

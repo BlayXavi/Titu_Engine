@@ -113,8 +113,8 @@ project "Sandbox"
 	{
 		"TituEngine/vendor/spdlog/include",
 		"TituEngine/src",
-		"%{IncludeDir.glm}"
-
+		"TituEngine/vendor",
+		"%{IncludeDir.glm}",
 	}
 
 	links
