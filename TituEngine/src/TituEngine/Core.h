@@ -1,10 +1,14 @@
 #pragma once
 
 #ifdef  TE_PLATFORM_WINDOWS
+#if TE_DLL
 #ifdef  TE_BUILD_DLL
 #define TE_API __declspec(dllexport)
 #else
 #define TE_API __declspec(dllimport)
+#endif
+#else 
+#define TE_API
 #endif //  TE_BUILD_DLL
 #else
 #error TituEngine only supports windows!
