@@ -22,8 +22,14 @@
     <Filter Include="src\TituEngine\Platform">
       <UniqueIdentifier>{CCD4AECF-380C-F766-4116-5B8AADCC1D60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TituEngine\Platform\OpenGL">
+      <UniqueIdentifier>{80A00A4B-6CC6-D4B1-550C-5A7D41D1F97D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TituEngine\Platform\Windows">
       <UniqueIdentifier>{068B7A04-726E-8944-7B71-B780E7D34F95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TituEngine\Renderer">
+      <UniqueIdentifier>{1EDC8BAA-8A13-D441-931D-3865FFD3FA3A}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -90,8 +96,14 @@
     <ClInclude Include="src\TituEngine\Log.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h">
       <Filter>src\TituEngine\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\GraphicsContext.h">
+      <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Window.h">
       <Filter>src\TituEngine</Filter>
@@ -1361,8 +1373,14 @@
     <ClCompile Include="src\TituEngine\Log.cpp">
       <Filter>src\TituEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\TituEngine\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\GraphicsContext.cpp">
+      <Filter>src\TituEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\tepch.cpp">
       <Filter>src</Filter>

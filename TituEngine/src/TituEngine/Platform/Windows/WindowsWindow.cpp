@@ -5,7 +5,8 @@
 #include "TituEngine/Events/MouseEvent.h"
 #include "TituEngine/Events/KeyEvent.h"
 
-#include "glad/glad.h"
+#include "TituEngine/Platform/OpenGL/OpenGLContext.h"
+
 
 namespace TituEngine
 {
@@ -48,9 +49,9 @@ namespace TituEngine
 		}
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		TE_ASSERT(status, "Failed to initializee glad!");
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -148,7 +149,7 @@ namespace TituEngine
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
