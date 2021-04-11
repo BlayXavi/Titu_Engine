@@ -6,6 +6,8 @@
 #include "Layer/LayerStack.h"
 #include "Events/ApplicationEvent.h"
 #include "TituEngine/ImGui/ImGuiLayer.h"
+#include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 
 namespace TituEngine
 {
@@ -34,6 +36,12 @@ namespace TituEngine
 
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
+
+		//TEMP
+		unsigned int vertexArray = 0;
+		Shader* m_Shader = nullptr;
+		VertexBuffer* m_VBuffer = nullptr;
+		IndexBuffer* m_IBuffer = nullptr;
 	};
 
 	//To be defined in CLIENT
