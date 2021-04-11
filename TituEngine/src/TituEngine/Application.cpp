@@ -55,7 +55,7 @@ namespace TituEngine
 	{
 		while (m_Runing)
 		{
-			glClearColor(1, 0, 1, 1);
+			glClearColor(0.1f, 0.1f, 0.1f, 1); 
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()

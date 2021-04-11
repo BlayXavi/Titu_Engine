@@ -6,13 +6,14 @@
 
 namespace TituEngine
 {
-
 #if TE_PLATFORM_WINDOWS
 	InputPlatform* InputPlatform::s_Instance = new InputPlatformWindows;
 
 	bool InputPlatformWindows::IsKeyPressedImpl(int keycode)
 	{
-		auto m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
+		if (m_MainWindow == nullptr)
+			m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
+
 		auto state = glfwGetKey(m_MainWindow, keycode);
 
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
@@ -20,7 +21,9 @@ namespace TituEngine
 
 	bool InputPlatformWindows::IsButtonMousePressedImpl(int button)
 	{
-		auto m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
+		if (m_MainWindow == nullptr)
+			m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
+
 		auto state = glfwGetMouseButton(m_MainWindow, button);
 		return false;
 	}
@@ -39,7 +42,9 @@ namespace TituEngine
 
 	inline std::pair<float, float> InputPlatformWindows::GetMousePositionImpl()
 	{
-		auto m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
+		if (m_MainWindow == nullptr)
+			m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
+
 		double xpos, ypos;
 		glfwGetCursorPos(m_MainWindow, &xpos, &ypos);
 		return { (float)xpos, (float)ypos };

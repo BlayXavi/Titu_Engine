@@ -2,9 +2,11 @@
 
 #include "TituEngine/Core.h"
 
+
+class GLFWwindow;
+
 namespace TituEngine
 {
-
 #define INPUT(x) InputPlatform::s_Instance->##x
 
 	class TE_API InputPlatform
@@ -22,8 +24,16 @@ namespace TituEngine
 	};
 
 #ifdef TE_PLATFORM_WINDOWS
+
 	class TE_API InputPlatformWindows : public InputPlatform
 	{
+		GLFWwindow* m_MainWindow = nullptr;
+
+		~InputPlatformWindows()
+		{
+			m_MainWindow = nullptr; //input must not destroy this pointer
+		}
+
 		inline virtual bool IsKeyPressedImpl(int keycode) override;
 		inline virtual bool IsButtonMousePressedImpl(int button) override;
 		inline virtual float GetMouseXImpl() override;
