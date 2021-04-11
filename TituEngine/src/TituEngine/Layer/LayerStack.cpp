@@ -34,9 +34,9 @@ void TituEngine::LayerStack::PopLayer(Layer* layer)
 	std::vector<Layer*>::iterator it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 	if (it != m_Layers.end())
 	{
+		layer->OnDetach();
 		m_Layers.erase(it);
 		m_LayerInsertIndex--;
-		layer->OnDetach();
 	}
 }
 
@@ -45,7 +45,7 @@ void TituEngine::LayerStack::PopOverlay(Layer* overlay)
 	std::vector<Layer*>::iterator it = std::find(m_Layers.begin(), m_Layers.end(), overlay);
 	if (it != m_Layers.end())
 	{
-		m_Layers.erase(it);
 		overlay->OnDetach();
+		m_Layers.erase(it);
 	}
 }

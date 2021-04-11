@@ -15,7 +15,7 @@
 #endif //  TE_PLATFORM_WINDOWS
 
 #ifdef TE_ENABLE_ASSERTS
-#define TE_ASSERT(x, ...) {if(!(x)){TE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+#define TE_ASSERT(x, ...) {if(!(x)){TE_CORE_ERROR("Assertion Failed"); TE_CORE_ERROR(__VA_ARGS__); __debugbreak(); } }
 #else
 #define TE_ASSERT(x, ...)
 #endif

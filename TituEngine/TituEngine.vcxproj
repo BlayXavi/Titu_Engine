@@ -136,6 +136,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\TituEngine\Renderer\Renderer.h" />
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\TituEngine\Renderer\Buffer.h" />
+    <ClInclude Include="src\TituEngine\Renderer\Shader.h" />
     <ClInclude Include="src\TituEngine.h" />
     <ClInclude Include="src\TituEngine\Application.h" />
     <ClInclude Include="src\TituEngine\Core.h" />
@@ -570,6 +574,10 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\TituEngine\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\TituEngine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\TituEngine\Renderer\Shader.cpp" />
     <ClCompile Include="src\TituEngine\Application.cpp" />
     <ClCompile Include="src\TituEngine\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp" />

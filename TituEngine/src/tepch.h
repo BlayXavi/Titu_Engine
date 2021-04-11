@@ -12,8 +12,12 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "TituEngine/Core.h"
+
+#pragma warning(push, 0)
 #include "TituEngine/Log.h"
+#pragma warning(pop)
 
 #ifdef TE_PLATFORM_WINDOWS
-	#include <Windows.h>
+#include <Windows.h>
 #endif

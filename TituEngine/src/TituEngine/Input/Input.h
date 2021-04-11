@@ -1,8 +1,6 @@
 #pragma once
 
 #include "TituEngine/Core.h"
-
-
 struct GLFWwindow;
 
 namespace TituEngine
