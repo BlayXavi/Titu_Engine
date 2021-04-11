@@ -3,7 +3,7 @@
 #include "TituEngine/Core.h"
 
 
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace TituEngine
 {
