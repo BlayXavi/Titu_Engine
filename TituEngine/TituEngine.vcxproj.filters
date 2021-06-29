@@ -96,13 +96,25 @@
     <ClInclude Include="src\TituEngine\Log.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLContext.h">
       <Filter>src\TituEngine\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h">
       <Filter>src\TituEngine\Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\Buffer.h">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Renderer\GraphicsContext.h">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\Renderer.h">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\Shader.h">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Window.h">
@@ -1350,16 +1362,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Renderer\Shader.h">
-      <Filter>src\TituEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TituEngine\Renderer\Buffer.h">
-      <Filter>src\TituEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.h">
-      <Filter>src\TituEngine\Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TituEngine\Renderer\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
@@ -1383,27 +1385,29 @@
     <ClCompile Include="src\TituEngine\Log.cpp">
       <Filter>src\TituEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\TituEngine\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\TituEngine\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\Buffer.cpp">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\TituEngine\Renderer\GraphicsContext.cpp">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\Renderer.cpp">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\Shader.cpp">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\tepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\TituEngine\Renderer\Shader.cpp">
-      <Filter>src\TituEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TituEngine\Renderer\Buffer.cpp">
-      <Filter>src\TituEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.cpp">
-      <Filter>src\TituEngine\Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TituEngine\Renderer\Renderer.cpp" />
   </ItemGroup>
 </Project>

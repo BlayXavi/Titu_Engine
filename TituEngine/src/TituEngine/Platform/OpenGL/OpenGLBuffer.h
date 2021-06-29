@@ -9,8 +9,8 @@ namespace TituEngine
 	public:
 		virtual ~OpenGLVertexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
 
 	private:
 		friend VertexBuffer; //only vertex buffer can create an instance of OpenGLVertexBuffer
@@ -25,10 +25,10 @@ namespace TituEngine
 	public:
 		virtual ~OpenGLIndexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
+		virtual void Bind() const override;
+		virtual void Unbind() const override ;
 		virtual uint GetCount() const { return m_Count; }
-
+		
 	private:
 		friend IndexBuffer;//only vertex buffer can create an instance of OpenGLIndexBuffer
 		OpenGLIndexBuffer(uint* indices, uint count);
