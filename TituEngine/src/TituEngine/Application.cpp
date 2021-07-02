@@ -29,6 +29,7 @@ namespace TituEngine
 		};
 
 		uint indices[3] = { 0, 1, 2 };
+		m_VertexArray = VertexArray::Create();
 
 		BufferLayout layout =
 		{
@@ -36,22 +37,12 @@ namespace TituEngine
 			{ShaderDataType::Float4, false, "a_Color"}
 		};
 
-		glGenVertexArrays(1, &vertexArray);
-		glBindVertexArray(vertexArray);
-
 		m_VBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		m_IBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint));
 
 		m_VBuffer->SetLayout(layout);
-
-		uint index = 0;
-		const BufferLayout currentLayout = m_VBuffer->GetLayout();
-		for (const BufferElement& element : currentLayout)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.ElementCount, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)element.Offset);
-			index++;
-		}
+		m_VertexArray->AddVertexBuffer(m_VBuffer);
+		m_VertexArray->SetIndexBuffer(m_IBuffer);
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -124,7 +115,7 @@ namespace TituEngine
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Shader->Bind();
-			glBindVertexArray(vertexArray);
+			m_VertexArray->Bind();
 			glDrawElements(GL_TRIANGLES, m_IBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()

@@ -152,11 +152,13 @@
     <ClInclude Include="src\TituEngine\Log.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\TituEngine\Renderer\Buffer.h" />
     <ClInclude Include="src\TituEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\TituEngine\Renderer\Renderer.h" />
     <ClInclude Include="src\TituEngine\Renderer\Shader.h" />
+    <ClInclude Include="src\TituEngine\Renderer\VertexArray.h" />
     <ClInclude Include="src\TituEngine\Window.h" />
     <ClInclude Include="src\tepch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -583,6 +585,7 @@
     <ClCompile Include="src\TituEngine\Log.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\Buffer.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\GraphicsContext.cpp" />
@@ -591,6 +594,7 @@
     <ClCompile Include="src\tepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

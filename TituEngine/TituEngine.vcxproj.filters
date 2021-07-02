@@ -1362,6 +1362,8 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\VertexArray.h" />
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
@@ -1409,5 +1411,7 @@
     <ClCompile Include="src\tepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
   </ItemGroup>
 </Project>

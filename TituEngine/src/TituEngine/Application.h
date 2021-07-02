@@ -8,6 +8,7 @@
 #include "TituEngine/ImGui/ImGuiLayer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 namespace TituEngine
 {
@@ -37,11 +38,10 @@ namespace TituEngine
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
 
-		//TEMP
-		unsigned int vertexArray = 0;
 		Shader* m_Shader = nullptr;
 		VertexBuffer* m_VBuffer = nullptr;
 		IndexBuffer* m_IBuffer = nullptr;
+		VertexArray* m_VertexArray = nullptr;
 	};
 
 	//To be defined in CLIENT

@@ -95,7 +95,7 @@ namespace TituEngine
 			CalculateOffsetsAndStride();
 		}
 
-		inline const std::vector<BufferElement>& GetElements() { return m_Elements; }
+		const std::vector<BufferElement> GetElements() const { return m_Elements; }
 
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
@@ -127,8 +127,8 @@ namespace TituEngine
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		const BufferLayout& GetLayout() const { return m_Layout; }
-		void SetLayout(const BufferLayout& layout) { m_Layout = layout; }
+		virtual const BufferLayout& GetLayout() const { return m_Layout; }
+		virtual void SetLayout(const BufferLayout& layout) { m_Layout = layout; }
 
 	private:
 		BufferLayout m_Layout;
