@@ -12,7 +12,7 @@ namespace TituEngine
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::OpenGL: return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size);
 		}
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [VertexBuffer]"); return nullptr;
@@ -22,7 +22,7 @@ namespace TituEngine
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::OpenGL: return new OpenGLIndexBuffer(vertices, count);
+		case RendererAPI::API::OpenGL: return new OpenGLIndexBuffer(vertices, count);
 		}
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [VertexBuffer]"); return nullptr;

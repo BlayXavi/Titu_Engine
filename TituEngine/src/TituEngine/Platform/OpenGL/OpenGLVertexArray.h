@@ -8,8 +8,8 @@ namespace TituEngine
 	public:
 		virtual ~OpenGLVertexArray() override;
 
-		virtual void Bind() override;
-		virtual void Unbind() override;
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
 
 		virtual void AddVertexBuffer(const VertexBuffer* vertexBuffer) override;
 		virtual void SetIndexBuffer(const IndexBuffer* indexBuffer) override;

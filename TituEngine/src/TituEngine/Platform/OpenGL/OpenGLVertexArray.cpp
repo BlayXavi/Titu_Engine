@@ -16,12 +16,12 @@ namespace TituEngine
 		glDeleteVertexArrays(1, &m_VertexArrayID);
 	}
 
-	void OpenGLVertexArray::Bind()
+	void OpenGLVertexArray::Bind() const
 	{
 		glBindVertexArray(m_VertexArrayID);
 	}
 
-	void OpenGLVertexArray::Unbind()
+	void OpenGLVertexArray::Unbind() const
 	{
 		glBindVertexArray(0);
 	}

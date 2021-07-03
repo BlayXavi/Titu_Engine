@@ -1,8 +1,8 @@
 #include "tepch.h"
 #include "Application.h"
 
-#include "glad/glad.h"
 #include "Input/Input.h"
+
 
 namespace TituEngine
 {
@@ -111,12 +111,14 @@ namespace TituEngine
 	{
 		while (m_Runing)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+			RenderCommand::Clear();
 
-			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::BeginScene();
+			{
+				m_Shader->Bind();
+				RenderCommand::DrawIndexed(m_VertexArray);
+			}
 
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
 				layer->OnUpdate();
