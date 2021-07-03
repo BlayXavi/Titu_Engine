@@ -14,6 +14,9 @@ namespace TituEngine
 		virtual void AddVertexBuffer(const VertexBuffer* vertexBuffer) override;
 		virtual void SetIndexBuffer(const IndexBuffer* indexBuffer) override;
 
+		virtual inline const std::vector<const VertexBuffer*> GetVertexBuffers() const override { return m_VertexBuffers; }
+		virtual inline const IndexBuffer* GetIndexBuffer() const override { return m_IndexBuffer; };
+
 	private:
 		friend VertexArray; //Only VertexArray can create instances of OpenGlVertexArray
 		OpenGLVertexArray();

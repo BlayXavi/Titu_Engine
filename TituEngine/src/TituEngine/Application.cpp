@@ -37,8 +37,8 @@ namespace TituEngine
 			{ShaderDataType::Float4, false, "a_Color"}
 		};
 
-		m_VBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
-		m_IBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint));
+		VertexBuffer* m_VBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
+		IndexBuffer* m_IBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint));
 
 		m_VBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(m_VBuffer);
@@ -116,7 +116,7 @@ namespace TituEngine
 
 			m_Shader->Bind();
 			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_IBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
 				layer->OnUpdate();

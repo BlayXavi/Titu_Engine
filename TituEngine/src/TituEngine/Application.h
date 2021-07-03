@@ -39,8 +39,6 @@ namespace TituEngine
 		static Application* s_Instance;
 
 		Shader* m_Shader = nullptr;
-		VertexBuffer* m_VBuffer = nullptr;
-		IndexBuffer* m_IBuffer = nullptr;
 		VertexArray* m_VertexArray = nullptr;
 	};
 

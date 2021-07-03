@@ -15,6 +15,9 @@ namespace TituEngine
 		virtual void AddVertexBuffer(const VertexBuffer* vertexBuffer) = 0;
 		virtual void SetIndexBuffer(const IndexBuffer* indexBuffer) = 0;
 
+		virtual inline const std::vector<const VertexBuffer*> GetVertexBuffers() const = 0;
+		virtual inline const IndexBuffer* GetIndexBuffer() const = 0;
+
 		static VertexArray* Create();
 	};
 }

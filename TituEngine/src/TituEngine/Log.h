@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TituEngine/Core.h"
+
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
