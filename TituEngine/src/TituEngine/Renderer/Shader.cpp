@@ -2,11 +2,14 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
-
 namespace TituEngine
 {
 	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
+		m_Program = 0;
+		m_FragmentShader = 0;
+		m_VertexShader = 0;
+
 		// https://www.khronos.org/opengl/wiki/Shader_Compilation
 
 		// Create an empty vertex shader handle
@@ -132,5 +135,11 @@ namespace TituEngine
 	void Shader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const
+	{
+		GLint location = glGetUniformLocation(m_Program, name.c_str());
+		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}
 }

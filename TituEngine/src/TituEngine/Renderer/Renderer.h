@@ -3,6 +3,9 @@
 #include <glm/glm.hpp>
 #include "VertexArray.h"
 
+#include "Camera.h"
+#include "Shader.h"
+
 namespace TituEngine
 {
 	class RendererAPI
@@ -28,12 +31,20 @@ namespace TituEngine
 	class Renderer
 	{
 	public:
-		static void BeginScene();
+		static void BeginScene(const Camera* camera);
 		static void EndScene();
 
-		static void Submit(const VertexArray* vertexArray);
+		static void Submit(const VertexArray* vertexArray, const Shader* shader);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
+
+	private:
+		struct SceneData
+		{
+			glm::mat4 ViewProjectionMatrix;
+		};
+
+		static SceneData s_SceneData;
 	};
 
 	class RenderCommand

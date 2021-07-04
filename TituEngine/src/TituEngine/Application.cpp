@@ -3,7 +3,6 @@
 
 #include "Input/Input.h"
 
-
 namespace TituEngine
 {
 #define BIND_EVENT_FN(x) std::bind(&Application::##x, this, std::placeholders::_1)
@@ -39,6 +38,7 @@ namespace TituEngine
 
 		VertexBuffer* m_VBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		IndexBuffer* m_IBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint));
+		m_Camera = new OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
 
 		m_VBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(m_VBuffer);
@@ -53,11 +53,13 @@ namespace TituEngine
 			out vec3 v_Position;
 			out vec4 v_Color;			
 
+			uniform mat4 u_ViewProjectionMatrix;
+
 			void main()
 			{
-				gl_Position = vec4(a_Position, 1.0);
 				v_Position = a_Position;
 				v_Color = a_Color;
+				gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -70,7 +72,6 @@ namespace TituEngine
 
 			void main()
 			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
 				color = v_Color;
 			}
 		)";
@@ -114,10 +115,12 @@ namespace TituEngine
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+			m_Camera->SetPosition({ 0.5f, 0.5f, 0.0f });
+			m_Camera->SetZRotation(45.0f);
+
+			Renderer::BeginScene(m_Camera);
 			{
-				m_Shader->Bind();
-				RenderCommand::DrawIndexed(m_VertexArray);
+				Renderer::Submit(m_VertexArray, m_Shader);
 			}
 
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()

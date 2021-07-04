@@ -156,6 +156,7 @@
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\TituEngine\Renderer\Buffer.h" />
+    <ClInclude Include="src\TituEngine\Renderer\Camera.h" />
     <ClInclude Include="src\TituEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\TituEngine\Renderer\Renderer.h" />
     <ClInclude Include="src\TituEngine\Renderer\Shader.h" />
@@ -590,6 +591,7 @@
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\TituEngine\Renderer\Camera.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\Renderer.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\Shader.cpp" />

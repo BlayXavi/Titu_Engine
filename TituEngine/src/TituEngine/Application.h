@@ -10,6 +10,7 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/Camera.h"
 
 namespace TituEngine
 {
@@ -41,6 +42,7 @@ namespace TituEngine
 
 		Shader* m_Shader = nullptr;
 		VertexArray* m_VertexArray = nullptr;
+		OrthographicCamera * m_Camera = nullptr;
 	};
 
 	//To be defined in CLIENT

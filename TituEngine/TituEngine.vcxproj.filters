@@ -1365,6 +1365,7 @@
     <ClInclude Include="src\TituEngine\Renderer\VertexArray.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\TituEngine\Renderer\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
@@ -1415,5 +1416,6 @@
     <ClCompile Include="src\TituEngine\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\TituEngine\Renderer\Camera.cpp" />
   </ItemGroup>
 </Project>
