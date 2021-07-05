@@ -6,11 +6,6 @@
 #include "Layer/LayerStack.h"
 #include "Events/ApplicationEvent.h"
 #include "TituEngine/ImGui/ImGuiLayer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/Camera.h"
 
 namespace TituEngine
 {
@@ -40,9 +35,6 @@ namespace TituEngine
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
 
-		Shader* m_Shader = nullptr;
-		VertexArray* m_VertexArray = nullptr;
-		OrthographicCamera * m_Camera = nullptr;
 	};
 
 	//To be defined in CLIENT
