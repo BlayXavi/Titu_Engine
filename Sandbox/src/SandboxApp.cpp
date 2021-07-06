@@ -14,7 +14,7 @@ using namespace TituEngine;
 class SandboxLayer : public Layer
 {
 public:
-	SandboxLayer() : Layer("SBLayer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f)
+	SandboxLayer() : Layer("SBLayer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f)
 	{
 		float vertices[3 * 3 + 3 * 4] =
 		{
@@ -79,16 +79,30 @@ public:
 	{
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Timestep ts) override
 	{
+		TE_CLIENT_TRACE("Delta time {0} ({1}ms)", ts.GetDeltaTime(), ts.GetDeltaTimeMilliseconds());
+
 		if (InputBridge::IsKeyPressed(TE_KEY_UP))
-			m_CameraPosition.x += m_CameraSpeed;
+			m_CameraPosition.y += m_CameraSpeed * ts;
+		else if (InputBridge::IsKeyPressed(TE_KEY_DOWN))
+			m_CameraPosition.y -= m_CameraSpeed * ts;
+
+		if (InputBridge::IsKeyPressed(TE_KEY_RIGHT))
+			m_CameraPosition.x += m_CameraSpeed * ts;
+		else if (InputBridge::IsKeyPressed(TE_KEY_LEFT))
+			m_CameraPosition.x -= m_CameraSpeed * ts;
+
+		if (InputBridge::IsKeyPressed(TE_KEY_Q))
+			m_CameraRotation += m_CameraAngularSpeed * ts;
+		else if (InputBridge::IsKeyPressed(TE_KEY_E))
+			m_CameraRotation -= m_CameraAngularSpeed * ts;
 
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
 		m_Camera->SetPosition(m_CameraPosition);
-		m_Camera->SetZRotation(45.0f);
+		m_Camera->SetZRotation(m_CameraRotation);
 
 		Renderer::BeginScene(m_Camera);
 		{
@@ -106,6 +120,9 @@ private:
 
 	glm::vec3 m_CameraPosition;
 	float m_CameraSpeed;
+
+	float m_CameraAngularSpeed;
+	float m_CameraRotation;
 };
 
 class Sandbox : public TituEngine::Application
@@ -121,7 +138,7 @@ public:
 
 	}
 
-};	
+};
 
 TituEngine::Application* TituEngine::CreateApplication()
 {

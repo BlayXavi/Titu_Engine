@@ -3,6 +3,8 @@
 //For use by TituEngine Applications	
 #include "TituEngine/Application.h"
 
+#include "TituEngine/Core/Timestep.h"
+
 #include "TituEngine/Input/Input.h"
 #include "TituEngine/Input/KeyboardMouseCodes.h"
 

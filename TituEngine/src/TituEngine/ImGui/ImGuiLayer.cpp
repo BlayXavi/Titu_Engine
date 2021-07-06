@@ -13,8 +13,6 @@
 namespace TituEngine
 {
 
-#define TE_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
-
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
 	{
 	}

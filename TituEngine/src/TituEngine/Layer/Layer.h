@@ -2,6 +2,7 @@
 
 #include "TituEngine/Events/Event.h"
 #include "TituEngine/Core.h"
+#include "TituEngine/Core/Timestep.h"
 
 namespace TituEngine
 {
@@ -13,7 +14,7 @@ namespace TituEngine
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnEvent(Event& event) {}
 		virtual void OnImGuiRender() {}
 

@@ -7,6 +7,9 @@
     <Filter Include="src\TituEngine">
       <UniqueIdentifier>{78715D6C-643F-5172-4DD3-C19839402DD7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TituEngine\Core">
+      <UniqueIdentifier>{D040D060-3CA2-AD6E-C50F-F4203170E42D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TituEngine\Events">
       <UniqueIdentifier>{5CC605DB-C832-C1D5-9126-5933FD51E33D}</UniqueIdentifier>
     </Filter>
@@ -63,6 +66,9 @@
     <ClInclude Include="src\TituEngine\Core.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Core\Timestep.h">
+      <Filter>src\TituEngine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\EntryPoint.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
@@ -102,10 +108,19 @@
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLContext.h">
       <Filter>src\TituEngine\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Platform\Windows\WindowsWindow.h">
       <Filter>src\TituEngine\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Renderer\Buffer.h">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\Camera.h">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Renderer\GraphicsContext.h">
@@ -115,6 +130,9 @@
       <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Renderer\Shader.h">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\VertexArray.h">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Window.h">
@@ -1362,10 +1380,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Renderer\VertexArray.h" />
-    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\TituEngine\Renderer\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
@@ -1395,10 +1409,19 @@
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\TituEngine\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>src\TituEngine\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\TituEngine\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\TituEngine\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Renderer\Buffer.cpp">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\Camera.cpp">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Renderer\GraphicsContext.cpp">
@@ -1410,12 +1433,12 @@
     <ClCompile Include="src\TituEngine\Renderer\Shader.cpp">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\VertexArray.cpp">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\tepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\TituEngine\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\TituEngine\Renderer\Camera.cpp" />
+    <ClCompile Include="src\TituEngine\Core\Timestep.cpp" />
   </ItemGroup>
 </Project>

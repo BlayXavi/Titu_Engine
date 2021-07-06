@@ -10,6 +10,7 @@ namespace TituEngine
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		: m_CurrentTime(0.0f)
 	{
 		TE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -54,8 +55,13 @@ namespace TituEngine
 	{
 		while (m_Runing)
 		{
+
+			float time = TituEngine::Timestep::GetCurrentTime();
+			Timestep ts = m_CurrentTime - time; //same as instancing a float!
+			m_CurrentTime = time;
+
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
-				layer->OnUpdate();
+				layer->OnUpdate(ts);
 
 			m_ImGuiLayer->BeginRender();
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()

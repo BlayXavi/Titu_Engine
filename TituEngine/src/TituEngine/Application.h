@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Window.h"
+#include "Core/Timestep.h"
 #include "Events/Event.h"
 #include "Layer/LayerStack.h"
 #include "Events/ApplicationEvent.h"
@@ -35,6 +36,7 @@ namespace TituEngine
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
 
+		float m_CurrentTime;
 	};
 
 	//To be defined in CLIENT
