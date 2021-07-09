@@ -125,6 +125,19 @@ namespace TituEngine
 		// Don't leak shaders either.
 		glDeleteShader(m_VertexShader);
 		glDeleteShader(m_FragmentShader);
+
+		m_UniformLocationCache.clear();
+	}
+
+	int Shader::GetUniformLocation(const std::string& name)
+	{
+		auto iterator = m_UniformLocationCache.find(name);
+		if (iterator != m_UniformLocationCache.end())
+			return (*iterator).second;
+
+		GLint location = glGetUniformLocation(m_Program, name.c_str());
+		m_UniformLocationCache[name] = location;
+		return location;
 	}
 
 	void Shader::Bind() const
@@ -137,8 +150,10 @@ namespace TituEngine
 		glUseProgram(0);
 	}
 
-	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const
+	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
+		GLint loc = GetUniformLocation(name);
+
 		GLint location = glGetUniformLocation(m_Program, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}

@@ -18,7 +18,7 @@ namespace TituEngine
 
 	}
 
-	void Renderer::Submit(const VertexArray* vertexArray, const Shader* shader)
+	void Renderer::Submit(const VertexArray* vertexArray, Shader* shader)
 	{
 		shader->Bind();
 		shader->UploadUniformMat4("u_ViewProjectionMatrix", s_SceneData.ViewProjectionMatrix);

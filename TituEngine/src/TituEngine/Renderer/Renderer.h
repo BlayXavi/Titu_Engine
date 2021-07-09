@@ -34,7 +34,7 @@ namespace TituEngine
 		static void BeginScene(const Camera* camera);
 		static void EndScene();
 
-		static void Submit(const VertexArray* vertexArray, const Shader* shader);
+		static void Submit(const VertexArray* vertexArray, Shader* shader);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
 
