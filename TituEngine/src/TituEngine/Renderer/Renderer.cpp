@@ -18,10 +18,10 @@ namespace TituEngine
 
 	}
 
-	void Renderer::Submit(const VertexArray* vertexArray, Shader* shader)
+	void Renderer::Submit(const VertexArray* vertexArray, Shader* shader, const glm::mat4 transform)
 	{
 		shader->Bind();
-		shader->UploadUniformMat4("u_ViewProjectionMatrix", s_SceneData.ViewProjectionMatrix);
+		shader->UploadUniformMat4("u_ModelViewProjectionMatrix", s_SceneData.ViewProjectionMatrix * transform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}

@@ -14,7 +14,7 @@ using namespace TituEngine;
 class SandboxLayer : public Layer
 {
 public:
-	SandboxLayer() : Layer("SBLayer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f)
+	SandboxLayer() : Layer("SBLayer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f), m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f)
 	{
 		float vertices[3 * 3 + 3 * 4] =
 		{
@@ -49,13 +49,13 @@ public:
 			out vec3 v_Position;
 			out vec4 v_Color;			
 
-			uniform mat4 u_ViewProjectionMatrix;
+			uniform mat4 u_ModelViewProjectionMatrix;
 
 			void main()
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+				gl_Position = u_ModelViewProjectionMatrix * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -98,6 +98,21 @@ public:
 		else if (InputBridge::IsKeyPressed(TE_KEY_E))
 			m_CameraRotation -= m_CameraAngularSpeed * ts;
 
+
+		if (InputBridge::IsKeyPressed(TE_KEY_D))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(m_TriangleSpeed * ts, 0.0f, 0.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_A))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(-m_TriangleSpeed * ts, 0.0f, 0.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_W))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, m_TriangleSpeed * ts, 0.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_S))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, -m_TriangleSpeed * ts, 0.0f));
+
+		if (InputBridge::IsKeyPressed(TE_KEY_Q))
+			m_CameraRotation += m_CameraAngularSpeed * ts;
+		else if (InputBridge::IsKeyPressed(TE_KEY_E))
+			m_CameraRotation -= m_CameraAngularSpeed * ts;
+
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
@@ -106,7 +121,7 @@ public:
 
 		Renderer::BeginScene(m_Camera);
 		{
-			Renderer::Submit(m_VertexArray, m_Shader);
+			Renderer::Submit(m_VertexArray, m_Shader, m_TriangleTransform);
 		}
 
 		Renderer::EndScene();
@@ -117,6 +132,9 @@ private:
 	Shader* m_Shader = nullptr;
 	VertexArray* m_VertexArray = nullptr;
 	OrthographicCamera* m_Camera = nullptr;
+
+	glm::mat4 m_TriangleTransform;
+	float m_TriangleSpeed;
 
 	glm::vec3 m_CameraPosition;
 	float m_CameraSpeed;

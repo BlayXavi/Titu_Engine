@@ -57,7 +57,7 @@ namespace TituEngine
 		{
 
 			float time = TituEngine::Timestep::GetCurrentTime();
-			Timestep ts = m_CurrentTime - time; //same as instancing a float!
+			Timestep ts = time - m_CurrentTime; //same as instancing a float!
 			m_CurrentTime = time;
 
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
