@@ -77,6 +77,10 @@ public:
 
 	void OnImGuiRender() override
 	{
+		ImGui::Begin("Sandbox Inspector");
+		ImGui::DragFloat("Triangle Speed", &m_TriangleSpeed, 0.2f, 0.0f, 10.0f);
+		ImGui::DragFloat("Triangle Angular Speed", &m_TriangleAngularSpeed, 0.2f, 0.0f, 10.0f);
+		ImGui::End();
 	}
 
 	void OnUpdate(Timestep ts) override
@@ -146,6 +150,7 @@ private:
 
 	float m_CameraAngularSpeed;
 	float m_CameraRotation;
+
 };
 
 class Sandbox : public TituEngine::Application
