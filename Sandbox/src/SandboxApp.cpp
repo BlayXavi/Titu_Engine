@@ -14,7 +14,7 @@ using namespace TituEngine;
 class SandboxLayer : public Layer
 {
 public:
-	SandboxLayer() : Layer("SBLayer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f), m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f)
+	SandboxLayer() : Layer("SBLayer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f), m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f), m_TriangleAngularSpeed(1.0f)
 	{
 		float vertices[3 * 3 + 3 * 4] =
 		{
@@ -98,7 +98,6 @@ public:
 		else if (InputBridge::IsKeyPressed(TE_KEY_E))
 			m_CameraRotation -= m_CameraAngularSpeed * ts;
 
-
 		if (InputBridge::IsKeyPressed(TE_KEY_D))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(m_TriangleSpeed * ts, 0.0f, 0.0f));
 		if (InputBridge::IsKeyPressed(TE_KEY_A))
@@ -107,6 +106,11 @@ public:
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, m_TriangleSpeed * ts, 0.0f));
 		if (InputBridge::IsKeyPressed(TE_KEY_S))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, -m_TriangleSpeed * ts, 0.0f));
+
+		if (InputBridge::IsKeyPressed(TE_KEY_Z))
+			m_TriangleTransform = glm::rotate(m_TriangleTransform, m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_X))
+			m_TriangleTransform = glm::rotate(m_TriangleTransform, -m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		if (InputBridge::IsKeyPressed(TE_KEY_Q))
 			m_CameraRotation += m_CameraAngularSpeed * ts;
@@ -135,6 +139,7 @@ private:
 
 	glm::mat4 m_TriangleTransform;
 	float m_TriangleSpeed;
+	float m_TriangleAngularSpeed;
 
 	glm::vec3 m_CameraPosition;
 	float m_CameraSpeed;
