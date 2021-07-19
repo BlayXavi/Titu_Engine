@@ -153,8 +153,12 @@ namespace TituEngine
 	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
 		GLint loc = GetUniformLocation(name);
-
-		GLint location = glGetUniformLocation(m_Program, name.c_str());
-		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+		glUniformMatrix4fv(loc, 1, GL_FALSE, &matrix[0][0]);
+	}
+	
+	void Shader::UploadUniformInt(const std::string& name, const int& integer)
+	{
+		GLint loc = GetUniformLocation(name);
+		glUniform1i(loc, integer);
 	}
 }

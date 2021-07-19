@@ -16,6 +16,7 @@ namespace TituEngine
 		void Unbind() const;
 
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+		void UploadUniformInt(const std::string& name, const int& integer);
 
 	private:
 		uint m_Program, m_VertexShader, m_FragmentShader;

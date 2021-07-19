@@ -5,7 +5,7 @@
 
 namespace TituEngine
 {
-	OpenGLVertexArray::OpenGLVertexArray()
+	OpenGLVertexArray::OpenGLVertexArray() : m_VertexBufferIndexOffset(0)
 	{
 		m_IndexBuffer = nullptr;
 		glCreateVertexArrays(1, &m_VertexArrayID);
@@ -36,12 +36,13 @@ namespace TituEngine
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& element : layout)
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.ElementCount, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(intptr_t)element.Offset);
+			glEnableVertexAttribArray(index + m_VertexBufferIndexOffset);
+			glVertexAttribPointer(index + m_VertexBufferIndexOffset, element.ElementCount, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(intptr_t)element.Offset);
 			index++;
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
+		m_VertexBufferIndexOffset += vertexBuffer->GetLayout().GetElements().size();
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer* indexBuffer)
