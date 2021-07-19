@@ -81,6 +81,7 @@ public:
 		)";
 
 		texture = Texture2D::Create("assets/textures2D/Checkerboard.png");
+		m_BlendTexture = Texture2D::Create("assets/textures2D/grass.png");
 		m_Shader = new Shader(vertexSrc, fragmentSrc);
 		m_Shader->UploadUniformInt("u_Texture", 0);
 	}
@@ -140,6 +141,8 @@ public:
 		Renderer::BeginScene(m_Camera);
 		{
 			texture->Bind();
+			Renderer::Submit(m_VertexArray, m_Shader, glm::mat4(1.0));
+			m_BlendTexture->Bind();
 			Renderer::Submit(m_VertexArray, m_Shader, m_TriangleTransform);
 		}
 
@@ -152,6 +155,7 @@ private:
 	VertexArray* m_VertexArray = nullptr;
 	OrthographicCamera* m_Camera = nullptr;
 	Texture* texture = nullptr;
+	Texture* m_BlendTexture = nullptr;
 
 	glm::mat4 m_TriangleTransform;
 	float m_TriangleSpeed;

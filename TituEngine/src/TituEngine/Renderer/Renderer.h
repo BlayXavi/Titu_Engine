@@ -17,6 +17,8 @@ namespace TituEngine
 			OpenGL = 1
 		};
 
+		virtual int Init() = 0;
+
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() const = 0;
 
@@ -31,6 +33,9 @@ namespace TituEngine
 	class Renderer
 	{
 	public:
+
+		static int Init();
+
 		static void BeginScene(const Camera* camera);
 		static void EndScene();
 
@@ -50,6 +55,8 @@ namespace TituEngine
 	class RenderCommand
 	{
 	public:
+
+		inline static int Init() { return s_RendererAPI->Init(); }
 
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 		inline static void Clear() { s_RendererAPI->Clear(); }

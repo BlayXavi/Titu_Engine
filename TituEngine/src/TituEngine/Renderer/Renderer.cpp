@@ -8,6 +8,11 @@ namespace TituEngine
 	RendererAPI::API RendererAPI::s_RendererAPI = API::OpenGL;
 	Renderer::SceneData Renderer::s_SceneData = SceneData();
 
+	int Renderer::Init()
+	{
+		return RenderCommand::Init();
+	}
+
 	void Renderer::BeginScene(const Camera* camera)
 	{
 		s_SceneData.ViewProjectionMatrix = camera->GetViewProjectionMatrix();

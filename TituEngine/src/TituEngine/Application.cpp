@@ -2,6 +2,7 @@
 #include "Application.h"
 
 #include "Input/Input.h"
+#include "Renderer/Renderer.h"
 
 namespace TituEngine
 {
@@ -18,9 +19,10 @@ namespace TituEngine
 		m_Window = std::unique_ptr< Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
-
 	}
 
 	Application::~Application()
