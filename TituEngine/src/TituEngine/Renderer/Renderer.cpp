@@ -2,6 +2,7 @@
 #include "Renderer.h"
 
 #include "TituEngine/Platform/OpenGL/OpenGlRendererAPI.h"
+#include "TituEngine/Platform/OpenGL/OpenGLShader.h"
 
 namespace TituEngine
 {
@@ -26,7 +27,9 @@ namespace TituEngine
 	void Renderer::Submit(const VertexArray* vertexArray, Shader* shader, const glm::mat4 transform)
 	{
 		shader->Bind();
-		shader->UploadUniformMat4("u_ModelViewProjectionMatrix", s_SceneData.ViewProjectionMatrix * transform);
+		if (GetAPI() == RendererAPI::API::OpenGL)
+			static_cast<OpenGLShader*>(shader)->UploadUniformMat4("u_ModelViewProjectionMatrix", s_SceneData.ViewProjectionMatrix * transform);
+
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}

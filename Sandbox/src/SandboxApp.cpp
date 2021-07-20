@@ -9,6 +9,8 @@
 
 #include "imgui/imgui.h"
 
+#include "TituEngine/Platform/OpenGL/OpenGLShader.h"
+
 using namespace TituEngine;
 
 class SandboxLayer : public Layer
@@ -82,8 +84,9 @@ public:
 
 		texture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 		m_BlendTexture = Texture2D::Create("assets/textures2D/grass.png");
-		m_Shader = new Shader(vertexSrc, fragmentSrc);
-		m_Shader->UploadUniformInt("u_Texture", 0);
+		m_Shader = Shader::Create(vertexSrc, fragmentSrc);
+		if(Renderer::GetAPI() == RendererAPI::API::OpenGL)
+		static_cast<TituEngine::OpenGLShader*>(m_Shader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnImGuiRender() override

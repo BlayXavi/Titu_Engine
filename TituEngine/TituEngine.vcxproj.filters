@@ -1390,6 +1390,7 @@
       <Filter>vendor\stb</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLTexture2D.h" />
+    <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Application.cpp">
@@ -1459,5 +1460,6 @@
       <Filter>vendor\stb</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLTexture2D.cpp" />
+    <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>
