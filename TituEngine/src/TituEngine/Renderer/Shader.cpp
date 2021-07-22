@@ -15,4 +15,14 @@ namespace TituEngine
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
 	}
+
+	Shader* Shader::Create(const std::string& path)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::OpenGL: return new OpenGLShader(path);
+		}
+
+		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
+	}
 }

@@ -33,7 +33,6 @@ public:
 		{
 			{ShaderDataType::Float3, false, "a_Position"},
 			{ShaderDataType::Float2, false, "a_TextCoord"},
-			//{ShaderDataType::Float4, false, "a_Color"}
 		};
 
 		VertexBuffer* m_VBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
@@ -44,47 +43,10 @@ public:
 		m_VertexArray->AddVertexBuffer(m_VBuffer);
 		m_VertexArray->SetIndexBuffer(m_IBuffer);
 
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location  = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TextCoord;
-			//layout(location  = 1) in vec4 a_Color;
-
-			out vec3 v_Position;
-			//out vec4 v_Color;
-			out vec2 v_TextCoord;
-
-			uniform mat4 u_ModelViewProjectionMatrix;
-
-			void main()
-			{
-				v_Position = a_Position;
-				//v_Color = a_Color;
-				v_TextCoord = a_TextCoord;
-				gl_Position = u_ModelViewProjectionMatrix * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			out vec4 color;
-			in vec3 v_Position;
-			//in vec4 v_Color;			
-			in vec2 v_TextCoord;
-
-			uniform sampler2D u_Texture;
-
-			void main()
-			{
-				color = texture(u_Texture, v_TextCoord);
-			}
-		)";
-
 		texture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 		m_BlendTexture = Texture2D::Create("assets/textures2D/grass.png");
-		m_Shader = Shader::Create(vertexSrc, fragmentSrc);
+		m_Shader = Shader::Create("assets/shaders/testing/Blending.glsl");
+
 		if(Renderer::GetAPI() == RendererAPI::API::OpenGL)
 		static_cast<TituEngine::OpenGLShader*>(m_Shader)->UploadUniformInt("u_Texture", 0);
 	}
@@ -92,6 +54,7 @@ public:
 	void OnImGuiRender() override
 	{
 		ImGui::Begin("Sandbox Inspector");
+		ImGui::Text("Delta time %f (%fms)", currentTimeStep.GetDeltaTime(), currentTimeStep.GetDeltaTimeMilliseconds());
 		ImGui::DragFloat("Triangle Speed", &m_TriangleSpeed, 0.2f, 0.0f, 10.0f);
 		ImGui::DragFloat("Triangle Angular Speed", &m_TriangleAngularSpeed, 0.2f, 0.0f, 10.0f);
 		ImGui::End();
@@ -99,7 +62,7 @@ public:
 
 	void OnUpdate(Timestep ts) override
 	{
-		TE_CLIENT_TRACE("Delta time {0} ({1}ms)", ts.GetDeltaTime(), ts.GetDeltaTimeMilliseconds());
+		currentTimeStep = ts;
 
 		if (InputBridge::IsKeyPressed(TE_KEY_UP))
 			m_CameraPosition.y += m_CameraSpeed * ts;
@@ -169,6 +132,8 @@ private:
 
 	float m_CameraAngularSpeed;
 	float m_CameraRotation;
+
+	Timestep currentTimeStep;
 
 };
 

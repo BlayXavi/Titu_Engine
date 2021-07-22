@@ -15,5 +15,6 @@ namespace TituEngine
 		virtual void Unbind() const = 0;
 
 		static Shader* Create(const std::string& vs, const std::string& ps);
+		static Shader* Create(const std::string& path);
 	};
 }
