@@ -3,6 +3,8 @@
 #include "TituEngine/Core.h"
 struct GLFWwindow;
 
+#include <utility>
+
 namespace TituEngine
 {
 #define INPUT(x) InputPlatform::s_Instance->##x
@@ -38,6 +40,8 @@ namespace TituEngine
 		inline virtual float GetMouseYImpl() override;
 		inline virtual std::pair<float, float> GetMousePositionImpl() override;
 	};
+#else
+#error Platform Not Supported Context_Input
 #endif
 
 	class TE_API InputBridge

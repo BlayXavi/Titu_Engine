@@ -8,8 +8,9 @@
 #include <glm/ext/scalar_constants.hpp> // glm::pi
 
 #include "imgui/imgui.h"
-
 #include "TituEngine/Platform/OpenGL/OpenGLShader.h"
+
+#include "Controller/OrthographicCameraController.h"
 
 using namespace TituEngine;
 
@@ -37,7 +38,8 @@ public:
 
 		VertexBuffer* m_VBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		IndexBuffer* m_IBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint));
-		m_Camera = new OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
+		m_Camera = new OrthographicCamera(1920.0f/1080.0f);
+		m_OrthographicCameraController.SetCamera(m_Camera);
 
 		m_VBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(m_VBuffer);
@@ -62,22 +64,9 @@ public:
 
 	void OnUpdate(Timestep ts) override
 	{
+		m_OrthographicCameraController.OnUpdate(ts);
+
 		currentTimeStep = ts;
-
-		if (InputBridge::IsKeyPressed(TE_KEY_UP))
-			m_CameraPosition.y += m_CameraSpeed * ts;
-		else if (InputBridge::IsKeyPressed(TE_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraSpeed * ts;
-
-		if (InputBridge::IsKeyPressed(TE_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraSpeed * ts;
-		else if (InputBridge::IsKeyPressed(TE_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraSpeed * ts;
-
-		if (InputBridge::IsKeyPressed(TE_KEY_Q))
-			m_CameraRotation += m_CameraAngularSpeed * ts;
-		else if (InputBridge::IsKeyPressed(TE_KEY_E))
-			m_CameraRotation -= m_CameraAngularSpeed * ts;
 
 		if (InputBridge::IsKeyPressed(TE_KEY_D))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(m_TriangleSpeed * ts, 0.0f, 0.0f));
@@ -101,9 +90,6 @@ public:
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
-		m_Camera->SetPosition(m_CameraPosition);
-		m_Camera->SetZRotation(m_CameraRotation);
-
 		Renderer::BeginScene(m_Camera);
 		{
 			texture->Bind();
@@ -115,11 +101,17 @@ public:
 		Renderer::EndScene();
 	}
 
+	void OnEvent(Event& e) override
+	{
+		m_OrthographicCameraController.OnEvent(e);
+	}
+
 private:
 
 	Shader* m_Shader = nullptr;
 	VertexArray* m_VertexArray = nullptr;
 	OrthographicCamera* m_Camera = nullptr;
+	OrthographicCameraController m_OrthographicCameraController;
 	Texture* texture = nullptr;
 	Texture* m_BlendTexture = nullptr;
 

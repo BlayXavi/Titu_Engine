@@ -36,7 +36,7 @@ namespace TituEngine
 			uint Width, Height;
 			bool VSync;
 
-			EventCallbackFn EventCallback;
+			EventCallbackFn EventCallback; //m_Data.EventCallback(event) to call the event bound function
 		};
 
 		WindowData m_Data;

@@ -42,7 +42,7 @@ namespace TituEngine
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
-		m_VertexBufferIndexOffset += vertexBuffer->GetLayout().GetElements().size();
+		m_VertexBufferIndexOffset += (uint)vertexBuffer->GetLayout().GetElements().size();
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer* indexBuffer)

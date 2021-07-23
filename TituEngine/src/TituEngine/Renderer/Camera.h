@@ -16,21 +16,28 @@ namespace TituEngine
 		void SetPosition(glm::vec3 position) { m_Position = position; RecalculateViewMatrix(); }
 
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+		inline const glm::mat4& GetInversedViewMatrix() const { return m_InversedViewMatrix; }
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		inline const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
 		inline virtual float GetZRotation() const = 0;
 		virtual void SetZRotation(float rotation) = 0;
 
+		inline const glm::vec3& GetPosition() const { return m_Position; }
+		inline const float GetAspectRatio() const { return m_AspectRatio; }
+
 	protected:
 
 		Projection m_ProjectionTYpe = Projection::ORTHOGRAPHIC;
 
 		glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
+		glm::mat4 m_InversedViewMatrix = glm::mat4(1.0f);
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
 		glm::mat4 m_ViewProjectionMatrix = glm::mat4(1.0f);
 
 		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);
+
+		float m_AspectRatio;
 
 		void RecalculateViewProjectionMatrix();
 		virtual void RecalculateViewMatrix() = 0;
@@ -40,6 +47,9 @@ namespace TituEngine
 	{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
+		OrthographicCamera(float aspectRatio);
+
+		void SetProjection(float left, float right, float bottom, float top);
 
 		inline float GetZRotation() const override { return m_Rotation; }
 		void SetZRotation(float rotation) override { m_Rotation = rotation; RecalculateViewMatrix(); }
