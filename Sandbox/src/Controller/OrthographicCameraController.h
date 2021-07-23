@@ -28,6 +28,8 @@ public:
 	void SetPosition(const glm::vec3& position);
 
 	void SetZoomMinMax(float min, float max);
+	void SetZoomLevel(float zoom) { m_ZoomLevel = zoom; }
+	inline const float& GetZoomLevel() { return m_ZoomLevel; }
 
 private:
 	bool OnMouseScrolled(MouseScrolledEvent& e);

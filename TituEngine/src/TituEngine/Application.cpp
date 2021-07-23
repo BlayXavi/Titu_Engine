@@ -33,7 +33,8 @@ namespace TituEngine
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowsClosed));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResized));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -57,13 +58,15 @@ namespace TituEngine
 	{
 		while (m_Runing)
 		{
+			if (m_Minimized == false)
+			{
+				float time = TituEngine::Timestep::GetCurrentTime();
+				Timestep ts = time - m_CurrentTime; //same as instancing a float!
+				m_CurrentTime = time;
 
-			float time = TituEngine::Timestep::GetCurrentTime();
-			Timestep ts = time - m_CurrentTime; //same as instancing a float!
-			m_CurrentTime = time;
-
-			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
-				layer->OnUpdate(ts);
+				for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
+					layer->OnUpdate(ts);
+			}
 
 			m_ImGuiLayer->BeginRender();
 			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
@@ -74,11 +77,26 @@ namespace TituEngine
 		}
 	}
 
-	bool Application::OnWindowsClosed(WindowCloseEvent& e)
+	bool Application::OnWindowClosed(WindowCloseEvent& e)
 	{
 		m_Runing = false;
 		TE_CORE_INFO(e.ToString());
 		return true;
+	}
+
+	bool Application::OnWindowResized(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return true;
+		}
+
+		m_Minimized = false;
+
+		Renderer::OnWindowResized(e.GetWidth(), e.GetHeight());
+
+		return false;
 	}
 
 }

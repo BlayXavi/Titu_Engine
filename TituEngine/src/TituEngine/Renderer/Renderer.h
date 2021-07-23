@@ -23,6 +23,7 @@ namespace TituEngine
 		virtual void Clear() const = 0;
 
 		virtual void DrawIndexed(const VertexArray* vertexArray) = 0;
+		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
 		inline static API GetAPIID() { return s_RendererAPI; }
 
@@ -38,6 +39,8 @@ namespace TituEngine
 
 		static void BeginScene(const Camera* camera);
 		static void EndScene();
+
+		static void OnWindowResized(uint32_t width, uint32_t height);
 
 		static void Submit(const VertexArray* vertexArray, Shader* shader´, glm::mat4 transform);
 
@@ -64,6 +67,11 @@ namespace TituEngine
 		void static DrawIndexed(const VertexArray* vertexArray)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);
+		}
+
+		void static SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+		{
+			s_RendererAPI->SetViewport(x, y, width, height);
 		}
 
 	private:

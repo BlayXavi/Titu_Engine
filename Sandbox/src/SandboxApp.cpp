@@ -38,7 +38,7 @@ public:
 
 		VertexBuffer* m_VBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		IndexBuffer* m_IBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint));
-		m_Camera = new OrthographicCamera(1920.0f/1080.0f);
+		m_Camera = new OrthographicCamera(1920.0f / 1080.0f);
 		m_OrthographicCameraController.SetCamera(m_Camera);
 
 		m_VBuffer->SetLayout(layout);
@@ -49,16 +49,22 @@ public:
 		m_BlendTexture = Texture2D::Create("assets/textures2D/grass.png");
 		m_Shader = Shader::Create("assets/shaders/testing/Blending.glsl");
 
-		if(Renderer::GetAPI() == RendererAPI::API::OpenGL)
-		static_cast<TituEngine::OpenGLShader*>(m_Shader)->UploadUniformInt("u_Texture", 0);
+		if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+			static_cast<TituEngine::OpenGLShader*>(m_Shader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnImGuiRender() override
 	{
 		ImGui::Begin("Sandbox Inspector");
+
 		ImGui::Text("Delta time %f (%fms)", currentTimeStep.GetDeltaTime(), currentTimeStep.GetDeltaTimeMilliseconds());
 		ImGui::DragFloat("Triangle Speed", &m_TriangleSpeed, 0.2f, 0.0f, 10.0f);
 		ImGui::DragFloat("Triangle Angular Speed", &m_TriangleAngularSpeed, 0.2f, 0.0f, 10.0f);
+		if (ImGui::Button("Reset"))
+		{
+			m_TriangleSpeed = 1.0f;
+			m_TriangleAngularSpeed = 1.0f;
+		}
 		ImGui::End();
 	}
 
@@ -104,7 +110,18 @@ public:
 	void OnEvent(Event& e) override
 	{
 		m_OrthographicCameraController.OnEvent(e);
+
+		EventDispatcher eDispatcher(e);
+		eDispatcher.Dispatch<WindowResizeEvent>(std::bind(&SandboxLayer::OnWindowResized, this, std::placeholders::_1));
 	}
+
+	bool OnWindowResized(WindowResizeEvent& e)
+	{
+
+
+		return false;
+	}
+
 
 private:
 
