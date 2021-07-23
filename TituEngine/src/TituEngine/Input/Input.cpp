@@ -1,7 +1,7 @@
 #include "tepch.h"
 #include "Input.h"
 
-#include "TituEngine/Application.h"
+#include "TituEngine/Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace TituEngine

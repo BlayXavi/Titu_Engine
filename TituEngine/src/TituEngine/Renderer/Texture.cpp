@@ -1,7 +1,7 @@
 #include "tepch.h"
 #include "Texture.h"
 
-#include "TituEngine/Core.h"
+#include "TituEngine/Core/Core.h"
 #include "Renderer.h"
 
 #include "TituEngine/Platform/OpenGL/OpenGLTexture2D.h"

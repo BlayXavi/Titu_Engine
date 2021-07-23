@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TituEngine/Events/Event.h"
-#include "TituEngine/Core.h"
+#include "TituEngine/Core/Core.h"
 #include "TituEngine/Core/Timestep.h"
 
 namespace TituEngine

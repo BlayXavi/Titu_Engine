@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GLFW/glfw3.h"
-#include "TituEngine/Window.h"
+#include "TituEngine/Core/Window.h"
 #include "TituEngine/Renderer/GraphicsContext.h"
 
 namespace TituEngine

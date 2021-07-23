@@ -1,8 +1,8 @@
 #include "tepch.h"
 #include "Application.h"
 
-#include "Input/Input.h"
-#include "Renderer/Renderer.h"
+#include "TituEngine/Input/Input.h"
+#include "TituEngine/Renderer/Renderer.h"
 
 namespace TituEngine
 {

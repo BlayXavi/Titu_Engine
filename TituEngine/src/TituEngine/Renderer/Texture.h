@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "TituEngine/Core.h"
+#include "TituEngine/Core/Core.h"
 
 namespace TituEngine
 {

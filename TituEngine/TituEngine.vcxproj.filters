@@ -63,16 +63,16 @@
     <ClInclude Include="src\TituEngine.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Application.h">
+    <ClInclude Include="src\TituEngine\Core\Application.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Core.h">
+    <ClInclude Include="src\TituEngine\Core\Core.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Core\Timestep.h">
       <Filter>src\TituEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\EntryPoint.h">
+    <ClInclude Include="src\TituEngine\Core\EntryPoint.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Events\ApplicationEvent.h">
@@ -102,7 +102,7 @@
     <ClInclude Include="src\TituEngine\Layer\LayerStack.h">
       <Filter>src\TituEngine\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Log.h">
+    <ClInclude Include="src\TituEngine\Core\Log.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.h">
@@ -141,7 +141,7 @@
     <ClInclude Include="src\TituEngine\Renderer\VertexArray.h">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Window.h">
+    <ClInclude Include="src\TituEngine\Core\Window.h">
       <Filter>src\TituEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\tepch.h">
@@ -1393,7 +1393,7 @@
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TituEngine\Application.cpp">
+    <ClCompile Include="src\TituEngine\Core\Application.cpp">
       <Filter>src\TituEngine</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Core\Timestep.cpp">
@@ -1414,7 +1414,7 @@
     <ClCompile Include="src\TituEngine\Layer\LayerStack.cpp">
       <Filter>src\TituEngine\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="src\TituEngine\Log.cpp">
+    <ClCompile Include="src\TituEngine\Core\Log.cpp">
       <Filter>src\TituEngine</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.cpp">

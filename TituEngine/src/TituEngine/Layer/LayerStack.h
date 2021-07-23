@@ -1,5 +1,5 @@
 #pragma once
-#include "TituEngine/Core.h"
+#include "TituEngine/Core/Core.h"
 #include "Layer.h"
 
 namespace TituEngine

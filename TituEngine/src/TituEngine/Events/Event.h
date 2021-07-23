@@ -1,6 +1,6 @@
 #pragma once
 #include "tepch.h"
-#include "TituEngine/Core.h"
+#include "TituEngine/Core/Core.h"
 
 namespace TituEngine {
 

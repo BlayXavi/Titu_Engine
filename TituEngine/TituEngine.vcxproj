@@ -137,10 +137,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\TituEngine.h" />
-    <ClInclude Include="src\TituEngine\Application.h" />
-    <ClInclude Include="src\TituEngine\Core.h" />
+    <ClInclude Include="src\TituEngine\Core\Application.h" />
+    <ClInclude Include="src\TituEngine\Core\Core.h" />
     <ClInclude Include="src\TituEngine\Core\Timestep.h" />
-    <ClInclude Include="src\TituEngine\EntryPoint.h" />
+    <ClInclude Include="src\TituEngine\Core\EntryPoint.h" />
     <ClInclude Include="src\TituEngine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\TituEngine\Events\Event.h" />
     <ClInclude Include="src\TituEngine\Events\KeyEvent.h" />
@@ -150,7 +150,7 @@
     <ClInclude Include="src\TituEngine\Input\KeyboardMouseCodes.h" />
     <ClInclude Include="src\TituEngine\Layer\Layer.h" />
     <ClInclude Include="src\TituEngine\Layer\LayerStack.h" />
-    <ClInclude Include="src\TituEngine\Log.h" />
+    <ClInclude Include="src\TituEngine\Core\Log.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
@@ -165,7 +165,7 @@
     <ClInclude Include="src\TituEngine\Renderer\Shader.h" />
     <ClInclude Include="src\TituEngine\Renderer\Texture.h" />
     <ClInclude Include="src\TituEngine\Renderer\VertexArray.h" />
-    <ClInclude Include="src\TituEngine\Window.h" />
+    <ClInclude Include="src\TituEngine\Core\Window.h" />
     <ClInclude Include="src\tepch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -583,14 +583,14 @@
     <ClInclude Include="vendor\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TituEngine\Application.cpp" />
+    <ClCompile Include="src\TituEngine\Core\Application.cpp" />
     <ClCompile Include="src\TituEngine\Core\Timestep.cpp" />
     <ClCompile Include="src\TituEngine\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\TituEngine\Input\Input.cpp" />
     <ClCompile Include="src\TituEngine\Layer\Layer.cpp" />
     <ClCompile Include="src\TituEngine\Layer\LayerStack.cpp" />
-    <ClCompile Include="src\TituEngine\Log.cpp" />
+    <ClCompile Include="src\TituEngine\Core\Log.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />

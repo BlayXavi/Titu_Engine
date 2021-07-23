@@ -2,10 +2,10 @@
 
 #include "Core.h"
 #include "Window.h"
-#include "Core/Timestep.h"
-#include "Events/Event.h"
-#include "Layer/LayerStack.h"
-#include "Events/ApplicationEvent.h"
+#include "Timestep.h"
+#include "TituEngine/Events/Event.h"
+#include "TituEngine/Events/ApplicationEvent.h"
+#include "TituEngine/Layer/LayerStack.h"
 #include "TituEngine/ImGui/ImGuiLayer.h"
 
 namespace TituEngine

@@ -12,10 +12,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "TituEngine/Core.h"
+#include "TituEngine/Core/Core.h"
 
 #pragma warning(push, 0)
-#include "TituEngine/Log.h"
+#include "TituEngine/Core/Log.h"
 #pragma warning(pop)
 
 #ifdef TE_PLATFORM_WINDOWS

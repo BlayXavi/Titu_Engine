@@ -1,6 +1,6 @@
 #include "tepch.h"
 #include "OpenGLShader.h"
-#include "TituEngine/Core.h"
+#include "TituEngine/Core/Core.h"
 
 #include <fstream>
 #include <glad/glad.h>
