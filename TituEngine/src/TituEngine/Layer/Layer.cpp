@@ -7,9 +7,4 @@ namespace TituEngine
 	{
 		
 	}
-
-	Layer::~Layer()
-	{
-
-	}
 }

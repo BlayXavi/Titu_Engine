@@ -6,7 +6,7 @@ namespace TituEngine
 	class OpenGLRendererAPI : public RendererAPI
 	{
 	public:
-		OpenGLRendererAPI() {}
+		OpenGLRendererAPI() = default;
 
 		virtual int Init() override;
 

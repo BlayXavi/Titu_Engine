@@ -88,7 +88,8 @@ namespace TituEngine
 	{
 	public:
 
-		BufferLayout() {}
+		BufferLayout() = default;
+		~BufferLayout() = default;
 
 		BufferLayout(const std::initializer_list<BufferElement>& elements) : m_Elements(elements), m_Stride(0)
 		{
@@ -145,7 +146,6 @@ namespace TituEngine
 	{
 	public:
 		~IndexBuffer() = default;
-
 		static IndexBuffer* Create(uint* vertices, uint size);
 		virtual uint GetCount() const = 0;
 	};

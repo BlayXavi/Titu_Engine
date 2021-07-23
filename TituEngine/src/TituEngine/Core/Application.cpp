@@ -25,11 +25,6 @@ namespace TituEngine
 		PushOverlay(m_ImGuiLayer);
 	}
 
-	Application::~Application()
-	{
-
-	}
-
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
