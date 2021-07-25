@@ -6,7 +6,7 @@
 
 namespace TituEngine
 {
-#if TE_PLATFORM_WINDOWS
+#ifdef TE_PLATFORM_WINDOWS
 	InputPlatform* InputPlatform::s_Instance = new InputPlatformWindows;
 
 	bool InputPlatformWindows::IsKeyPressedImpl(int keycode)

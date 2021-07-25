@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Core.h"
 #include "Window.h"
 #include "Timestep.h"
 #include "TituEngine/Events/Event.h"

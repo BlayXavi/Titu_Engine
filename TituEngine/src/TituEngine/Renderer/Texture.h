@@ -9,6 +9,8 @@ namespace TituEngine
 	class Texture
 	{
 	public:
+		virtual ~Texture() = default;
+
 		inline uint GetWidth() const { return m_Width; }
 		inline uint GetHeight() const { return m_Height; }
 		inline std::string GetPath() const { return m_Path; }

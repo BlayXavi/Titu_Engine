@@ -141,7 +141,10 @@ namespace TituEngine
 
 		// Always detach shaders after a successful link.
 		for (auto& id : glShaderIDs)
+		{
 			glDetachShader(id, id);
+			glDeleteShader(id);
+		}
 	}
 
 	OpenGLShader::~OpenGLShader()

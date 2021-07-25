@@ -12,6 +12,7 @@ namespace TituEngine
 		enum class Projection { ORTHOGRAPHIC = 0, PERSPECTIVE = 1 };
 
 		Camera();
+		virtual ~Camera() = default;
 
 		void SetPosition(glm::vec3 position) { m_Position = position; RecalculateViewMatrix(); }
 

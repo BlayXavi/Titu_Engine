@@ -1,5 +1,7 @@
 #pragma once
 
+#include <TituEngine/Core/Core.h>
+
 //For use by TituEngine Applications	
 #include "TituEngine/Core/Application.h"
 
@@ -20,6 +22,3 @@
 #include "TituEngine/Renderer/Shader.h"
 
 #include "TituEngine/Renderer/Camera.h"
-
-//--- ENTRY POINT ---
-#include "TituEngine/Core/EntryPoint.h"

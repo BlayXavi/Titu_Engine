@@ -78,7 +78,6 @@ project "TituEngine"
 		defines
 		{
 			"TE_BUILD_DLL",
-			"TE_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE"
 		}
 
@@ -130,11 +129,6 @@ project "Sandbox"
 	filter "system:windows"
 		staticruntime "on"
 		systemversion "latest"
-
-		defines
-		{
-			"TE_PLATFORM_WINDOWS"
-		}
 
 	filter "configurations:Debug"
 		defines "TE_DEBUG"

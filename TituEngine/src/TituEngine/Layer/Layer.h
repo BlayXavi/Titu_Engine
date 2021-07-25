@@ -10,7 +10,7 @@ namespace TituEngine
 	{
 	public:
 		Layer(const std::string& name = "LAYER");
-		~Layer() = default;
+		virtual ~Layer() = default;
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}

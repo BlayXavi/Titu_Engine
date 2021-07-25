@@ -1,5 +1,15 @@
 #pragma once
 
+#ifdef _WIN32
+#ifdef _WIN64
+#define TE_PLATFORM_WINDOWS
+#else
+error Winx86 not supported
+#endif
+#else
+error Platform not supported
+#endif
+
 #ifdef  TE_PLATFORM_WINDOWS
 #if TE_DLL
 #ifdef  TE_BUILD_DLL
@@ -7,11 +17,9 @@
 #else
 #define TE_API __declspec(dllimport)
 #endif
-#else 
+#else
 #define TE_API
 #endif //  TE_BUILD_DLL
-#else
-#error TituEngine only supports windows!
 #endif //  TE_PLATFORM_WINDOWS
 
 #ifdef TE_ENABLE_ASSERTS
