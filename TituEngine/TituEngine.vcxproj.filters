@@ -1395,6 +1395,7 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Core\Application.cpp">
@@ -1469,5 +1470,6 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

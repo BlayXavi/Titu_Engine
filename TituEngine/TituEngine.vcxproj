@@ -162,6 +162,7 @@
     <ClInclude Include="src\TituEngine\Renderer\Buffer.h" />
     <ClInclude Include="src\TituEngine\Renderer\Camera.h" />
     <ClInclude Include="src\TituEngine\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\TituEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\TituEngine\Renderer\Renderer.h" />
     <ClInclude Include="src\TituEngine\Renderer\Shader.h" />
     <ClInclude Include="src\TituEngine\Renderer\Texture.h" />
@@ -602,6 +603,7 @@
     <ClCompile Include="src\TituEngine\Renderer\Camera.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\TituEngine\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\Shader.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\Texture.cpp" />
     <ClCompile Include="src\TituEngine\Renderer\VertexArray.cpp" />

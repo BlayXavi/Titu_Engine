@@ -5,7 +5,7 @@ namespace TituEngine
 {
 	//-------------------------------------------CAMERA-------------------------------------
 	Camera::Camera()
-		: m_ViewMatrix(1.0f), m_InversedViewMatrix(1.0f), m_ProjectionMatrix(1.0f), m_ViewProjectionMatrix(1.0f)
+		: m_ViewMatrix(1.0f), m_InversedViewMatrix(1.0f), m_ProjectionMatrix(1.0f), m_ViewProjectionMatrix(1.0f), m_AspectRatio(1.0f)
 	{
 	}
 

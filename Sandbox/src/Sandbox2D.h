@@ -10,7 +10,6 @@
 #include <glm/ext/scalar_constants.hpp> // glm::pi
 
 #include "imgui/imgui.h"
-#include "TituEngine/Platform/OpenGL/OpenGLShader.h"
 
 #include "Controller/OrthographicCameraController.h"
 
@@ -27,12 +26,11 @@ public:
 
 private:
 
-	Shader* m_Shader = nullptr;
-	VertexArray* m_VertexArray = nullptr;
 	OrthographicCamera* m_Camera = nullptr;
 	OrthographicCameraController m_OrthographicCameraController;
-	Texture* texture = nullptr;
-	Texture* m_BlendTexture = nullptr;
+	glm::vec4 m_QuadColor;
+	glm::vec4 m_QuadTextureColor;
+	Texture2D* m_QuadTexture;
 
 	glm::mat4 m_TriangleTransform;
 	float m_TriangleSpeed;
@@ -45,5 +43,4 @@ private:
 	float m_CameraRotation;
 
 	Timestep currentTimeStep;
-
 };

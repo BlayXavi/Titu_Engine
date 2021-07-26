@@ -14,6 +14,13 @@ namespace TituEngine
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
 		glDeleteVertexArrays(1, &m_VertexArrayID);
+		for (auto& vb : m_VertexBuffers)
+		{
+			delete vb;
+			vb = nullptr;
+		}
+		delete m_IndexBuffer;
+		m_IndexBuffer = nullptr;
 	}
 
 	void OpenGLVertexArray::Bind() const

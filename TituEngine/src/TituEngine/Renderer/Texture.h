@@ -30,6 +30,7 @@ namespace TituEngine
 	{
 	public:
 		static Texture2D* Create(const std::string& path);
+		virtual void Bind(uint slot = 0) const = 0;
 
 	protected:
 		Texture2D(const std::string& path) : Texture(path) { }

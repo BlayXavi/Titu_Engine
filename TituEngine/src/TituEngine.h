@@ -17,6 +17,7 @@
 #include "TituEngine/ImGui/ImGuiLayer.h"
 
 #include "TituEngine/Renderer/Renderer.h"
+#include "TituEngine/Renderer/Renderer2D.h"
 #include "TituEngine/Renderer/VertexArray.h"
 #include "TituEngine/Renderer/Texture.h"
 #include "TituEngine/Renderer/Shader.h"

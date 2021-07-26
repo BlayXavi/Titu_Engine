@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #include "VertexArray.h"
 
-#include "Camera.h"
 #include "Shader.h"
 
 namespace TituEngine
@@ -17,7 +16,7 @@ namespace TituEngine
 			OpenGL = 1
 		};
 
-		virtual int Init() = 0;
+		virtual void Init() = 0;
 		virtual ~RendererAPI() = default;
 
 		virtual void SetClearColor(const glm::vec4& color) = 0;
@@ -36,31 +35,18 @@ namespace TituEngine
 	{
 	public:
 
-		static int Init();
-
-		static void BeginScene(const Camera* camera);
-		static void EndScene();
+		static void Init();
 
 		static void OnWindowResized(uint32_t width, uint32_t height);
 
-		static void Submit(const VertexArray* vertexArray, Shader* shader´, glm::mat4 transform);
-
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
-
-	private:
-		struct SceneData
-		{
-			glm::mat4 ViewProjectionMatrix;
-		};
-
-		static SceneData s_SceneData;
 	};
 
 	class RenderCommand
 	{
 	public:
 
-		inline static int Init() { return s_RendererAPI->Init(); }
+		inline static void Init() { s_RendererAPI->Init(); }
 
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 		inline static void Clear() { s_RendererAPI->Clear(); }

@@ -5,16 +5,10 @@
 
 namespace TituEngine
 {
-	int OpenGLRendererAPI::Init()
+	void OpenGLRendererAPI::Init()
 	{
-		int result = 0;
-
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		TE_ASSERT(result == 0, "Open GL Renderer API could not be initialized.")
-
-		return result;
 	}
 
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)

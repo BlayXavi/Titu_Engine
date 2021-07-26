@@ -14,9 +14,10 @@ namespace TituEngine
 		void Bind() const override;
 		void Unbind() const override;
 
-		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
-		void UploadUniformInt(const std::string& name, const int& integer);
-
+		void SetInt(const std::string& name, const int& integer)  override;
+		void SetMat4(const std::string& name, const glm::mat4& matrix) override;
+		void SetFloat3(const std::string& name, const glm::vec3& value) override;
+		void SetFloat4(const std::string& name, const glm::vec4& value) override;
 	private:
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& path);
@@ -30,6 +31,8 @@ namespace TituEngine
 		std::vector<uint>glShaderIDs;
 
 		void ClearData();
+
+		std::string m_Path;
 
 		friend Shader;
 	};

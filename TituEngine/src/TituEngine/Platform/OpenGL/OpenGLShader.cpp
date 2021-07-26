@@ -17,6 +17,7 @@ namespace TituEngine
 
 	OpenGLShader::OpenGLShader(const std::string& path)
 	{
+		m_Path = path;
 		std::ifstream in(path, std::ios::in, std::ios::binary);
 		if (in)
 		{
@@ -60,7 +61,7 @@ namespace TituEngine
 				pos = shaderSource.find(typeToken, nexLinePos);
 				shaderSources[shaderType] = shaderSource.substr(nexLinePos, pos - (nexLinePos == std::string::npos ? shaderSource.size() - 1 : nexLinePos));
 
-				
+
 			}
 
 			Compile(shaderSources);
@@ -170,6 +171,9 @@ namespace TituEngine
 			return (*iterator).second;
 
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+
+		TE_ASSERT(location >= 0, "Error, uniform not found. \"{0}\" at shader {1}", name, m_Path);
+
 		m_UniformLocationCache[name] = location;
 		return location;
 	}
@@ -184,15 +188,27 @@ namespace TituEngine
 		glUseProgram(0);
 	}
 
-	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
 	{
 		GLint loc = GetUniformLocation(name);
 		glUniformMatrix4fv(loc, 1, GL_FALSE, &matrix[0][0]);
 	}
 
-	void OpenGLShader::UploadUniformInt(const std::string& name, const int& integer)
+	void OpenGLShader::SetInt(const std::string& name, const int& integer)
 	{
 		GLint loc = GetUniformLocation(name);
 		glUniform1i(loc, integer);
+	}
+
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& floats)
+	{
+		GLint loc = GetUniformLocation(name);
+		glUniform3f(loc, floats[0], floats[1], floats[2]);
+	}
+
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& floats)
+	{
+		GLint loc = GetUniformLocation(name);
+		glUniform4f(loc, floats[0], floats[1], floats[2], floats[3]);
 	}
 }
