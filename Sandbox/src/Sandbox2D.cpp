@@ -1,7 +1,8 @@
 #include "Sandbox2D.h"
 
 Sandbox2DLayer::Sandbox2DLayer()
-	: Layer("SandBox 2D Layer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f), m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f), m_TriangleAngularSpeed(1.0f), m_QuadColor(0.9f, 0.1f, 0.1f, 1.0f), m_QuadTextureColor(1.0f)
+	: Layer("SandBox 2D Layer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f),
+	m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f), m_TriangleAngularSpeed(1.0f), m_QuadColor(0.9f, 0.1f, 0.1f, 1.0f), m_QuadTextureColor(1.0f), m_zSquare(0.0f)
 {
 	m_Camera = new OrthographicCamera(1920.0f / 1080.0f);
 	m_OrthographicCameraController.SetCamera(m_Camera);
@@ -20,9 +21,10 @@ void Sandbox2DLayer::OnImGuiRender()
 	ImGui::Text("Delta time %f (%fms)", currentTimeStep.GetDeltaTime(), currentTimeStep.GetDeltaTimeMilliseconds());
 	ImGui::DragFloat("Triangle Speed", &m_TriangleSpeed, 0.2f, 0.0f, 10.0f);
 	ImGui::DragFloat("Triangle Angular Speed", &m_TriangleAngularSpeed, 0.2f, 0.0f, 10.0f);
+	ImGui::DragFloat("z background", &m_zSquare, 0.2f, -1.0f, 1.0f);
 	ImGui::ColorEdit4("Square Color", &m_QuadColor[0]);
 	ImGui::ColorEdit4("Texture Color", &m_QuadTextureColor[0]);
-	
+
 	if (ImGui::Button("Reset"))
 	{
 		m_TriangleSpeed = 1.0f;
@@ -61,9 +63,9 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 
 	Renderer2D::BeginScene(m_Camera);
 	{
-		//Renderer2D::DrawQuad(m_TriangleTransform, m_QuadColor);
-		//Renderer2D::DrawQuad({ -5.0f, -5.0f }, { 0.5f, 1.0f }, m_QuadColor);
-		Renderer2D::DrawQuad({ 0.0f, 0.0f }, {1.0f, 1.0f}, m_QuadTextureColor, *m_QuadTexture);
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, -9.99f}, { 20.0f, 20.0f }, m_QuadTextureColor, *m_QuadTexture);
+		Renderer2D::DrawQuad(m_TriangleTransform, m_QuadColor);
+		Renderer2D::DrawQuad({ 0.5f, 0.5f, m_zSquare }, { 0.5f, 1.0f }, glm::vec4(0.2f, 0.2f, 0.8f, 0.8f));
 	}
 
 	Renderer2D::EndScene();

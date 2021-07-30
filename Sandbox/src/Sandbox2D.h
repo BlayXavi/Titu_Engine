@@ -35,6 +35,7 @@ private:
 	glm::mat4 m_TriangleTransform;
 	float m_TriangleSpeed;
 	float m_TriangleAngularSpeed;
+	float m_zSquare;
 
 	glm::vec3 m_CameraPosition;
 	float m_CameraSpeed;

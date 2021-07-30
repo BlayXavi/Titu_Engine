@@ -14,7 +14,7 @@ uniform mat4 u_ModelViewProjectionMatrix;
 void main()
 {
 	v_Color = u_Color;
-	v_TextCoord = a_TextCoord;
+	v_TextCoord = a_TextCoord * 10.0f;
 	gl_Position = u_ModelViewProjectionMatrix * vec4(a_Position, 1.0);
 }
 
