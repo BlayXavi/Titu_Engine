@@ -12,6 +12,7 @@
 #include "imgui/imgui.h"
 
 #include "Controller/OrthographicCameraController.h"
+#include "TituEngine/Instrumentation/Profiler.h"
 
 class Sandbox2DLayer : public Layer
 {

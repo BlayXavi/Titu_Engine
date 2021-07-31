@@ -10,8 +10,8 @@ namespace TituEngine
 	struct Renderer2DStorage
 	{
 		VertexArray* QuadVertexArray;
-		Shader* FlatColorShader;
 		Shader* TextureColorShader;
+		Texture* WhiteTexture;
 	};
 
 	static Renderer2DStorage* s_StorageData;
@@ -46,11 +46,14 @@ namespace TituEngine
 
 		squareVB->SetLayout(layout);
 
+		s_StorageData->WhiteTexture = Texture2D::Create(1, 1);
+		uint data = 0xffffffff;
+		s_StorageData->WhiteTexture->SetData(&data, sizeof(uint));
+
 		s_StorageData->QuadVertexArray = VertexArray::Create();
 		s_StorageData->QuadVertexArray->AddVertexBuffer(squareVB);
 		s_StorageData->QuadVertexArray->SetIndexBuffer(indexBuffer);
 
-		s_StorageData->FlatColorShader = Shader::Create("assets/shaders/testing/FlatColor.glsl");
 		s_StorageData->TextureColorShader = Shader::Create("assets/shaders/testing/Blending.glsl");
 		s_StorageData->TextureColorShader->Bind();
 			s_StorageData->TextureColorShader->SetInt("u_Texture", 0);
@@ -59,14 +62,12 @@ namespace TituEngine
 	void Renderer2D::Shutdown()
 	{
 		delete s_StorageData->QuadVertexArray;
-		delete s_StorageData->FlatColorShader;
 		delete s_StorageData;
 		delete s_SceneData;
 	}
 
 	void Renderer2D::BeginScene(const Camera* camera)
 	{
-		(s_StorageData->FlatColorShader)->Bind();
 		camera = camera;
 		s_SceneData->m_CameraViewProjectionMatrix = &camera->GetViewProjectionMatrix();
 	}
@@ -77,9 +78,10 @@ namespace TituEngine
 
 	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color)
 	{
-		s_StorageData->FlatColorShader->Bind();
-		s_StorageData->FlatColorShader->SetFloat4("u_Color", color);
-		s_StorageData->FlatColorShader->SetMat4("u_ModelViewProjectionMatrix", *(s_SceneData->m_CameraViewProjectionMatrix) * model);
+		s_StorageData->WhiteTexture->Bind();
+		s_StorageData->TextureColorShader->Bind();
+		s_StorageData->TextureColorShader->SetFloat4("u_Color", color);
+		s_StorageData->TextureColorShader->SetMat4("u_ModelViewProjectionMatrix", *(s_SceneData->m_CameraViewProjectionMatrix) * model);
 
 		s_StorageData->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_StorageData->QuadVertexArray);
@@ -118,3 +120,4 @@ namespace TituEngine
 		DrawQuad(modelMatrix, color, texture);
 	}
 }
+	

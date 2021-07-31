@@ -19,6 +19,9 @@
     <Filter Include="src\TituEngine\Input">
       <UniqueIdentifier>{775B447B-63EA-CD44-0C09-E23FF876DEEA}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TituEngine\Instrumentation">
+      <UniqueIdentifier>{3B553DD6-277B-073D-10C1-8C08FC852C09}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TituEngine\Layer">
       <UniqueIdentifier>{44A8737B-3037-FD44-D955-1140C5C30DEB}</UniqueIdentifier>
     </Filter>
@@ -102,6 +105,9 @@
     <ClInclude Include="src\TituEngine\Input\KeyboardMouseCodes.h">
       <Filter>src\TituEngine\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\TituEngine\Instrumentation\Profiler.h">
+      <Filter>src\TituEngine\Instrumentation</Filter>
+    </ClInclude>
     <ClInclude Include="src\TituEngine\Layer\Layer.h">
       <Filter>src\TituEngine\Layer</Filter>
     </ClInclude>
@@ -139,6 +145,9 @@
       <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Renderer\Renderer.h">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TituEngine\Renderer\Renderer2D.h">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TituEngine\Renderer\Shader.h">
@@ -1395,7 +1404,6 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TituEngine\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TituEngine\Core\Application.cpp">
@@ -1415,6 +1423,9 @@
     </ClCompile>
     <ClCompile Include="src\TituEngine\Input\Input.cpp">
       <Filter>src\TituEngine\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TituEngine\Instrumentation\Profiler.cpp">
+      <Filter>src\TituEngine\Instrumentation</Filter>
     </ClCompile>
     <ClCompile Include="src\TituEngine\Layer\Layer.cpp">
       <Filter>src\TituEngine\Layer</Filter>
@@ -1455,6 +1466,9 @@
     <ClCompile Include="src\TituEngine\Renderer\Renderer.cpp">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\TituEngine\Renderer\Renderer2D.cpp">
+      <Filter>src\TituEngine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\TituEngine\Renderer\Shader.cpp">
       <Filter>src\TituEngine\Renderer</Filter>
     </ClCompile>
@@ -1470,6 +1484,5 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TituEngine\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

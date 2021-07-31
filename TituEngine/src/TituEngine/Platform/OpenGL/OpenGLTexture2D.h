@@ -10,13 +10,20 @@ namespace TituEngine
 	public:
 
 		void Bind(uint slot = 0) const override;
+		void SetData(void* data, uint size, bool deleteData = false) override;
 
 		~OpenGLTexture2D();
 
 	private:
-		OpenGLTexture2D(const std::string& path);
-		GLuint m_RendererID;
-
 		friend Texture2D;
+
+		OpenGLTexture2D(uint width, uint height);
+		OpenGLTexture2D(const std::string& path);
+	
+	private:
+
+		GLenum m_DataFormat;
+		GLenum m_InternalFormat;
+		GLuint m_RendererID;
 	};
 }

@@ -30,40 +30,51 @@ void Sandbox2DLayer::OnImGuiRender()
 		m_TriangleSpeed = 1.0f;
 		m_TriangleAngularSpeed = 1.0f;
 	}
+
+	Profiler::EndFrame();
+
 	ImGui::End();
 }
 
 void Sandbox2DLayer::OnUpdate(Timestep ts)
 {
-	m_OrthographicCameraController.OnUpdate(ts);
+	PROFILE("Sandbox2DLayer::OnUpdate");
+
+	{
+		PROFILE("Sandbox2DLayer::CameraUpdate");
+		m_OrthographicCameraController.OnUpdate(ts);
+	}
 
 	currentTimeStep = ts;
 
-	if (InputBridge::IsKeyPressed(TE_KEY_D))
-		m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(m_TriangleSpeed * ts, 0.0f, 0.0f));
-	if (InputBridge::IsKeyPressed(TE_KEY_A))
-		m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(-m_TriangleSpeed * ts, 0.0f, 0.0f));
-	if (InputBridge::IsKeyPressed(TE_KEY_W))
-		m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, m_TriangleSpeed * ts, 0.0f));
-	if (InputBridge::IsKeyPressed(TE_KEY_S))
-		m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, -m_TriangleSpeed * ts, 0.0f));
+	{
+		PROFILE("Sandbox2DLayer::ProcessInput");
+		if (InputBridge::IsKeyPressed(TE_KEY_D))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(m_TriangleSpeed * ts, 0.0f, 0.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_A))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(-m_TriangleSpeed * ts, 0.0f, 0.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_W))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, m_TriangleSpeed * ts, 0.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_S))
+			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, -m_TriangleSpeed * ts, 0.0f));
 
-	if (InputBridge::IsKeyPressed(TE_KEY_Z))
-		m_TriangleTransform = glm::rotate(m_TriangleTransform, m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
-	if (InputBridge::IsKeyPressed(TE_KEY_X))
-		m_TriangleTransform = glm::rotate(m_TriangleTransform, -m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_Z))
+			m_TriangleTransform = glm::rotate(m_TriangleTransform, m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
+		if (InputBridge::IsKeyPressed(TE_KEY_X))
+			m_TriangleTransform = glm::rotate(m_TriangleTransform, -m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
 
-	if (InputBridge::IsKeyPressed(TE_KEY_Q))
-		m_CameraRotation += m_CameraAngularSpeed * ts;
-	else if (InputBridge::IsKeyPressed(TE_KEY_E))
-		m_CameraRotation -= m_CameraAngularSpeed * ts;
+		if (InputBridge::IsKeyPressed(TE_KEY_Q))
+			m_CameraRotation += m_CameraAngularSpeed * ts;
+		else if (InputBridge::IsKeyPressed(TE_KEY_E))
+			m_CameraRotation -= m_CameraAngularSpeed * ts;
+	}
 
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	RenderCommand::Clear();
 
 	Renderer2D::BeginScene(m_Camera);
 	{
-		Renderer2D::DrawQuad({ 0.0f, 0.0f, -9.99f}, { 20.0f, 20.0f }, m_QuadTextureColor, *m_QuadTexture);
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, -9.99f }, { 20.0f, 20.0f }, m_QuadTextureColor, *m_QuadTexture);
 		Renderer2D::DrawQuad(m_TriangleTransform, m_QuadColor);
 		Renderer2D::DrawQuad({ 0.5f, 0.5f, m_zSquare }, { 0.5f, 1.0f }, glm::vec4(0.2f, 0.2f, 0.8f, 0.8f));
 	}

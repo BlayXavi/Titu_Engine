@@ -15,10 +15,7 @@
     <ClCompile Include="src\Controller\OrthographicCameraController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="src\SandboxApp.cpp" />
     <ClCompile Include="src\Sandbox2D.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\testing\FlatColor.glsl" />
+    <ClCompile Include="src\SandboxApp.cpp" />
   </ItemGroup>
 </Project>

@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>tepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TE_BUILD_DLL;GLFW_INCLUDE_NONE;TE_ENABLE_ASSERTS;TE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TE_BUILD_DLL;GLFW_INCLUDE_NONE;TE_ENABLE_ASSERTS;TE_ENABLE_PROFILER;TE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -150,6 +150,7 @@
     <ClInclude Include="src\TituEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\TituEngine\Input\Input.h" />
     <ClInclude Include="src\TituEngine\Input\KeyboardMouseCodes.h" />
+    <ClInclude Include="src\TituEngine\Instrumentation\Profiler.h" />
     <ClInclude Include="src\TituEngine\Layer\Layer.h" />
     <ClInclude Include="src\TituEngine\Layer\LayerStack.h" />
     <ClInclude Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.h" />
@@ -162,8 +163,8 @@
     <ClInclude Include="src\TituEngine\Renderer\Buffer.h" />
     <ClInclude Include="src\TituEngine\Renderer\Camera.h" />
     <ClInclude Include="src\TituEngine\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\TituEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\TituEngine\Renderer\Renderer.h" />
+    <ClInclude Include="src\TituEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\TituEngine\Renderer\Shader.h" />
     <ClInclude Include="src\TituEngine\Renderer\Texture.h" />
     <ClInclude Include="src\TituEngine\Renderer\VertexArray.h" />
@@ -590,6 +591,7 @@
     <ClCompile Include="src\TituEngine\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\TituEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\TituEngine\Input\Input.cpp" />
+    <ClCompile Include="src\TituEngine\Instrumentation\Profiler.cpp" />
     <ClCompile Include="src\TituEngine\Layer\Layer.cpp" />
     <ClCompile Include="src\TituEngine\Layer\LayerStack.cpp" />
     <ClCompile Include="src\TituEngine\Platform\OpenGL\OpenGLBuffer.cpp" />

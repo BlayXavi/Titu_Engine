@@ -7,6 +7,7 @@
 
 #include "TituEngine/Platform/OpenGL/OpenGLContext.h"
 
+#include "TituEngine/Instrumentation/Profiler.h"
 
 namespace TituEngine
 {

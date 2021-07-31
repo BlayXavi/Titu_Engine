@@ -83,6 +83,7 @@ project "TituEngine"
 
 	filter "configurations:Debug"
 		defines "TE_ENABLE_ASSERTS"
+		defines "TE_ENABLE_PROFILER"
 		defines "TE_DEBUG"
 		runtime "Debug"
 		symbols "on"
@@ -132,6 +133,7 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "TE_DEBUG"
+		defines "TE_ENABLE_PROFILER"
 		runtime "Debug"
 		symbols "on"
 
