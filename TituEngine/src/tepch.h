@@ -13,6 +13,7 @@
 #include <unordered_set>
 
 #include "TituEngine/Core/Core.h"
+#include "TituEngine/Instrumentation/Profiler.h"
 
 #pragma warning(push, 0)
 #include "TituEngine/Core/Log.h"

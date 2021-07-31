@@ -26,8 +26,15 @@ namespace TituEngine
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: Texture2D(path), m_DataFormat(0), m_InternalFormat(0)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channels, 0);
+
+		stbi_uc* data = nullptr;
+		{
+			TE_PROFILE_PROFILE_SCOPE("stbi_load");
+			data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channels, 0);
+		}
 		TE_ASSERT(data, "Failed loading image! {0}", path.c_str());
 
 		if (m_Channels == 4)
@@ -64,11 +71,13 @@ namespace TituEngine
 
 	void OpenGLTexture2D::Bind(uint slot) const
 	{
+		TE_PROFILE_PROFILE_FUNC();
 		glBindTextureUnit(slot, m_RendererID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint size, bool deleteData)
 	{
+		TE_PROFILE_PROFILE_FUNC();
 		TE_ASSERT(size == m_Width * m_Height * (m_DataFormat == GL_RGBA ? 4 : 3), "Error, size does not match with m_Width && m_Height.");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 

@@ -16,6 +16,8 @@ Sandbox2DLayer::~Sandbox2DLayer()
 
 void Sandbox2DLayer::OnImGuiRender()
 {
+	TE_PROFILE_PROFILE_FUNC();
+
 	ImGui::Begin("Sandbox Inspector");
 
 	ImGui::Text("Delta time %f (%fms)", currentTimeStep.GetDeltaTime(), currentTimeStep.GetDeltaTimeMilliseconds());
@@ -31,24 +33,21 @@ void Sandbox2DLayer::OnImGuiRender()
 		m_TriangleAngularSpeed = 1.0f;
 	}
 
-	Profiler::EndFrame();
-
 	ImGui::End();
 }
 
 void Sandbox2DLayer::OnUpdate(Timestep ts)
 {
-	PROFILE("Sandbox2DLayer::OnUpdate");
+	TE_PROFILE_PROFILE_FUNC();
 
 	{
-		PROFILE("Sandbox2DLayer::CameraUpdate");
 		m_OrthographicCameraController.OnUpdate(ts);
 	}
 
 	currentTimeStep = ts;
 
 	{
-		PROFILE("Sandbox2DLayer::ProcessInput");
+		TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::ProcessInput");
 		if (InputBridge::IsKeyPressed(TE_KEY_D))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(m_TriangleSpeed * ts, 0.0f, 0.0f));
 		if (InputBridge::IsKeyPressed(TE_KEY_A))
@@ -74,6 +73,8 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 
 	Renderer2D::BeginScene(m_Camera);
 	{
+		TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
+
 		Renderer2D::DrawQuad({ 0.0f, 0.0f, -9.99f }, { 20.0f, 20.0f }, m_QuadTextureColor, *m_QuadTexture);
 		Renderer2D::DrawQuad(m_TriangleTransform, m_QuadColor);
 		Renderer2D::DrawQuad({ 0.5f, 0.5f, m_zSquare }, { 0.5f, 1.0f }, glm::vec4(0.2f, 0.2f, 0.8f, 0.8f));

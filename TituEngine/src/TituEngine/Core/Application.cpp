@@ -13,10 +13,12 @@ namespace TituEngine
 	Application::Application()
 		: m_CurrentTime(0.0f)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		TE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		m_Window = std::unique_ptr< Window>(Window::Create());
+		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		Renderer::Init();
@@ -27,6 +29,8 @@ namespace TituEngine
 
 	void Application::OnEvent(Event& e)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResized));
@@ -53,6 +57,8 @@ namespace TituEngine
 	{
 		while (m_Runing)
 		{
+			TE_PROFILE_PROFILE_FUNC();
+
 			if (m_Minimized == false)
 			{
 				float time = TituEngine::Timestep::GetCurrentTime();
@@ -63,10 +69,13 @@ namespace TituEngine
 					layer->OnUpdate(ts);
 			}
 
-			m_ImGuiLayer->BeginRender();
-			for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
-				layer->OnImGuiRender();
-			m_ImGuiLayer->EndRender();
+			{
+				TE_PROFILE_PROFILE_SCOPE("ImGui Render");
+				m_ImGuiLayer->BeginRender();
+				for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
+					layer->OnImGuiRender();
+				m_ImGuiLayer->EndRender();
+			}
 
 			m_Window->OnUpdate();
 		}

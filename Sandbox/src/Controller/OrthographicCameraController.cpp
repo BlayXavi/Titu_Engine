@@ -41,6 +41,8 @@ void OrthographicCameraController::SetZoomMinMax(float min, float max)
 
 void OrthographicCameraController::OnUpdate(Timestep ts)
 {
+	TE_PROFILE_PROFILE_FUNC();
+
 	if (m_Camera == nullptr)
 		return;
 

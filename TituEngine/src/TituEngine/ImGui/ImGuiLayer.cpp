@@ -58,6 +58,8 @@ namespace TituEngine
 
 	void ImGuiLayer::BeginRender()
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -65,16 +67,27 @@ namespace TituEngine
 
 	void ImGuiLayer::EndRender()
 	{
+		TE_PROFILE_PROFILE_FUNC();
 		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Instance();
-		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+
+		{
+			TE_PROFILE_PROFILE_SCOPE("Display Size");
+
+			Application& app = Application::Instance();
+			io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+		}
 
 		// Rendering
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		{
+			TE_PROFILE_PROFILE_SCOPE("Render");
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
+			TE_PROFILE_PROFILE_SCOPE("ViewPorts");
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();

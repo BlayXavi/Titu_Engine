@@ -10,6 +10,8 @@ namespace TituEngine
 
 	void Renderer::Init()
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		Renderer2D::Init();
 		RenderCommand::Init();
 	}

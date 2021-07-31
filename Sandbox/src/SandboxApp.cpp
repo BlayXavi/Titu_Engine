@@ -16,5 +16,6 @@ public:
 
 TituEngine::Application* TituEngine::CreateApplication()
 {
+	TE_PROFILE_PROFILE_FUNC();
 	return new Sandbox();
 }

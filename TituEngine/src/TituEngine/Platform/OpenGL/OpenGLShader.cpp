@@ -17,6 +17,8 @@ namespace TituEngine
 
 	OpenGLShader::OpenGLShader(const std::string& path)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		m_Path = path;
 		std::ifstream in(path, std::ios::in, std::ios::binary);
 		if (in)
@@ -75,6 +77,8 @@ namespace TituEngine
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> shaderSources)
 	{
+		TE_PROFILE_PROFILE_SCOPE(m_Path.c_str());
+
 		GLuint program = glCreateProgram();
 		glShaderIDs.reserve(shaderSources.size());
 

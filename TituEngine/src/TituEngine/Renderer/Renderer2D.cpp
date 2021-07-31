@@ -24,6 +24,8 @@ namespace TituEngine
 
 	void Renderer2D::Init()
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		s_StorageData = new Renderer2DStorage();
 		s_SceneData = new SceneData();
 
@@ -56,11 +58,13 @@ namespace TituEngine
 
 		s_StorageData->TextureColorShader = Shader::Create("assets/shaders/testing/Blending.glsl");
 		s_StorageData->TextureColorShader->Bind();
-			s_StorageData->TextureColorShader->SetInt("u_Texture", 0);
+		s_StorageData->TextureColorShader->SetInt("u_Texture", 0);
 	}
 
 	void Renderer2D::Shutdown()
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		delete s_StorageData->QuadVertexArray;
 		delete s_StorageData;
 		delete s_SceneData;
@@ -68,6 +72,8 @@ namespace TituEngine
 
 	void Renderer2D::BeginScene(const Camera* camera)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		camera = camera;
 		s_SceneData->m_CameraViewProjectionMatrix = &camera->GetViewProjectionMatrix();
 	}
@@ -78,6 +84,8 @@ namespace TituEngine
 
 	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		s_StorageData->WhiteTexture->Bind();
 		s_StorageData->TextureColorShader->Bind();
 		s_StorageData->TextureColorShader->SetFloat4("u_Color", color);
@@ -89,17 +97,23 @@ namespace TituEngine
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		DrawQuad({ position.x, position.y, 0.0f }, size, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
 		DrawQuad(modelMatrix, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color, const Texture& texture)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		texture.Bind(0);
 		s_StorageData->TextureColorShader->Bind();
 		s_StorageData->TextureColorShader->SetFloat4("u_Color", color);
@@ -111,13 +125,16 @@ namespace TituEngine
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const Texture& texture)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		DrawQuad({ position.x, position.y, 0.0f }, size, color, texture);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Texture& texture)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
 		DrawQuad(modelMatrix, color, texture);
 	}
 }
-	

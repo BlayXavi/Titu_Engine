@@ -10,6 +10,7 @@ namespace TituEngine
 {
 	Texture2D* Texture2D::Create(uint width, uint height)
 	{
+		TE_PROFILE_PROFILE_FUNC();
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::OpenGL: return new OpenGLTexture2D(width, height);
@@ -20,6 +21,8 @@ namespace TituEngine
 
 	Texture2D* Texture2D::Create(const std::string& path)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::OpenGL: return new OpenGLTexture2D(path);

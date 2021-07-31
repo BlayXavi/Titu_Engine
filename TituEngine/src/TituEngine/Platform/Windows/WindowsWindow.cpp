@@ -35,6 +35,8 @@ namespace TituEngine
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
@@ -149,6 +151,8 @@ namespace TituEngine
 
 	void WindowsWindow::OnUpdate()
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}

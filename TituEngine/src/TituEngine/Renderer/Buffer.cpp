@@ -10,6 +10,8 @@ namespace TituEngine
 
 	VertexBuffer* VertexBuffer::Create(float* vertices, uint size)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size);
@@ -20,6 +22,8 @@ namespace TituEngine
 
 	IndexBuffer* IndexBuffer::Create(uint* vertices, uint count)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::OpenGL: return new OpenGLIndexBuffer(vertices, count);
