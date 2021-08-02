@@ -8,10 +8,10 @@ layout(location  = 1) in vec2 a_TextCoord;
 out vec2 v_TextCoord;
 
 uniform mat4 u_ModelViewProjectionMatrix;
-
+uniform vec2 u_TileSize;
 void main()
 {
-	v_TextCoord = a_TextCoord * 10.0f;
+	v_TextCoord = a_TextCoord * u_TileSize;
 	gl_Position = u_ModelViewProjectionMatrix * vec4(a_Position, 1.0);
 }
 

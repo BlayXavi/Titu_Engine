@@ -16,8 +16,10 @@ namespace TituEngine
 
 		void SetInt(const std::string& name, const int& integer)  override;
 		void SetMat4(const std::string& name, const glm::mat4& matrix) override;
+		void SetFloat2(const std::string& name, const glm::vec2& value) override;
 		void SetFloat3(const std::string& name, const glm::vec3& value) override;
 		void SetFloat4(const std::string& name, const glm::vec4& value) override;
+
 	private:
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& path);

@@ -204,6 +204,12 @@ namespace TituEngine
 		glUniform1i(loc, integer);
 	}
 
+	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& floats)
+	{
+		GLint loc = GetUniformLocation(name);
+		glUniform2f(loc, floats[0], floats[1]);
+	}
+
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& floats)
 	{
 		GLint loc = GetUniformLocation(name);

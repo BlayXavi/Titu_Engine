@@ -31,12 +31,15 @@ private:
 	OrthographicCameraController m_OrthographicCameraController;
 	glm::vec4 m_QuadColor;
 	glm::vec4 m_QuadTextureColor;
+	glm::ivec2 m_BackgroundTileSize;
 	Texture2D* m_QuadTexture;
+	Texture2D* m_QuadTexture2;
 
 	glm::mat4 m_TriangleTransform;
 	float m_TriangleSpeed;
 	float m_TriangleAngularSpeed;
 	float m_zSquare;
+	float m_squareRotationAccumulated;
 
 	glm::vec3 m_CameraPosition;
 	float m_CameraSpeed;

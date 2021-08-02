@@ -102,6 +102,11 @@ namespace TituEngine
 		DrawQuad({ position.x, position.y, 0.0f }, size, color);
 	}
 
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color)
+	{
+		DrawQuad({ position.x, position.y, 0.0f }, angle, size, color);
+	}
+
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		TE_PROFILE_PROFILE_FUNC();
@@ -110,7 +115,17 @@ namespace TituEngine
 		DrawQuad(modelMatrix, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color, const Texture& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+
+		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
+		modelMatrix = glm::rotate(modelMatrix, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		DrawQuad(modelMatrix, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color, const Texture& texture, const glm::vec2& tileSize)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
@@ -118,23 +133,39 @@ namespace TituEngine
 		s_StorageData->TextureColorShader->Bind();
 		s_StorageData->TextureColorShader->SetFloat4("u_Color", color);
 		s_StorageData->TextureColorShader->SetMat4("u_ModelViewProjectionMatrix", *(s_SceneData->m_CameraViewProjectionMatrix) * model);
+		s_StorageData->TextureColorShader->SetFloat2("u_TileSize", tileSize);
 
 		s_StorageData->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_StorageData->QuadVertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const Texture& texture)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const Texture& texture, const  glm::vec2& tileSize)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		DrawQuad({ position.x, position.y, 0.0f }, size, color, texture);
+		DrawQuad({ position.x, position.y, 0.0f }, size, color, texture, tileSize);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Texture& texture)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color, const Texture& texture, const glm::vec2& tileSize)
+	{
+		DrawQuad({ position.x, position.y, 0.0f }, angle, size, color, texture, tileSize);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Texture& texture, const glm::vec2& tileSize)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
 		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
-		DrawQuad(modelMatrix, color, texture);
+		DrawQuad(modelMatrix, color, texture, tileSize);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, const Texture& texture, const glm::vec2& tileSize)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+
+		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
+		modelMatrix = glm::rotate(modelMatrix, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		DrawQuad(modelMatrix, color, texture, tileSize);
 	}
 }
