@@ -13,7 +13,7 @@ namespace TituEngine
 	{
 	public:
 		Application();
-		virtual ~Application() = default;
+		virtual ~Application();
 
 		void Run();
 

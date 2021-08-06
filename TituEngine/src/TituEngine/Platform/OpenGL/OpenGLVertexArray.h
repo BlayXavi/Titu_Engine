@@ -19,6 +19,7 @@ namespace TituEngine
 
 	private:
 		friend VertexArray; //Only VertexArray can create instances of OpenGlVertexArray
+
 		OpenGLVertexArray();
 
 		std::vector<const VertexBuffer*> m_VertexBuffers;

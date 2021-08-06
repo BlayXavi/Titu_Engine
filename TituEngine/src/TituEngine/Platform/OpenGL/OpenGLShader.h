@@ -21,6 +21,8 @@ namespace TituEngine
 		void SetFloat4(const std::string& name, const glm::vec4& value) override;
 
 	private:
+		friend Shader;
+
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& path);
 		void Compile(std::unordered_map<uint, std::string> shaderSources);
@@ -36,6 +38,5 @@ namespace TituEngine
 
 		std::string m_Path;
 
-		friend Shader;
 	};
 }

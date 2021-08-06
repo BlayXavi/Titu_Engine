@@ -19,8 +19,8 @@ namespace TituEngine
 		inline virtual std::pair<float, float> GetMousePositionImpl() = 0;
 
 	private:
-		static InputPlatform* s_Instance;
 		friend class InputBridge;
+		static InputPlatform* s_Instance;
 	};
 
 #ifdef TE_PLATFORM_WINDOWS

@@ -26,6 +26,7 @@ namespace TituEngine
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
 		inline static API GetAPIID() { return s_RendererAPI; }
+		static RendererAPI* Create();
 
 	private:
 		static API s_RendererAPI;
@@ -36,7 +37,7 @@ namespace TituEngine
 	public:
 
 		static void Init();
-
+		static void Shutdown();
 		static void OnWindowResized(uint32_t width, uint32_t height);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
@@ -47,7 +48,7 @@ namespace TituEngine
 	public:
 
 		inline static void Init() { s_RendererAPI->Init(); }
-
+		inline static void Shutdown() { delete s_RendererAPI; }
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 		inline static void Clear() { s_RendererAPI->Clear(); }
 
