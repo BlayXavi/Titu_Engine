@@ -105,21 +105,24 @@ public:
 		static Instrumentor instance;
 		return instance;
 	}
+
 };
 
 namespace TituEngine
 {
 
-#if TE_ENABLE_PROFILER
+#if TE_ENABLE_PROFILER_
 #define TE_PROFILE_BEGIN_SESSION(name, filepath) Instrumentor::Get().BeginSession(name, filepath);
 #define TE_PROFILE_END_SESSION() Instrumentor::Get().EndSession();
-#define TE_PROFILE_PROFILE_SCOPE(name) TituEngine::Profiler Profile(##name);
+#define TE_PROFILE_PROFILE_SCOPE(name)	TituEngine::Profiler Profile(##name);
 #define TE_PROFILE_PROFILE_FUNC() TE_PROFILE_PROFILE_SCOPE(__FUNCSIG__);
+
 #else
 #define TE_PROFILE_BEGIN_SESSION(name, filepath)
 #define TE_PROFILE_END_SESSION()
 #define TE_PROFILE_PROFILE_SCOPE(name) 
 #define TE_PROFILE_PROFILE_FUNC()
+
 #endif
 
 	class Profiler
@@ -132,9 +135,10 @@ namespace TituEngine
 		void Stop();
 
 	private:
+
 		const char* m_Name;
 		bool m_Stopped;
-
 		time_point<high_resolution_clock> m_StartTimepoint;
+
 	};
 }

@@ -140,6 +140,9 @@
       <Project>{C1D45635-AD8C-9882-1694-71DE026B3373}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\testing\BatchRendering.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

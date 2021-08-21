@@ -221,4 +221,10 @@ namespace TituEngine
 		GLint loc = GetUniformLocation(name);
 		glUniform4f(loc, floats[0], floats[1], floats[2], floats[3]);
 	}
+	
+	void OpenGLShader::SetIntArray(const std::string& name, const int* values, const uint32_t count)
+	{
+		GLint loc = GetUniformLocation(name);
+		glUniform1iv(loc, count, values);
+	}
 }

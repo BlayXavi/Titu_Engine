@@ -8,25 +8,25 @@
 namespace TituEngine
 {
 
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint size)
+	VertexBuffer* VertexBuffer::Create(float* vertices, uint size, bool isStatic)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size, isStatic);
 		}
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [VertexBuffer]"); return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint* vertices, uint count)
+	IndexBuffer* IndexBuffer::Create(uint* vertices, uint count, bool isStatic)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::OpenGL: return new OpenGLIndexBuffer(vertices, count);
+		case RendererAPI::API::OpenGL: return new OpenGLIndexBuffer(vertices, count, isStatic);
 		}
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [VertexBuffer]"); return nullptr;

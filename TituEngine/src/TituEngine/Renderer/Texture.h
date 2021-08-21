@@ -17,6 +17,9 @@ namespace TituEngine
 		virtual void Bind(uint slot = 0) const = 0;
 		virtual void SetData(void* data, uint size, bool deleteData = false) = 0;
 
+
+		virtual bool operator==(const Texture& other) const = 0;
+
 	protected:
 		Texture(const std::string& path) : m_Path(path), m_Width(0), m_Height(0), m_Channels(0){ }
 		Texture(uint width, uint height) : m_Path(""), m_Width(width), m_Height(height), m_Channels(0) { }

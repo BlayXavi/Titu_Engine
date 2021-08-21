@@ -5,11 +5,11 @@
 namespace TituEngine
 {
 	//------------------------------------VERTEX-----------------------------------------
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint size)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint size, bool isStatic)
 	{
 		glCreateBuffers(1, &m_RendererID); //also does binding
 		Bind();
-		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -27,13 +27,19 @@ namespace TituEngine
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	void OpenGLVertexBuffer::SetData(const void* data, uint size)
+	{
+		Bind();
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+	}
+
 	//------------------------------------INDEX-----------------------------------------
-	OpenGLIndexBuffer::OpenGLIndexBuffer(uint* indices, uint count)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(uint* indices, uint count, bool isStatic)
 		:m_Count(count)
 	{
 		glCreateBuffers(1, &m_RendererID); //also does binding
 		Bind();
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint), indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint), indices, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -48,7 +54,6 @@ namespace TituEngine
 
 	void OpenGLIndexBuffer::Unbind() const
 	{
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }

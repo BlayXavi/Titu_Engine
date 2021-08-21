@@ -5,6 +5,9 @@
 
 #include "Shader.h"
 
+#define VERTEX_PER_QUAD 4;
+#define INDICES_PER_QUAD 6;
+
 namespace TituEngine
 {
 	class RendererAPI
@@ -22,7 +25,7 @@ namespace TituEngine
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() const = 0;
 
-		virtual void DrawIndexed(const VertexArray* vertexArray) = 0;
+		virtual void DrawIndexed(const VertexArray* vertexArray, const uint count = -1) = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
 		inline static API GetAPIID() { return s_RendererAPI; }
@@ -52,9 +55,9 @@ namespace TituEngine
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 		inline static void Clear() { s_RendererAPI->Clear(); }
 
-		void static DrawIndexed(const VertexArray* vertexArray)
+		void static DrawIndexed(const VertexArray* vertexArray, const uint count = -1)
 		{
-			s_RendererAPI->DrawIndexed(vertexArray);
+			s_RendererAPI->DrawIndexed(vertexArray, count);
 		}
 
 		void static SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

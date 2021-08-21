@@ -35,6 +35,9 @@ private:
 	Texture2D* m_QuadTexture;
 	Texture2D* m_QuadTexture2;
 
+	glm::vec3* randomPositions;
+	glm::vec4* randomColors;
+
 	glm::mat4 m_TriangleTransform;
 	float m_TriangleSpeed;
 	float m_TriangleAngularSpeed;

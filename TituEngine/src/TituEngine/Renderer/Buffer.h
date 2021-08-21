@@ -141,14 +141,16 @@ namespace TituEngine
 	{
 	public:
 		virtual ~VertexBuffer() = default;
-		static VertexBuffer* Create(float* vertices, uint size);
+		static VertexBuffer* Create(float* vertices, uint size, bool isStatic = true);
+		virtual void SetData(const void* data, uint size) = 0;
 	};
 
 	class IndexBuffer : public Buffer
 	{
 	public:
 		virtual ~IndexBuffer() = default;
-		static IndexBuffer* Create(uint* vertices, uint size);
+		static IndexBuffer* Create(uint* vertices, uint count, bool isStatic = true);
+
 		virtual uint GetCount() const = 0;
 	};
 
