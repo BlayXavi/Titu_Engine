@@ -59,4 +59,6 @@ private:
 	float debugMS[FPS_DEBUG_COUNT];
 	bool m_UpdateFPS = true;
 	float m_AverageFPS = 0;
+
+	bool m_VSync;
 };

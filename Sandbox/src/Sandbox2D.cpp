@@ -1,6 +1,6 @@
 #include "Sandbox2D.h"
 
-#define POSITIONS_COUNT 10
+#define QUADS_COUNT 50000
 
 #define GENERATE_RANDOM(min, max) min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)))
 
@@ -8,23 +8,27 @@ Sandbox2DLayer::Sandbox2DLayer()
 	: Layer("SandBox 2D Layer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f),
 	m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f), m_TriangleAngularSpeed(1.0f), m_QuadColor(0.9f, 0.1f, 0.1f, 1.0f), m_QuadTextureColor(1.0f), m_zSquare(0.0f), m_squareRotationAccumulated(0.0f), m_BackgroundTileSize({ 10, 10 })
 {
+	m_TriangleTransform *= glm::scale(glm::mat4(1.0f), { 0.2f, 0.2f, 1.0f });
+
 	m_Camera = new OrthographicCamera(1920.0f / 1080.0f);
 	m_OrthographicCameraController.SetCamera(m_Camera);
 	m_QuadTexture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 	m_QuadTexture2 = Texture2D::Create("assets/textures2D/blending_transparent_window.png");
 
-	randomPositions = new glm::mat4[POSITIONS_COUNT];
-	randomColors = new glm::vec4[POSITIONS_COUNT];
+	randomPositions = new glm::mat4[QUADS_COUNT];
+	randomColors = new glm::vec4[QUADS_COUNT];
 
 	std::srand((unsigned int)std::time(nullptr)); // use current time as seed for random generator
-	for (size_t i = 0; i < POSITIONS_COUNT; i++)
+	for (size_t i = 0; i < QUADS_COUNT; i++)
 	{
 		float x = GENERATE_RANDOM(-1.0f, 1.0f);
 		float y = GENERATE_RANDOM(-1.0f, 1.0f);
 
+		float scale = GENERATE_RANDOM(0.1f, 0.2f);
 		randomPositions[i] =
 			glm::translate(glm::mat4(1.0f), { x, y, 0.0f }) *
-			glm::rotate(glm::mat4(1.0f), GENERATE_RANDOM(-180.0f, 180.0f), { 0.0f, 0.0f, 1.0f });
+			glm::rotate(glm::mat4(1.0f), GENERATE_RANDOM(-180.0f, 180.0f), { 0.0f, 0.0f, 1.0f }) *
+			glm::scale(glm::mat4(1.0f), { scale, scale, scale });
 
 		x = GENERATE_RANDOM(0.0f, 1.0f);
 		y = GENERATE_RANDOM(0.0f, 1.0f);
@@ -36,6 +40,8 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 	memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 	memset(debugMS, 0.0f, FPS_DEBUG_COUNT * sizeof(float));
+
+	m_VSync = Application::Instance().GetWindow().IsVsync();
 }
 
 Sandbox2DLayer::~Sandbox2DLayer()
@@ -49,38 +55,45 @@ void Sandbox2DLayer::OnImGuiRender()
 
 	ImGui::Begin("Sandbox Inspector");
 
-	
-	if (ImGui::Button("VSync"))
-		Application::Instance().GetWindow().SetVSync(!Application::Instance().GetWindow().IsVsync());
+	if (ImGui::Checkbox("Vsync", &m_VSync))
+		Application::Instance().GetWindow().SetVSync(m_VSync);
 
-	// Plots can display overlay texts
-	// (in this example, we will display an average value)
+	if (ImGui::TreeNode("Render Stats"))
 	{
-		float ms = currentTimeStep.GetDeltaTimeMilliseconds();
-		float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
-
-		if (ImGui::Button(m_UpdateFPS ? "Stop FPS" : "Start FPS"))
-			m_UpdateFPS = !m_UpdateFPS;
-
-		if (m_UpdateFPS)
+		// Plots can display overlay texts
+		// (in this example, we will display an average value)
 		{
-			m_AverageFPS = 0;
-			for (int n = 1; n < FPS_DEBUG_COUNT; n++)
+			float ms = currentTimeStep.GetDeltaTimeMilliseconds();
+			float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
+
+			ImGui::Checkbox("Animate FPS Graph", &m_UpdateFPS);
+
+			if (m_UpdateFPS)
 			{
-				debugFPS[n - 1] = debugFPS[n];
-				m_AverageFPS += debugFPS[n];
+				m_AverageFPS = 0;
+				for (int n = 1; n < FPS_DEBUG_COUNT; n++)
+				{
+					debugFPS[n - 1] = debugFPS[n];
+					m_AverageFPS += debugFPS[n];
+				}
+
+				debugFPS[FPS_DEBUG_COUNT - 1] = fps;
+				m_AverageFPS += debugFPS[FPS_DEBUG_COUNT - 1];
+
+				m_AverageFPS /= (float)FPS_DEBUG_COUNT;
 			}
 
-			debugFPS[FPS_DEBUG_COUNT - 1] = fps;
-			m_AverageFPS += debugFPS[FPS_DEBUG_COUNT - 1];
+			char overlay[32];
+			sprintf(overlay, "FPS Avg: %f", m_AverageFPS);
+			ImGui::PlotHistogram("Histogram", debugFPS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageFPS * 1.5f, ImVec2(0, 80.0f));
+			ImGui::Separator();
 
-			m_AverageFPS /= (float)FPS_DEBUG_COUNT;
+			ImGui::Text("Batches [%d]", Renderer2D::RenderStats::GetDrawCalls());
+			ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
+			ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
+
+			ImGui::TreePop();
 		}
-
-		char overlay[32];
-		sprintf(overlay, "FPS Avg: %f", m_AverageFPS);
-		ImGui::PlotHistogram("Histogram", debugFPS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageFPS * 1.5f, ImVec2(0, 80.0f));
-
 	}
 
 	ImGui::End();
@@ -129,7 +142,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 	{
 		TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
 		int count = 0;
-		for (size_t i = 0; i < POSITIONS_COUNT; i++)
+		for (size_t i = 0; i < QUADS_COUNT; i++)
 		{
 			if (i == 0)
 			{
