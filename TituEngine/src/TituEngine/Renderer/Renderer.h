@@ -5,8 +5,8 @@
 
 #include "Shader.h"
 
-#define VERTEX_PER_QUAD 4;
-#define INDICES_PER_QUAD 6;
+#define VERTEX_PER_QUAD 4
+#define INDICES_PER_QUAD 6
 
 namespace TituEngine
 {

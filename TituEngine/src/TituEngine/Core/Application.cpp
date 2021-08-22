@@ -83,6 +83,7 @@ namespace TituEngine
 			}
 
 			m_Window->OnUpdate();
+			m_FrameCount++;
 		}
 	}
 

@@ -14,6 +14,8 @@
 #include "Controller/OrthographicCameraController.h"
 #include "TituEngine/Instrumentation/Profiler.h"
 
+#define FPS_DEBUG_COUNT 120
+
 class Sandbox2DLayer : public Layer
 {
 public:
@@ -32,11 +34,11 @@ private:
 	glm::vec4 m_QuadColor;
 	glm::vec4 m_QuadTextureColor;
 	glm::ivec2 m_BackgroundTileSize;
-	Texture2D* m_QuadTexture;
-	Texture2D* m_QuadTexture2;
+	Texture2D* m_QuadTexture = nullptr;
+	Texture2D* m_QuadTexture2 = nullptr;
 
-	glm::vec3* randomPositions;
-	glm::vec4* randomColors;
+	glm::mat4* randomPositions = nullptr;
+	glm::vec4* randomColors = nullptr;
 
 	glm::mat4 m_TriangleTransform;
 	float m_TriangleSpeed;
@@ -51,4 +53,10 @@ private:
 	float m_CameraRotation;
 
 	Timestep currentTimeStep;
+
+	int currentFPSDebugIndex = 0;
+	float debugFPS[FPS_DEBUG_COUNT];
+	float debugMS[FPS_DEBUG_COUNT];
+	bool m_UpdateFPS = true;
+	float m_AverageFPS = 0;
 };

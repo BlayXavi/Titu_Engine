@@ -1,8 +1,8 @@
 #include "Sandbox2D.h"
 
-#define POSITIONS_COUNT 20000
+#define POSITIONS_COUNT 10
 
-#define GENERATE_RANDOM(min, max) min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+#define GENERATE_RANDOM(min, max) min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)))
 
 Sandbox2DLayer::Sandbox2DLayer()
 	: Layer("SandBox 2D Layer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f),
@@ -13,13 +13,18 @@ Sandbox2DLayer::Sandbox2DLayer()
 	m_QuadTexture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 	m_QuadTexture2 = Texture2D::Create("assets/textures2D/blending_transparent_window.png");
 
-	randomPositions = new glm::vec3[POSITIONS_COUNT]; randomColors = new glm::vec4[POSITIONS_COUNT];
-	std::srand(std::time(nullptr)); // use current time as seed for random generator
+	randomPositions = new glm::mat4[POSITIONS_COUNT];
+	randomColors = new glm::vec4[POSITIONS_COUNT];
+
+	std::srand((unsigned int)std::time(nullptr)); // use current time as seed for random generator
 	for (size_t i = 0; i < POSITIONS_COUNT; i++)
 	{
-		float x = GENERATE_RANDOM(-10.0f, 10.0f);
-		float y = GENERATE_RANDOM(-10.0f, 10.0f);
-		randomPositions[i] = { x, y, 0.0f };
+		float x = GENERATE_RANDOM(-1.0f, 1.0f);
+		float y = GENERATE_RANDOM(-1.0f, 1.0f);
+
+		randomPositions[i] =
+			glm::translate(glm::mat4(1.0f), { x, y, 0.0f }) *
+			glm::rotate(glm::mat4(1.0f), GENERATE_RANDOM(-180.0f, 180.0f), { 0.0f, 0.0f, 1.0f });
 
 		x = GENERATE_RANDOM(0.0f, 1.0f);
 		y = GENERATE_RANDOM(0.0f, 1.0f);
@@ -29,7 +34,8 @@ Sandbox2DLayer::Sandbox2DLayer()
 		randomColors[i] = { x, y, z, a };
 	}
 
-
+	memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
+	memset(debugMS, 0.0f, FPS_DEBUG_COUNT * sizeof(float));
 }
 
 Sandbox2DLayer::~Sandbox2DLayer()
@@ -43,23 +49,41 @@ void Sandbox2DLayer::OnImGuiRender()
 
 	ImGui::Begin("Sandbox Inspector");
 
+	
+	if (ImGui::Button("VSync"))
+		Application::Instance().GetWindow().SetVSync(!Application::Instance().GetWindow().IsVsync());
 
-	ImGui::Text("Delta time %f (%fms) - (%ffps)", currentTimeStep.GetDeltaTime(), currentTimeStep.GetDeltaTimeMilliseconds(), 1000 / currentTimeStep.GetDeltaTimeMilliseconds());
-	ImGui::SliderFloat("Triangle Speed", &m_TriangleSpeed, 0.0f, 10.0f);
-	ImGui::SliderFloat("Triangle Angular Speed", &m_TriangleAngularSpeed, 0.0f, 10.0f);
-	ImGui::SliderFloat("z background", &m_zSquare, -1.0f, 1.0f);
-	ImGui::SliderInt2("Background Tile Size", &m_BackgroundTileSize[0], 1, 10);
-	ImGui::ColorEdit4("Square Color", &m_QuadColor[0]);
-	ImGui::ColorEdit4("Texture Color", &m_QuadTextureColor[0]);
-
-	if (ImGui::Button("Reset"))
+	// Plots can display overlay texts
+	// (in this example, we will display an average value)
 	{
-		m_TriangleSpeed = 1.0f;
-		m_TriangleAngularSpeed = 1.0f;
+		float ms = currentTimeStep.GetDeltaTimeMilliseconds();
+		float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
+
+		if (ImGui::Button(m_UpdateFPS ? "Stop FPS" : "Start FPS"))
+			m_UpdateFPS = !m_UpdateFPS;
+
+		if (m_UpdateFPS)
+		{
+			m_AverageFPS = 0;
+			for (int n = 1; n < FPS_DEBUG_COUNT; n++)
+			{
+				debugFPS[n - 1] = debugFPS[n];
+				m_AverageFPS += debugFPS[n];
+			}
+
+			debugFPS[FPS_DEBUG_COUNT - 1] = fps;
+			m_AverageFPS += debugFPS[FPS_DEBUG_COUNT - 1];
+
+			m_AverageFPS /= (float)FPS_DEBUG_COUNT;
+		}
+
+		char overlay[32];
+		sprintf(overlay, "FPS Avg: %f", m_AverageFPS);
+		ImGui::PlotHistogram("Histogram", debugFPS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageFPS * 1.5f, ImVec2(0, 80.0f));
+
 	}
 
 	ImGui::End();
-	//ImGui::ShowDemoWindow();
 }
 
 void Sandbox2DLayer::OnUpdate(Timestep ts)
@@ -107,12 +131,19 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 		int count = 0;
 		for (size_t i = 0; i < POSITIONS_COUNT; i++)
 		{
-			if(count == 0)
-				Renderer2D::DrawQuad(randomPositions[i], { 0.1f, 0.1f }, randomColors[i]); //movement quad
-			else if(count == 1)
-				Renderer2D::DrawQuad(randomPositions[i], { 0.1f, 0.1f }, { 1.0f, 1.0f, 1.0f, 1.0f }, m_QuadTexture); //movement quad
-			else if(count == 2)
-				Renderer2D::DrawQuad(randomPositions[i], { 0.1f, 0.1f }, { 1.0f, 1.0f, 1.0f, 1.0f }, m_QuadTexture2); //movement quad
+			if (i == 0)
+			{
+				Renderer2D::DrawQuad(m_TriangleTransform, randomColors[i]);
+			}
+			else
+			{
+				if (count == 0)
+					Renderer2D::DrawQuad(randomPositions[i], randomColors[i]);
+				else if (count == 1)
+					Renderer2D::DrawQuad(randomPositions[i], { 1.0f, 1.0f, 1.0f, 1.0f }, m_QuadTexture, { 1.0f, 1.0f });
+				else if (count == 2)
+					Renderer2D::DrawQuad(randomPositions[i], { 1.0f, 1.0f, 1.0f, 1.0f }, m_QuadTexture2, { 2.0f, 2.0f });
+			}
 
 			count++;
 			if (count > 2)

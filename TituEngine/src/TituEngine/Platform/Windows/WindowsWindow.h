@@ -32,9 +32,9 @@ namespace TituEngine
 
 		struct WindowData
 		{
-			std::string Title;
-			uint Width, Height;
-			bool VSync;
+			std::string Title = "WindowsWindow";
+			uint Width, Height = 0;
+			bool VSync = true;
 
 			EventCallbackFn EventCallback; //m_Data.EventCallback(event) to call the event bound function
 		};

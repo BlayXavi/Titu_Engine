@@ -23,6 +23,7 @@ namespace TituEngine
 		void PushOverlay(Layer* overlay);
 
 		inline Window& GetWindow() { return *m_Window; }
+		inline int GetFrameCount() { return m_FrameCount; }
 
 		inline static Application& Instance() { return *s_Instance; }
 		ImGuiLayer* m_ImGuiLayer;
@@ -39,6 +40,7 @@ namespace TituEngine
 		static Application* s_Instance;
 
 		float m_CurrentTime;
+		unsigned long int m_FrameCount;
 	};
 
 	//To be defined in CLIENT

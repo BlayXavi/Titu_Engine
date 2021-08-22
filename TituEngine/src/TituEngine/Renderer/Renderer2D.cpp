@@ -15,15 +15,16 @@ namespace TituEngine
 		glm::vec4 Color;
 		glm::vec2 TexCoord;
 		uint32_t TexIndex;
+		glm::vec2 Tiling;
 	};
 
 	struct Renderer2DData
 	{
-		VertexArray* QuadVertexArray;
+		VertexArray* QuadVertexArray = nullptr;
 
-		Shader* TextureColorShader;
-		Shader* BatchRenderingShader;
-		Texture* WhiteTexture;
+		Shader* TextureColorShader = nullptr;
+		Shader* BatchRenderingShader = nullptr;
+		Texture* WhiteTexture = nullptr;
 
 		//Static Batching Stuff
 		uint32_t MaxQuads = 20000;
@@ -40,7 +41,7 @@ namespace TituEngine
 
 		int32_t currentTexSlots = -1;
 
-		Texture* texSlots[MaxTexSlots];
+		Texture* texSlots[MaxTexSlots] = { nullptr };
 	};
 
 	static Renderer2DData s_Data;
@@ -76,6 +77,7 @@ namespace TituEngine
 			{ ShaderDataType::Float4,	false, "a_Color" },
 			{ ShaderDataType::Float2,	false, "a_TexCoord" },
 			{ ShaderDataType::Int,		false, "a_TexIndex"},
+			{ ShaderDataType::Float2,	false, "a_Tiling"},
 			});
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
@@ -84,7 +86,7 @@ namespace TituEngine
 		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
 
 		uint32_t offset = 0;
-		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6)
+		for (uint32_t i = 0; i < s_Data.MaxIndices; i += INDICES_PER_QUAD)
 		{
 			quadIndices[i + 0] = offset + 0;
 			quadIndices[i + 1] = offset + 1;
@@ -102,7 +104,7 @@ namespace TituEngine
 		delete[] quadIndices;
 
 		int* texSlots = new int[s_Data.MaxTexSlots];
-		for (size_t i = 0; i < s_Data.MaxTexSlots; i++)
+		for (uint32_t i = 0; i < s_Data.MaxTexSlots; i++)
 			texSlots[i] = i;
 
 		s_Data.BatchRenderingShader = Shader::Create("assets/shaders/testing/BatchRendering.glsl");
@@ -163,7 +165,7 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		uint32_t dataSize = (uint8_t*)s_Data.QuadVertexPtr - (uint8_t*)s_Data.QuadVertexBase;
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexPtr - (uint8_t*)s_Data.QuadVertexBase);
 		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBase, dataSize);
 		Flush();
 	}
@@ -175,16 +177,14 @@ namespace TituEngine
 		s_Data.QuadVertexArray->Bind();
 
 		// Bind textures
-		for (uint32_t i = 0; i < s_Data.currentTexSlots; i++)
+		for (int32_t i = 0; i < s_Data.currentTexSlots; i++)
 			s_Data.texSlots[i]->Bind(i);
 
-		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.FrameQuadCount * 6);
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.FrameQuadCount * INDICES_PER_QUAD);
 	}
 
-	void AddVertices(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, Texture* const tex, Renderer2DData& s_Data)
+	int GetTextureIndex(Texture* const tex)
 	{
-		TE_PROFILE_PROFILE_FUNC();
-
 		int32_t texIndex = -1;
 
 		for (int32_t i = 0; i < s_Data.currentTexSlots; i++)
@@ -200,36 +200,52 @@ namespace TituEngine
 			s_Data.texSlots[s_Data.currentTexSlots] = tex;
 		}
 
-		s_Data.QuadVertexPtr->Position = { position.x - size.x * 0.5f, position.y - size.y * 0.5f, 0.0f };
-		s_Data.QuadVertexPtr->Color = color;
-		s_Data.QuadVertexPtr->TexCoord = { 0.0f, 0.0f };
-		s_Data.QuadVertexPtr->TexIndex = texIndex;
-		s_Data.QuadVertexPtr++;
+		return texIndex;
+	}
 
-		s_Data.QuadVertexPtr->Position = { position.x + size.x * 0.5f, position.y - size.y * 0.5f, 0.0f };
-		s_Data.QuadVertexPtr->Color = color;
-		s_Data.QuadVertexPtr->TexCoord = { 1.0f, 0.0f };
-		s_Data.QuadVertexPtr->TexIndex = texIndex;
-		s_Data.QuadVertexPtr++;
+	void AddVertices(const glm::mat4 transform, const glm::vec4& color, Texture* const tex, const glm::vec2& tiling, Renderer2DData& s_Data)
+	{
+		int32_t texIndex = GetTextureIndex(tex);
 
-		s_Data.QuadVertexPtr->Position = { position.x + size.x * 0.5f, position.y + size.y * 0.5f, 0.0f };
-		s_Data.QuadVertexPtr->Color = color;
-		s_Data.QuadVertexPtr->TexCoord = { 1.0f, 1.0f };
-		s_Data.QuadVertexPtr->TexIndex = texIndex;
-		s_Data.QuadVertexPtr++;
+		static const glm::vec4 vecPositions[VERTEX_PER_QUAD] =
+		{ {-0.5f,  -0.5f, 0.0f, 1.0f},
+		 { 0.5f,  -0.5f, 0.0f, 1.0f},
+		 { 0.5f,   0.5f, 0.0f, 1.0f},
+		 {-0.5f,   0.5f, 0.0f, 1.0f} };
 
-		s_Data.QuadVertexPtr->Position = { position.x - size.x * 0.5f, position.y + size.y * 0.5f, 0.0f };
-		s_Data.QuadVertexPtr->Color = color;
-		s_Data.QuadVertexPtr->TexCoord = { 0.0f, 1.0f };
-		s_Data.QuadVertexPtr->TexIndex = texIndex;
-		s_Data.QuadVertexPtr++;
+		static const glm::vec2 uvPositions[VERTEX_PER_QUAD] =
+		{ {0.0f, 0.0f},
+		{1.0f, 0.0f} ,
+		{1.0f, 1.0f} ,
+		{0.0f, 1.0f} };
+
+		for (size_t i = 0; i < VERTEX_PER_QUAD; i++)
+		{
+			s_Data.QuadVertexPtr->Position = transform * vecPositions[i];
+			s_Data.QuadVertexPtr->Color = color;
+			s_Data.QuadVertexPtr->TexCoord = uvPositions[i];
+			s_Data.QuadVertexPtr->TexIndex = texIndex;
+			s_Data.QuadVertexPtr->Tiling = tiling;
+			s_Data.QuadVertexPtr++;
+		}
 
 		s_Data.FrameQuadCount++;
 	}
 
+	void AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, Texture* const tex, const glm::vec2& tiling, Renderer2DData& s_Data)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
+
+		AddVertices(transform, color, tex, tiling, s_Data);
+	}
+
 	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color)
 	{
-		TE_ASSERT(false, "DrawQuad - ModelMatrix -> Batch Rendering not supported");
+		AddVertices(model, color, s_Data.WhiteTexture, { 1.0f, 1.0f }, s_Data);
 
 		//TE_PROFILE_PROFILE_FUNC();
 
@@ -258,7 +274,7 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		AddVertices(position, size, color, s_Data.WhiteTexture, s_Data);
+		AddVertices(position, 0.0f, size, color, s_Data.WhiteTexture, glm::vec2(1.0f), s_Data);
 
 		/*glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
 		DrawQuad(modelMatrix, color);
@@ -277,7 +293,7 @@ namespace TituEngine
 
 	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color, Texture* texture, const glm::vec2& tileSize)
 	{
-		TE_ASSERT(false, "DrawQuad - ModelMatrix -> Batch Rendering not supported");
+		AddVertices(model, color, texture, tileSize, s_Data);
 
 		/*texture.Bind(0);
 		s_Data.TextureColorShader->Bind();
@@ -305,7 +321,7 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		AddVertices(position, size, color, texture, s_Data);
+		AddVertices(position, 0.0f, size, color, texture, tileSize, s_Data);
 
 		/*glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
 		DrawQuad(modelMatrix, color, texture, tileSize);*/
