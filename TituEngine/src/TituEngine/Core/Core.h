@@ -31,3 +31,5 @@ error Platform not supported
 #define BIT(x) (1<<x)
 #define TE_BIND_EVENT_FN (x) std::bind(&x, this, std::placeholders::_1)
 using uint = unsigned int;
+
+#define GENERATE_RANDOM(min, max) min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)))

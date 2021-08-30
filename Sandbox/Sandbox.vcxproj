@@ -129,11 +129,13 @@
   <ItemGroup>
     <ClInclude Include="src\Controller\OrthographicCameraController.h" />
     <ClInclude Include="src\Sandbox2D.h" />
+    <ClInclude Include="src\Utilities\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Controller\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Sandbox2D.cpp" />
     <ClCompile Include="src\SandboxApp.cpp" />
+    <ClCompile Include="src\Utilities\ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TituEngine\TituEngine.vcxproj">

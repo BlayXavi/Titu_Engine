@@ -10,6 +10,7 @@
       <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="src\Sandbox2D.h" />
+    <ClInclude Include="src\Utilities\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Controller\OrthographicCameraController.cpp">
@@ -17,6 +18,7 @@
     </ClCompile>
     <ClCompile Include="src\Sandbox2D.cpp" />
     <ClCompile Include="src\SandboxApp.cpp" />
+    <ClCompile Include="src\Utilities\ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\testing\BatchRendering.glsl" />

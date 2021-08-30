@@ -41,7 +41,7 @@ namespace TituEngine
 		vertexBuffer->Bind();
 		uint index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
-		for (const auto& element : layout)
+		for (const BufferElement& element : layout)
 		{
 			glEnableVertexAttribArray(index + m_VertexBufferIndexOffset);
 			glVertexAttribPointer(index + m_VertexBufferIndexOffset, element.ElementCount, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(intptr_t)element.Offset);

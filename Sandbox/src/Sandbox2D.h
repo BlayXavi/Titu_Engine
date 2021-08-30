@@ -13,6 +13,7 @@
 
 #include "Controller/OrthographicCameraController.h"
 #include "TituEngine/Instrumentation/Profiler.h"
+#include "Utilities/ParticleSystem.h"
 
 #define FPS_DEBUG_COUNT 120
 
@@ -59,6 +60,16 @@ private:
 	float debugMS[FPS_DEBUG_COUNT];
 	bool m_UpdateFPS = true;
 	float m_AverageFPS = 0;
+	float m_AverageMS = 0;
+
+	ParticleSystem m_ParticleSystem;
+	glm::vec4 m_particleVel;
+	float	  m_particleSizeStart;
+	float	  m_particleSizeEnd;
+	glm::vec4 m_particleColorStart;
+	glm::vec4 m_particleColorEnd;
+	float	  m_particleAngularVel;
+	float	  m_particleLifeTime;
 
 	bool m_VSync;
 };

@@ -27,7 +27,7 @@ namespace TituEngine
 		Texture* WhiteTexture = nullptr;
 
 		//Static Batching Stuff
-		static const uint32_t MaxQuadsPerBatch = 10000;
+		static const uint32_t MaxQuadsPerBatch = 500;
 		static const uint32_t MaxVerticesPerBatch = MaxQuadsPerBatch * VERTEX_PER_QUAD;
 		static const uint32_t MaxIndicesPerBatch = MaxQuadsPerBatch * INDICES_PER_QUAD;
 		static const uint32_t MaxTexSlotsPerBatch = 32; //TODO: Check GraphicsCard Textures Slots
@@ -169,29 +169,29 @@ namespace TituEngine
 
 	void Renderer2D::Flush()
 	{
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexPtr - (uint8_t*)s_Data.QuadVertexBase);
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBase, dataSize);
-		s_Data.QuadVertexArray->Bind();
+		if ((uint8_t*)s_Data.QuadVertexPtr != (uint8_t*)s_Data.QuadVertexBase)
+		{
+			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexPtr - (uint8_t*)s_Data.QuadVertexBase);
+			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBase, dataSize);
+			s_Data.QuadVertexArray->Bind();
 
-		s_Data.BatchRenderingShader->Bind();
-		s_Data.BatchRenderingShader->SetMat4("u_ModelViewProjectionMatrix", *(s_Data.m_CameraViewProjectionMatrix));
+			s_Data.BatchRenderingShader->Bind();
+			s_Data.BatchRenderingShader->SetMat4("u_ModelViewProjectionMatrix", *(s_Data.m_CameraViewProjectionMatrix));
 
-		// Bind textures
-		for (int32_t i = 0; i <= s_Data.currentTexSlots; i++)
-			s_Data.texSlots[i]->Bind(i);
+			// Bind textures
+			for (int32_t i = 0; i <= s_Data.currentTexSlots; i++)
+				s_Data.texSlots[i]->Bind(i);
 
-		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.FrameQuadCount * INDICES_PER_QUAD);
-		RenderStats::IncreaseDrawCalls();
-		ResetBatchingData();
+			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.FrameQuadCount * INDICES_PER_QUAD);
+			RenderStats::IncreaseDrawCalls();
+			ResetBatchingData();
+		}
 	}
 
 	void Renderer2D::AddVertices(const glm::mat4 transform, const glm::vec4& color, Texture* const tex, const glm::vec2& tiling)
 	{
 		if (s_Data.FrameQuadCount >= s_Data.MaxQuadsPerBatch)
-		{
 			Flush();
-			ResetBatchingData();
-		}
 
 		int32_t texIndex = -1;
 
@@ -203,6 +203,9 @@ namespace TituEngine
 
 		if (texIndex == -1)
 		{
+			if (s_Data.currentTexSlots > s_Data.MaxTexSlotsPerBatch)
+				Flush();
+
 			s_Data.currentTexSlots++;
 			texIndex = s_Data.currentTexSlots;
 			s_Data.texSlots[s_Data.currentTexSlots] = tex;

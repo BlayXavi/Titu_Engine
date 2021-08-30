@@ -25,7 +25,7 @@ namespace TituEngine
 			m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
 
 		auto state = glfwGetMouseButton(m_MainWindow, button);
-		return false;
+		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	float InputPlatformWindows::GetMouseXImpl()
