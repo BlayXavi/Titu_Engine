@@ -29,6 +29,7 @@ namespace TituEngine
 	{
 		m_ProjectionMatrix = glm::ortho(left, right, bottom, top, -10.0f, 10.0f);
 		m_AspectRatio = (right - left) / (top - bottom);
+		m_InversedProjectionMatrix = glm::inverse(m_ProjectionMatrix);
 		RecalculateViewProjectionMatrix();
 	}
 

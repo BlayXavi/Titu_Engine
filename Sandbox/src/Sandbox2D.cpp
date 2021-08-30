@@ -7,17 +7,17 @@ Sandbox2DLayer::Sandbox2DLayer()
 	: Layer("SandBox 2D Layer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f),
 	m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f), m_TriangleAngularSpeed(1.0f), m_QuadColor(0.9f, 0.1f, 0.1f, 1.0f), m_QuadTextureColor(1.0f), m_zSquare(0.0f), m_squareRotationAccumulated(0.0f), m_BackgroundTileSize({ 10, 10 })
 {
-	m_particleVel = {-1.0f, 1.0f, 0.0f, 1.0f};
+	m_particleVel = { -1.0f, 1.0f, 0.0f, 1.0f };
 	m_particleSizeStart = 0.3f;
 	m_particleSizeEnd = 0.0f;
-	m_particleColorStart = {1.0f, 0.0f, 1.0f, 1.0f};
-	m_particleColorEnd = {0.2f, 1.0f, 1.0f, 0.3f};
+	m_particleColorStart = { 1.0f, 0.0f, 1.0f, 1.0f };
+	m_particleColorEnd = { 0.2f, 1.0f, 1.0f, 0.3f };
 	m_particleAngularVel = 1.0f;
 	m_particleLifeTime = 1.0f;
 
 	m_TriangleTransform *= glm::scale(glm::mat4(1.0f), { 0.2f, 0.2f, 1.0f });
 
-	m_Camera = new OrthographicCamera(1280.0f/720.0f);
+	m_Camera = new OrthographicCamera(1280.0f / 720.0f);
 	m_OrthographicCameraController.SetCamera(m_Camera);
 	m_QuadTexture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 	m_QuadTexture2 = Texture2D::Create("assets/textures2D/blending_transparent_window.png");
@@ -149,16 +149,18 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 	if (InputBridge::IsButtonMousePressed(TE_MOUSE_BUTTON_1))
 	{
 		ParticleProperties pps;
-		pps.velocity = { GENERATE_RANDOM(m_particleVel.x, m_particleVel.y), GENERATE_RANDOM(-m_particleVel.z, m_particleVel.w) };
+		pps.velocity = { GENERATE_RANDOM(m_particleVel.x, m_particleVel.y), GENERATE_RANDOM(m_particleVel.z, m_particleVel.w) };
 		pps.colorStart = m_particleColorStart;
 		pps.colorEnd = m_particleColorEnd;
 		pps.sizeStart = { m_particleSizeStart, m_particleSizeStart };
 		pps.sizeEnd = { m_particleSizeEnd, m_particleSizeEnd };
 		pps.rotationSpeed = m_particleAngularVel;
 		pps.lifeTime = m_particleLifeTime;
-		/*std::pair<float, float> mousePos = InputBridge::GetMousePosition();
-		pps.posStart = { mousePos.first, mousePos.second };*/
-		pps.posStart = { 0.0f, 0.0f};
+
+		std::pair<float, float> mousePos = InputBridge::GetMousePosition();
+		glm::vec3 tempPos = m_Camera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
+
+		pps.posStart = { tempPos.x, tempPos.y };
 		m_ParticleSystem.Emit(pps);
 	}
 
