@@ -30,4 +30,29 @@ namespace TituEngine
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
 	}
+
+	//----------------------------------------- SubTexture2D ----------------------------------------- 
+
+	SubTexture2D::SubTexture2D(Texture2D* texture, const glm::vec2& min, const glm::vec2& max)
+		: m_Texture(texture), m_SpriteSize(1.0f, 1.0f)
+	{
+		m_TexCoords[0] = { min.x, min.y };
+		m_TexCoords[1] = { max.x, min.y };
+		m_TexCoords[2] = { max.x, max.y };
+		m_TexCoords[3] = { min.x, max.y };
+	}
+
+	SubTexture2D::SubTexture2D(Texture2D* texture, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize)
+		: m_Texture(texture), m_SpriteSize(spriteSize)
+	{
+		glm::vec2 textureSize = { texture->GetWidth(), texture->GetHeight() };
+		glm::vec2 normalizedCellSize = cellSize / textureSize;
+		glm::vec2 min = coords * normalizedCellSize;
+		glm::vec2 max = min + (normalizedCellSize * spriteSize);
+
+		m_TexCoords[0] = { min.x, min.y };
+		m_TexCoords[1] = { max.x, min.y };
+		m_TexCoords[2] = { max.x, max.y };
+		m_TexCoords[3] = { min.x, max.y };
+	}
 }

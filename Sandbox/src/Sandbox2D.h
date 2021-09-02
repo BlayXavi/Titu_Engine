@@ -37,6 +37,9 @@ private:
 	glm::ivec2 m_BackgroundTileSize;
 	Texture2D* m_QuadTexture = nullptr;
 	Texture2D* m_QuadTexture2 = nullptr;
+	Texture2D* m_SpriteSheet = nullptr;
+	SubTexture2D* m_SubTexture2D = nullptr;
+	SubTexture2D* m_SubTextures2D[10];
 
 	glm::mat4* randomPositions = nullptr;
 	glm::vec4* randomColors = nullptr;
@@ -70,6 +73,6 @@ private:
 	glm::vec4 m_particleColorEnd;
 	float	  m_particleAngularVel;
 	float	  m_particleLifeTime;
-
+	int m_particlesPerFrame;
 	bool m_VSync;
 };

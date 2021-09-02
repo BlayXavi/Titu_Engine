@@ -4,7 +4,14 @@
 
 #include "tepch.h"
 
-ParticleSystem::ParticleSystem() : m_PoolIndex(999)
+ParticleSystem::ParticleSystem()
+	: m_PoolIndex(999)
+{
+	m_ParticlesPool = std::vector<Particle>(m_PoolIndex + 1);
+}
+
+ParticleSystem::ParticleSystem(int poolSize)
+	: m_PoolIndex(poolSize)
 {
 	m_ParticlesPool = std::vector<Particle>(m_PoolIndex + 1);
 }
@@ -42,6 +49,20 @@ void ParticleSystem::OnRender()
 			continue;
 
 		TituEngine::Renderer2D::DrawQuad(particle.position, particle.rotation, particle.sizeCurrent, particle.colorCurrent);
+	}
+}
+
+void ParticleSystem::OnRender(TituEngine::SubTexture2D* textures[], uint32_t size)
+{
+	for (size_t i = 0; i < m_ParticlesPool.size(); i++)
+	{
+		Particle particle = m_ParticlesPool[i];
+		if (!particle.active)
+			continue;
+
+		int pI = i % size;
+		TituEngine::Renderer2D::DrawQuad({ particle.position.x, particle.position.y, -0.5f}, particle.rotation, particle.sizeCurrent, { 1.0f, 1.0f, 1.0f, 1.0f }, textures[pI]);
+		TituEngine::Renderer2D::Flush();
 	}
 }
 

@@ -18,9 +18,11 @@ class ParticleSystem
 {
 public:
 	ParticleSystem();
+	ParticleSystem(int poolSize);
 
 	void OnUpdate(TituEngine::Timestep ts);
 	void OnRender();
+	void OnRender(TituEngine::SubTexture2D* textures[], uint32_t size);
 
 	void Emit(const ParticleProperties& particleProps);
 

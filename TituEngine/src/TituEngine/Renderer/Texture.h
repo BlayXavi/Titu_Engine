@@ -2,6 +2,7 @@
 
 #include <string>
 #include "TituEngine/Core/Core.h"
+#include <glm/vec2.hpp>
 
 namespace TituEngine
 {
@@ -21,7 +22,7 @@ namespace TituEngine
 		virtual bool operator==(const Texture& other) const = 0;
 
 	protected:
-		Texture(const std::string& path) : m_Path(path), m_Width(0), m_Height(0), m_Channels(0){ }
+		Texture(const std::string& path) : m_Path(path), m_Width(0), m_Height(0), m_Channels(0) { }
 		Texture(uint width, uint height) : m_Path(""), m_Width(width), m_Height(height), m_Channels(0) { }
 
 		std::string m_Path;
@@ -45,4 +46,21 @@ namespace TituEngine
 		Texture2D(uint width, uint height) : Texture(width, height) { }
 	};
 
+
+	class SubTexture2D
+	{
+	public:
+		SubTexture2D() = default;
+		SubTexture2D(Texture2D* texture, const glm::vec2& min, const glm::vec2& max);
+		SubTexture2D(Texture2D* texture, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize);
+
+		Texture2D* GetTexture() const { return m_Texture; }
+		glm::vec2* GetTexCoords() { return m_TexCoords; }
+		glm::vec2 GetSpriteSize() { return m_SpriteSize; }
+
+	private:
+		Texture2D* m_Texture;
+		glm::vec2 m_TexCoords[4];
+		glm::vec2 m_SpriteSize;
+	};
 }

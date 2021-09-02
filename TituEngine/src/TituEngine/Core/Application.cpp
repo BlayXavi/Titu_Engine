@@ -24,7 +24,7 @@ namespace TituEngine
 		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayer);
+		PushLayer(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -40,11 +40,11 @@ namespace TituEngine
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResized));
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); ++it)
 		{
-			(*--it)->OnEvent(e);
 			if (e.Handled)
 				break;
+			(*it)->OnEvent(e);
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace TituEngine
 
 	void Application::PushOverlay(Layer* overlay)
 	{
-		m_LayerStack.PushLayer(overlay);
+		m_LayerStack.PushOverlay(overlay);
 	}
 
 	void Application::Run()

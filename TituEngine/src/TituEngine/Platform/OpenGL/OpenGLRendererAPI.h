@@ -15,6 +15,7 @@ namespace TituEngine
 
 		virtual void DrawIndexed(const VertexArray* vertexArray, const uint count = -1) override;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
+		virtual void EnableDepthTest(bool enable) override;
 
 	private:
 		friend RendererAPI;

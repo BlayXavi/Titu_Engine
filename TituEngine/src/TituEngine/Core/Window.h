@@ -13,7 +13,7 @@ namespace TituEngine
 		uint Width;
 		uint Height;
 
-		WindowProps(const std::string& title = "Titu Engine", uint width = 1280, uint height = 720) :
+		WindowProps(const std::string& title = "Titu Engine", uint width = 1920, uint height = 1080) :
 			Title(title), Width(width), Height(height) {}
 	};
 

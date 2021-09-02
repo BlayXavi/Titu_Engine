@@ -22,15 +22,15 @@ namespace TituEngine
 		const glm::mat4* m_CameraViewProjectionMatrix;
 		VertexArray* QuadVertexArray = nullptr;
 
-		Shader* TextureColorShader = nullptr;
 		Shader* BatchRenderingShader = nullptr;
-		Texture* WhiteTexture = nullptr;
+		Texture2D* WhiteTexture = nullptr;
+		SubTexture2D* whiteSubTexture2D = nullptr;
 
 		//Static Batching Stuff
-		static const uint32_t MaxQuadsPerBatch = 500;
+		static const uint32_t MaxQuadsPerBatch = 1000;
 		static const uint32_t MaxVerticesPerBatch = MaxQuadsPerBatch * VERTEX_PER_QUAD;
 		static const uint32_t MaxIndicesPerBatch = MaxQuadsPerBatch * INDICES_PER_QUAD;
-		static const uint32_t MaxTexSlotsPerBatch = 32; //TODO: Check GraphicsCard Textures Slots
+		static const int32_t MaxTexSlotsPerBatch = 32; //TODO: Check GraphicsCard Textures Slots
 
 		QuadVertex* QuadVertexBase = nullptr;
 		QuadVertex* QuadVertexPtr = nullptr;
@@ -41,7 +41,7 @@ namespace TituEngine
 
 		int32_t currentTexSlots = -1;
 
-		Texture* texSlots[MaxTexSlotsPerBatch] = { nullptr };
+		Texture2D* texSlots[MaxTexSlotsPerBatch] = { nullptr };
 	};
 
 	static Renderer2DData s_Data;
@@ -112,6 +112,7 @@ namespace TituEngine
 		uint data = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&data, sizeof(uint));
 
+		s_Data.whiteSubTexture2D = new SubTexture2D(s_Data.WhiteTexture, { 0.0f, 0.0f }, { 1.0f, 1.0f });
 
 		/*
 		s_Renderer2DData.QuadVertexArray = VertexArray::Create();
@@ -128,7 +129,6 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		delete s_Data.TextureColorShader;
 		delete s_Data.BatchRenderingShader;
 		delete s_Data.WhiteTexture;
 
@@ -156,6 +156,9 @@ namespace TituEngine
 		camera = camera;
 		s_Data.m_CameraViewProjectionMatrix = &camera->GetViewProjectionMatrix();
 
+		s_Data.BatchRenderingShader->Bind();
+		s_Data.BatchRenderingShader->SetMat4("u_ModelViewProjectionMatrix", *(s_Data.m_CameraViewProjectionMatrix));
+
 		RenderStats::Reset();
 		ResetBatchingData();
 	}
@@ -175,9 +178,6 @@ namespace TituEngine
 			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBase, dataSize);
 			s_Data.QuadVertexArray->Bind();
 
-			s_Data.BatchRenderingShader->Bind();
-			s_Data.BatchRenderingShader->SetMat4("u_ModelViewProjectionMatrix", *(s_Data.m_CameraViewProjectionMatrix));
-
 			// Bind textures
 			for (int32_t i = 0; i <= s_Data.currentTexSlots; i++)
 				s_Data.texSlots[i]->Bind(i);
@@ -188,7 +188,7 @@ namespace TituEngine
 		}
 	}
 
-	void Renderer2D::AddVertices(const glm::mat4 transform, const glm::vec4& color, Texture* const tex, const glm::vec2& tiling)
+	void Renderer2D::AddVertices(const glm::mat4 transform, const glm::vec4& color, SubTexture2D* tex, const glm::vec2& tiling)
 	{
 		if (s_Data.FrameQuadCount >= s_Data.MaxQuadsPerBatch)
 			Flush();
@@ -197,7 +197,7 @@ namespace TituEngine
 
 		for (int32_t i = 0; i < s_Data.currentTexSlots; i++)
 		{
-			if (*tex == *s_Data.texSlots[i])
+			if (*tex->GetTexture() == *s_Data.texSlots[i])
 				texIndex = i;
 		}
 
@@ -208,7 +208,7 @@ namespace TituEngine
 
 			s_Data.currentTexSlots++;
 			texIndex = s_Data.currentTexSlots;
-			s_Data.texSlots[s_Data.currentTexSlots] = tex;
+			s_Data.texSlots[s_Data.currentTexSlots] = tex->GetTexture();
 		}
 
 		static const glm::vec4 vecPositions[VERTEX_PER_QUAD] =
@@ -217,17 +217,13 @@ namespace TituEngine
 		 { 0.5f,   0.5f, 0.0f, 1.0f},
 		 {-0.5f,   0.5f, 0.0f, 1.0f} };
 
-		static const glm::vec2 uvPositions[VERTEX_PER_QUAD] =
-		{ {0.0f, 0.0f},
-		{1.0f, 0.0f} ,
-		{1.0f, 1.0f} ,
-		{0.0f, 1.0f} };
+		glm::vec2* texCoords = tex->GetTexCoords();
 
 		for (size_t i = 0; i < VERTEX_PER_QUAD; i++)
 		{
 			s_Data.QuadVertexPtr->Position = transform * vecPositions[i];
 			s_Data.QuadVertexPtr->Color = color;
-			s_Data.QuadVertexPtr->TexCoord = uvPositions[i];
+			s_Data.QuadVertexPtr->TexCoord = texCoords[i];
 			s_Data.QuadVertexPtr->TexIndex = texIndex;
 			s_Data.QuadVertexPtr->Tiling = tiling;
 			s_Data.QuadVertexPtr++;
@@ -237,7 +233,7 @@ namespace TituEngine
 		RenderStats::IncreaseQuads();
 	}
 
-	void Renderer2D::AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, Texture* const tex, const glm::vec2& tiling)
+	void Renderer2D::AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, SubTexture2D* tex, const glm::vec2& tiling)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
@@ -250,17 +246,7 @@ namespace TituEngine
 
 	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color)
 	{
-		AddVertices(model, color, s_Data.WhiteTexture, { 1.0f, 1.0f });
-
-		//TE_PROFILE_PROFILE_FUNC();
-
-		//s_Renderer2DData.WhiteTexture->Bind();
-		//s_Renderer2DData.TextureColorShader->Bind();
-		//s_Renderer2DData.TextureColorShader->SetFloat4("u_Color", color);
-		//s_Renderer2DData.TextureColorShader->SetMat4("u_ModelViewProjectionMatrix", *(s_SceneData->m_CameraViewProjectionMatrix) * model);
-
-		/*s_Renderer2DData.QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Renderer2DData.QuadVertexArray);*/
+		AddVertices(model, color, s_Data.whiteSubTexture2D, { 1.0f, 1.0f });
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -279,7 +265,7 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		AddVertices(position, 0.0f, size, color, s_Data.WhiteTexture, glm::vec2(1.0f));
+		AddVertices(position, 0.0f, size, color, s_Data.whiteSubTexture2D, glm::vec2(1.0f));
 
 		/*glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
 		DrawQuad(modelMatrix, color);
@@ -296,7 +282,7 @@ namespace TituEngine
 		DrawQuad(modelMatrix, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color, Texture* texture, const glm::vec2& tileSize)
+	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize)
 	{
 		AddVertices(model, color, texture, tileSize);
 
@@ -310,19 +296,19 @@ namespace TituEngine
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);*/
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, Texture* texture, const  glm::vec2& tileSize)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const  glm::vec2& tileSize)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
 		DrawQuad({ position.x, position.y, 0.0f }, size, color, texture, tileSize);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color, Texture* texture, const glm::vec2& tileSize)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, angle, size, color, texture, tileSize);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, Texture* texture, const glm::vec2& tileSize)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
@@ -332,7 +318,7 @@ namespace TituEngine
 		DrawQuad(modelMatrix, color, texture, tileSize);*/
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, Texture* texture, const glm::vec2& tileSize)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 

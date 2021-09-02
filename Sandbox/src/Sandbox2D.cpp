@@ -7,6 +7,8 @@ Sandbox2DLayer::Sandbox2DLayer()
 	: Layer("SandBox 2D Layer"), m_CameraPosition(glm::vec3(0.0f)), m_CameraSpeed(1.0f), m_CameraRotation(0.0f), m_CameraAngularSpeed(45.0f),
 	m_TriangleSpeed(1.0f), m_TriangleTransform(1.0f), m_TriangleAngularSpeed(1.0f), m_QuadColor(0.9f, 0.1f, 0.1f, 1.0f), m_QuadTextureColor(1.0f), m_zSquare(0.0f), m_squareRotationAccumulated(0.0f), m_BackgroundTileSize({ 10, 10 })
 {
+	m_ParticleSystem = ParticleSystem(99999);
+
 	m_particleVel = { -1.0f, 1.0f, 0.0f, 1.0f };
 	m_particleSizeStart = 0.3f;
 	m_particleSizeEnd = 0.0f;
@@ -14,6 +16,7 @@ Sandbox2DLayer::Sandbox2DLayer()
 	m_particleColorEnd = { 0.2f, 1.0f, 1.0f, 0.3f };
 	m_particleAngularVel = 1.0f;
 	m_particleLifeTime = 1.0f;
+	m_particlesPerFrame = 1;
 
 	m_TriangleTransform *= glm::scale(glm::mat4(1.0f), { 0.2f, 0.2f, 1.0f });
 
@@ -21,6 +24,20 @@ Sandbox2DLayer::Sandbox2DLayer()
 	m_OrthographicCameraController.SetCamera(m_Camera);
 	m_QuadTexture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 	m_QuadTexture2 = Texture2D::Create("assets/textures2D/blending_transparent_window.png");
+	m_SpriteSheet = Texture2D::Create("assets/textures2D/base_Spritesheet.png");
+
+	m_SubTexture2D = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
+
+	m_SubTextures2D[0] = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
+	m_SubTextures2D[1] = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
+	m_SubTextures2D[2] = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
+	m_SubTextures2D[3] = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
+	m_SubTextures2D[4] = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
+	m_SubTextures2D[5] = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
+	m_SubTextures2D[6] = new SubTexture2D(m_SpriteSheet, { 0, 1 }, { 128, 128 }, { 1, 2 });
+	m_SubTextures2D[7] = new SubTexture2D(m_SpriteSheet, { 1, 1 }, { 128, 128 }, { 1, 2 });
+	m_SubTextures2D[8] = new SubTexture2D(m_SpriteSheet, { 3, 1 }, { 128, 128 }, { 1, 2 });
+	m_SubTextures2D[9] = new SubTexture2D(m_SpriteSheet, { 4, 1 }, { 128, 128 }, { 1, 2 });
 
 	randomPositions = new glm::mat4[QUADS_COUNT];
 	randomColors = new glm::vec4[QUADS_COUNT];
@@ -114,6 +131,7 @@ void Sandbox2DLayer::OnImGuiRender()
 
 	if (ImGui::TreeNode("Particle Props"))
 	{
+		ImGui::SliderInt("Particles per Frame", &m_particlesPerFrame, 1, 200);
 		ImGui::SliderFloat("LifeTime", &m_particleLifeTime, 0.0f, 30.0f);
 		ImGui::SliderFloat4("Velocity", &m_particleVel[0], -5.0f, 5.0f);
 		ImGui::SliderFloat("Size Start", &m_particleSizeStart, 0.0f, 3.0f);
@@ -122,7 +140,6 @@ void Sandbox2DLayer::OnImGuiRender()
 		ImGui::ColorEdit4("Color End", &m_particleColorEnd[0]);
 		ImGui::SliderFloat("Angualr Speed", &m_particleAngularVel, 0.0f, 5.0f);
 		ImGui::TreePop();
-
 	}
 
 	ImGui::End();
@@ -148,20 +165,24 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 
 	if (InputBridge::IsButtonMousePressed(TE_MOUSE_BUTTON_1))
 	{
-		ParticleProperties pps;
-		pps.velocity = { GENERATE_RANDOM(m_particleVel.x, m_particleVel.y), GENERATE_RANDOM(m_particleVel.z, m_particleVel.w) };
-		pps.colorStart = m_particleColorStart;
-		pps.colorEnd = m_particleColorEnd;
-		pps.sizeStart = { m_particleSizeStart, m_particleSizeStart };
-		pps.sizeEnd = { m_particleSizeEnd, m_particleSizeEnd };
-		pps.rotationSpeed = m_particleAngularVel;
-		pps.lifeTime = m_particleLifeTime;
+		for (size_t i = 0; i < m_particlesPerFrame; i++)
+		{
+			ParticleProperties pps;
+			pps.velocity = { GENERATE_RANDOM(m_particleVel.x, m_particleVel.y), GENERATE_RANDOM(m_particleVel.z, m_particleVel.w) };
+			pps.colorStart = m_particleColorStart;
+			pps.colorEnd = m_particleColorEnd;
+			pps.sizeStart = { m_particleSizeStart, m_particleSizeStart };
+			pps.sizeEnd = { m_particleSizeEnd, m_particleSizeEnd };
+			pps.rotationSpeed = m_particleAngularVel;
+			pps.lifeTime = m_particleLifeTime;
 
-		std::pair<float, float> mousePos = InputBridge::GetMousePosition();
-		glm::vec3 tempPos = m_Camera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
+			std::pair<float, float> mousePos = InputBridge::GetMousePosition();
+			glm::vec3 tempPos = m_Camera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
 
-		pps.posStart = { tempPos.x, tempPos.y };
-		m_ParticleSystem.Emit(pps);
+			pps.posStart = { tempPos.x, tempPos.y };
+
+			m_ParticleSystem.Emit(pps);
+		}
 	}
 
 	{
@@ -220,7 +241,13 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 				count = 0;
 		}*/
 
-		m_ParticleSystem.OnRender();
+		RenderCommand::EnableDepthTest(false);
+		m_ParticleSystem.OnRender(m_SubTextures2D, 10);
+		RenderCommand::EnableDepthTest(true);
+
+		//Renderer2D::DrawQuad(glm::mat4(1.0), { 1.0f, 1.0f, 1.0f, 1.0f }, m_SubTexture2D, { 1.0f, 1.0f });
+		//Renderer2D::DrawQuad(glm::translate(glm::mat4(1.0), { 0.2f, 0.0f, 1.0f }), { 1.0f, 1.0f, 1.0f, 1.0f }, m_SubTexture2D, { 1.0f, 1.0f });
+		Renderer2D::DrawQuad({ -1.0f, 0.0f, 1.0f }, m_SubTextures2D[9]->GetSpriteSize(), { 1.0f, 1.0f, 1.0f, 1.0f }, m_SubTextures2D[9], { 1.0f, 1.0f });
 
 		//Renderer2D::DrawQuad({ 0.0f, 0.0f, -9.99f }, { 20.0f, 20.0f }, m_QuadTextureColor, *m_QuadTexture, m_BackgroundTileSize);
 		//Renderer2D::DrawQuad({ -1.0f, 0.0f }, glm::radians(m_squareRotationAccumulated), { 1.0f, 1.0f }, { 0.3f, 0.3f, 0.9f, 1.0f }); //rotate quad
