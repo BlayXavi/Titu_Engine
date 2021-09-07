@@ -7,3 +7,8 @@ bin-int/
 .user
 Sandbox/imgui.ini
 Sandbox/*.json
+
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
