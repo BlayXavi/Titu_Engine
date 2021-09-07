@@ -11,14 +11,14 @@ namespace TituEngine
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
-		virtual void SetData(const void* data, uint size) override;
+		virtual void SetData(const void* data, uint32_t size) override;
 
 	private:
 		friend VertexBuffer; //only vertex buffer can create an instance of OpenGLVertexBuffer
-		OpenGLVertexBuffer(float* vertices, uint size, bool isStatic = true);
+		OpenGLVertexBuffer(float* vertices, uint32_t size, bool isStatic = true);
 
 
-		uint m_RendererID;
+		uint32_t m_RendererID;
 	};
 
 	//------------------------------------INDEX-----------------------------------------
@@ -29,13 +29,13 @@ namespace TituEngine
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override ;
-		virtual uint GetCount() const { return m_Count; }
+		virtual uint32_t GetCount() const { return m_Count; }
 	private:
 		friend IndexBuffer;//only vertex buffer can create an instance of OpenGLIndexBuffer
-		OpenGLIndexBuffer(uint* indices, uint count, bool isStatic = true);
+		OpenGLIndexBuffer(uint32_t* indices, uint32_t count, bool isStatic = true);
 
-		uint m_RendererID;
-		uint m_Count;
+		uint32_t m_RendererID;
+		uint32_t m_Count;
 	};
 }
 

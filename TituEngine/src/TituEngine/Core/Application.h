@@ -7,6 +7,8 @@
 #include "TituEngine/Layer/LayerStack.h"
 #include "TituEngine/ImGui/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace TituEngine
 {
 	class TE_API Application
@@ -14,8 +16,6 @@ namespace TituEngine
 	public:
 		Application();
 		virtual ~Application();
-
-		void Run();
 
 		void OnEvent(Event& e);
 
@@ -29,6 +29,7 @@ namespace TituEngine
 		ImGuiLayer* m_ImGuiLayer;
 
 	private:
+		void Run();
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 
@@ -41,6 +42,7 @@ namespace TituEngine
 
 		float m_CurrentTime;
 		unsigned long int m_FrameCount;
+		friend int ::main(int argc, char** argv);
 	};
 
 	//To be defined in CLIENT

@@ -10,10 +10,10 @@ namespace TituEngine
 	struct WindowProps
 	{
 		std::string Title;
-		uint Width;
-		uint Height;
+		uint32_t Width;
+		uint32_t Height;
 
-		WindowProps(const std::string& title = "Titu Engine", uint width = 1920, uint height = 1080) :
+		WindowProps(const std::string& title = "Titu Engine", uint32_t width = 1920, uint32_t height = 1080) :
 			Title(title), Width(width), Height(height) {}
 	};
 
@@ -24,8 +24,8 @@ namespace TituEngine
 		using EventCallbackFn = std::function<void(Event&)>;
 
 		virtual void OnUpdate() = 0;
-		virtual uint GetWidth() const = 0;
-		virtual uint GetHeight() const = 0;
+		virtual uint32_t GetWidth() const = 0;
+		virtual uint32_t GetHeight() const = 0;
 
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;

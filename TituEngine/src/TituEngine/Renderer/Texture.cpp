@@ -8,7 +8,7 @@
 
 namespace TituEngine
 {
-	Texture2D* Texture2D::Create(uint width, uint height)
+	Texture2D* Texture2D::Create(uint32_t width, uint32_t height)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 		switch (Renderer::GetAPI())

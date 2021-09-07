@@ -7,11 +7,11 @@ namespace TituEngine {
 	class WindowResizeEvent : public Event
 	{
 	public:
-		WindowResizeEvent(uint width, uint height)
+		WindowResizeEvent(uint32_t width, uint32_t height)
 			: m_Width(width), m_Height(height) {}
 
-		uint GetWidth() const { return m_Width; }
-		uint GetHeight() const { return m_Height; }
+		uint32_t GetWidth() const { return m_Width; }
+		uint32_t GetHeight() const { return m_Height; }
 
 		std::string ToString() const override
 		{
@@ -23,7 +23,7 @@ namespace TituEngine {
 		EVENT_CLASS_TYPE(WindowResize)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	private:
-		uint m_Width, m_Height;
+		uint32_t m_Width, m_Height;
 	};
 
 	class WindowCloseEvent : public Event

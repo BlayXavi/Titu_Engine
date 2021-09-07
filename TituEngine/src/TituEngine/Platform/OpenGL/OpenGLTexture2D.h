@@ -9,8 +9,8 @@ namespace TituEngine
 	{
 	public:
 
-		void Bind(uint slot = 0) const override;
-		void SetData(void* data, uint size, bool deleteData = false) override;
+		void Bind(uint32_t slot = 0) const override;
+		void SetData(void* data, uint32_t size, bool deleteData = false) override;
 
 		~OpenGLTexture2D();
 
@@ -23,7 +23,7 @@ namespace TituEngine
 	private:
 		friend Texture2D;
 
-		OpenGLTexture2D(uint width, uint height);
+		OpenGLTexture2D(uint32_t width, uint32_t height);
 		OpenGLTexture2D(const std::string& path);
 	
 	private:

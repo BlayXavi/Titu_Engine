@@ -5,7 +5,7 @@
 
 namespace TituEngine
 {
-	OpenGLTexture2D::OpenGLTexture2D(uint width, uint height)
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
 		: Texture2D(width, height), m_DataFormat(0), m_InternalFormat(0)
 	{
 		m_InternalFormat = GL_RGBA8;
@@ -69,13 +69,13 @@ namespace TituEngine
 		glDeleteTextures(1, &m_RendererID);
 	}
 
-	void OpenGLTexture2D::Bind(uint slot) const
+	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
 		TE_PROFILE_PROFILE_FUNC();
 		glBindTextureUnit(slot, m_RendererID);
 	}
 
-	void OpenGLTexture2D::SetData(void* data, uint size, bool deleteData)
+	void OpenGLTexture2D::SetData(void* data, uint32_t size, bool deleteData)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 		TE_ASSERT(size == m_Width * m_Height * (m_DataFormat == GL_RGBA ? 4 : 3), "Error, size does not match with m_Width && m_Height.");

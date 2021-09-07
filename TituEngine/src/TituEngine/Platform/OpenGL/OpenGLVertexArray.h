@@ -24,9 +24,9 @@ namespace TituEngine
 
 		std::vector<const VertexBuffer*> m_VertexBuffers;
 		const IndexBuffer* m_IndexBuffer = nullptr;
-		uint m_VertexArrayID;
+		uint32_t m_VertexArrayID;
 		
 		//Buffer Index Tracker. Used to add an offset to Vertex Attrib Array/Pointer
-		uint m_VertexBufferIndexOffset;
+		uint32_t m_VertexBufferIndexOffset;
 	};
 }

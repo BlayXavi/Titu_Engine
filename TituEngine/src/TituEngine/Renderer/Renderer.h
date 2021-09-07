@@ -25,7 +25,7 @@ namespace TituEngine
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() const = 0;
 
-		virtual void DrawIndexed(const VertexArray* vertexArray, const uint count = -1) = 0;
+		virtual void DrawIndexed(const VertexArray* vertexArray, const uint32_t count = -1) = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 		virtual void EnableDepthTest(bool enable) = 0;
 
@@ -57,7 +57,7 @@ namespace TituEngine
 		inline static void Clear() { s_RendererAPI->Clear(); }
 		inline static void EnableDepthTest(bool enable) { s_RendererAPI->EnableDepthTest(enable); }
 
-		void static DrawIndexed(const VertexArray* vertexArray, const uint count = -1)
+		void static DrawIndexed(const VertexArray* vertexArray, const uint32_t count = -1)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray, count);
 		}

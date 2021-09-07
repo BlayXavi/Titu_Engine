@@ -61,7 +61,7 @@ namespace TituEngine
 		//		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,// bottom left
 		//};
 
-		//uint indices[3 * 2] = { 0, 1, 3,   // first triangle
+		//uint32_t indices[3 * 2] = { 0, 1, 3,   // first triangle
 		//						1, 2, 3    // second triangle
 		//};
 
@@ -109,8 +109,8 @@ namespace TituEngine
 		delete[] texSlots;
 
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
-		uint data = 0xffffffff;
-		s_Data.WhiteTexture->SetData(&data, sizeof(uint));
+		uint32_t data = 0xffffffff;
+		s_Data.WhiteTexture->SetData(&data, sizeof(uint32_t));
 
 		s_Data.whiteSubTexture2D = new SubTexture2D(s_Data.WhiteTexture, { 0.0f, 0.0f }, { 1.0f, 1.0f });
 

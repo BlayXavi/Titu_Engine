@@ -52,6 +52,11 @@ namespace TituEngine
 		}
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+
+#ifdef TE_DEBUG
+		if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
 
@@ -101,7 +106,7 @@ namespace TituEngine
 				}
 			});
 
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, uint keyChar)
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, uint32_t keyChar)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 				KeyTypedEvent event(keyChar);

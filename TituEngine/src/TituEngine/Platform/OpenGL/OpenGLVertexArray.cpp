@@ -39,7 +39,7 @@ namespace TituEngine
 
 		Bind();
 		vertexBuffer->Bind();
-		uint index = 0;
+		uint32_t index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const BufferElement& element : layout)
 		{
@@ -49,7 +49,7 @@ namespace TituEngine
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
-		m_VertexBufferIndexOffset += (uint)vertexBuffer->GetLayout().GetElements().size();
+		m_VertexBufferIndexOffset += (uint32_t)vertexBuffer->GetLayout().GetElements().size();
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer* indexBuffer)

@@ -1,12 +1,16 @@
 [submodule "TituEngine/vendor/spdlog"]
 	path = TituEngine/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+	branch = v1.x
 [submodule "TituEngine/vendor/GLFW"]
 	path = TituEngine/vendor/GLFW
 	url = https://github.com/TheCherno/glfw
+	branch = master
 [submodule "TituEngine/vendor/imgui"]
 	path = TituEngine/vendor/imgui
 	url = https://github.com/TheCherno/imgui
+	branch = docking
 [submodule "TituEngine/vendor/glm"]
 	path = TituEngine/vendor/glm
-	url = https://github.com/g-truc/glm.git
+	url = https://github.com/g-truc/glm.gi
+	branch = master

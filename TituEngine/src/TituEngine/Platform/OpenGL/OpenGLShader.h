@@ -27,14 +27,14 @@ namespace TituEngine
 
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& path);
-		void Compile(std::unordered_map<uint, std::string> shaderSources);
+		void Compile(std::unordered_map<uint32_t, std::string> shaderSources);
 
-		uint m_RendererID;
+		uint32_t m_RendererID;
 
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 		int GetUniformLocation(const std::string& name);
 
-		std::vector<uint>glShaderIDs;
+		std::vector<uint32_t>glShaderIDs;
 
 		void ClearData();
 

@@ -20,7 +20,7 @@ namespace TituEngine
 		Bool
 	};
 
-	static uint ShaderDataTypeSize(const ShaderDataType type)
+	static uint32_t ShaderDataTypeSize(const ShaderDataType type)
 	{
 		switch (type)
 		{
@@ -41,7 +41,7 @@ namespace TituEngine
 		return 0;
 	}
 
-	static uint ShaderDataTypeElementCount(const ShaderDataType type)
+	static uint32_t ShaderDataTypeElementCount(const ShaderDataType type)
 	{
 		switch (type)
 		{
@@ -72,10 +72,10 @@ namespace TituEngine
 	{
 		std::string Name;
 		ShaderDataType Type;
-		uint Offset;
-		uint Size;
-		uint ElementCount;
-		uint Normalized;
+		uint32_t Offset;
+		uint32_t Size;
+		uint32_t ElementCount;
+		uint32_t Normalized;
 
 		BufferElement(const ShaderDataType type, const bool normalized, const std::string name)
 			: Type(type), Normalized(normalized), Name(name), Size(ShaderDataTypeSize(type)), Offset(0), ElementCount(ShaderDataTypeElementCount(type))
@@ -104,11 +104,11 @@ namespace TituEngine
 		std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
 		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
 
-		inline uint GetStride() const { return m_Stride; }
+		inline uint32_t GetStride() const { return m_Stride; }
 
 	private:
 		std::vector<BufferElement> m_Elements;
-		uint m_Stride = 0;
+		uint32_t m_Stride = 0;
 
 		void CalculateOffsetsAndStride()
 		{
@@ -141,17 +141,17 @@ namespace TituEngine
 	{
 	public:
 		virtual ~VertexBuffer() = default;
-		static VertexBuffer* Create(float* vertices, uint size, bool isStatic = true);
-		virtual void SetData(const void* data, uint size) = 0;
+		static VertexBuffer* Create(float* vertices, uint32_t size, bool isStatic = true);
+		virtual void SetData(const void* data, uint32_t size) = 0;
 	};
 
 	class IndexBuffer : public Buffer
 	{
 	public:
 		virtual ~IndexBuffer() = default;
-		static IndexBuffer* Create(uint* vertices, uint count, bool isStatic = true);
+		static IndexBuffer* Create(uint32_t* vertices, uint32_t count, bool isStatic = true);
 
-		virtual uint GetCount() const = 0;
+		virtual uint32_t GetCount() const = 0;
 	};
 
 }

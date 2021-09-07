@@ -3,7 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "TituEngine/Core/Window.h"
 #include "TituEngine/Renderer/GraphicsContext.h"
-
+#include "TituEngine/Renderer/Renderer.h"
 namespace TituEngine
 {
 	class WindowsWindow : public Window
@@ -14,8 +14,8 @@ namespace TituEngine
 
 		void OnUpdate() override;
 
-		inline uint GetWidth() const override { return m_Data.Width; }
-		inline uint GetHeight() const override { return m_Data.Height; }
+		inline uint32_t GetWidth() const override { return m_Data.Width; }
+		inline uint32_t GetHeight() const override { return m_Data.Height; }
 		inline bool IsVsync() const override { return m_Data.VSync; }
 
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
@@ -33,7 +33,7 @@ namespace TituEngine
 		struct WindowData
 		{
 			std::string Title = "WindowsWindow";
-			uint Width, Height = 0;
+			uint32_t Width, Height = 0;
 			bool VSync = true;
 
 			EventCallbackFn EventCallback; //m_Data.EventCallback(event) to call the event bound function

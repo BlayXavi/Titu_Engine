@@ -25,10 +25,18 @@ namespace TituEngine
 		{
 			std::string shaderSource;
 			in.seekg(0, std::ios::end);
-			shaderSource.resize(in.tellg());
-			in.seekg(0, std::ios::beg);
-			in.read(&shaderSource[0], shaderSource.size());
-			in.close();
+			size_t size = in.tellg();
+			if (size != -1)
+			{
+				shaderSource.resize(in.tellg());
+				in.seekg(0, std::ios::beg);
+				in.read(&shaderSource[0], shaderSource.size());
+				in.close();
+			}
+			else
+			{
+				TE_ASSERT(false, "Caould not open files {0}", path);
+			}
 
 			const char* typeToken = "#type";
 
@@ -72,7 +80,6 @@ namespace TituEngine
 		{
 			TE_CORE_ERROR("Error: Could not open Shader File [{0}]", path);
 		}
-
 	}
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> shaderSources)
@@ -147,7 +154,7 @@ namespace TituEngine
 		// Always detach shaders after a successful link.
 		for (auto& id : glShaderIDs)
 		{
-			glDetachShader(id, id);
+			glDetachShader(program, id);
 			glDeleteShader(id);
 		}
 	}

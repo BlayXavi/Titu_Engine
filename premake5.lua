@@ -1,5 +1,5 @@
 workspace "TituEngine"
-	architecture "x64"
+	architecture "x86_64"
 
 	configurations
 	{
