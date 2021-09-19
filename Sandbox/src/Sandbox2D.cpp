@@ -21,8 +21,8 @@ Sandbox2DLayer::Sandbox2DLayer()
 	m_TriangleTransform *= glm::scale(glm::mat4(1.0f), { 0.2f, 0.2f, 1.0f });
 
 	FramebufferSpecs spec;
-	spec.Width = 1920;
-	spec.Height = 1080;
+	spec.Width = 1280;
+	spec.Height = 720;
 	m_Framebuffer = Framebuffer::Create(spec);
 
 	m_Camera = new OrthographicCamera(1280.0f / 720.0f);
@@ -148,7 +148,7 @@ void Sandbox2DLayer::OnImGuiRender()
 	}
 
 	uint32_t framebufferTextureID = m_Framebuffer->GetColorAttachment();
-	ImGui::Image((void*)framebufferTextureID, ImVec2{ 512.0f, 256.0f });
+	ImGui::Image((void*)framebufferTextureID, ImVec2{ 512.0f, 256.0f }, { 0, 1 }, { 1, 0 });
 
 	ImGui::End();
 	ImGui::ShowDemoWindow();
