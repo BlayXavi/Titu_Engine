@@ -127,6 +127,8 @@ void Sandbox2DLayer::OnImGuiRender()
 
 			ImGui::TreePop();
 		}
+
+		ImGui::ShowDemoWindow();
 	}
 
 	if (ImGui::TreeNode("Particle Props"))
@@ -242,7 +244,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 		}*/
 
 		RenderCommand::EnableDepthTest(false);
-		m_ParticleSystem.OnRender(m_SubTextures2D, 10);
+		m_ParticleSystem.OnRender();
 		RenderCommand::EnableDepthTest(true);
 
 		//Renderer2D::DrawQuad(glm::mat4(1.0), { 1.0f, 1.0f, 1.0f, 1.0f }, m_SubTexture2D, { 1.0f, 1.0f });

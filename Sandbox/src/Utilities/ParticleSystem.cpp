@@ -1,8 +1,8 @@
+#include "tepch.h"
 
 #include "ParticleSystem.h"
 #include <glm/gtx/compatibility.hpp>
 
-#include "tepch.h"
 
 ParticleSystem::ParticleSystem()
 	: m_PoolIndex(999)
