@@ -40,6 +40,7 @@ private:
 	Texture2D* m_SpriteSheet = nullptr;
 	SubTexture2D* m_SubTexture2D = nullptr;
 	SubTexture2D* m_SubTextures2D[10];
+	Framebuffer* m_Framebuffer = nullptr;
 
 	glm::mat4* randomPositions = nullptr;
 	glm::vec4* randomColors = nullptr;

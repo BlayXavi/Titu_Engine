@@ -20,6 +20,11 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 	m_TriangleTransform *= glm::scale(glm::mat4(1.0f), { 0.2f, 0.2f, 1.0f });
 
+	FramebufferSpecs spec;
+	spec.Width = 1920;
+	spec.Height = 1080;
+	m_Framebuffer = Framebuffer::Create(spec);
+
 	m_Camera = new OrthographicCamera(1280.0f / 720.0f);
 	m_OrthographicCameraController.SetCamera(m_Camera);
 	m_QuadTexture = Texture2D::Create("assets/textures2D/Checkerboard.png");
@@ -127,8 +132,6 @@ void Sandbox2DLayer::OnImGuiRender()
 
 			ImGui::TreePop();
 		}
-
-		ImGui::ShowDemoWindow();
 	}
 
 	if (ImGui::TreeNode("Particle Props"))
@@ -143,6 +146,9 @@ void Sandbox2DLayer::OnImGuiRender()
 		ImGui::SliderFloat("Angualr Speed", &m_particleAngularVel, 0.0f, 5.0f);
 		ImGui::TreePop();
 	}
+
+	uint32_t framebufferTextureID = m_Framebuffer->GetColorAttachment();
+	ImGui::Image((void*)framebufferTextureID, ImVec2{ 512.0f, 256.0f });
 
 	ImGui::End();
 	ImGui::ShowDemoWindow();
@@ -215,6 +221,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 
 	m_ParticleSystem.OnUpdate(ts);
 
+	m_Framebuffer->Bind();
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	RenderCommand::Clear();
 
@@ -260,6 +267,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 	}
 
 	Renderer2D::EndScene();
+	m_Framebuffer->UnBind();
 }
 
 void Sandbox2DLayer::OnEvent(Event& e)
