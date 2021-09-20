@@ -28,6 +28,8 @@ namespace TituEngine
 		inline static Application& Instance() { return *s_Instance; }
 		ImGuiLayer* m_ImGuiLayer;
 
+		void Close() { m_Runing = false; }
+
 	private:
 		void Run();
 		bool OnWindowClosed(WindowCloseEvent& e);

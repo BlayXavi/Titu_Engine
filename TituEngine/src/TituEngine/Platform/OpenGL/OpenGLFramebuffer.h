@@ -11,7 +11,7 @@ namespace TituEngine
 		virtual void Bind() override;
 		virtual void UnBind() override;
 
-		virtual void Rebuild() override;
+		virtual void Resize(uint32_t width, uint32_t height) override;
 
 		virtual const uint32_t GetColorAttachment() const override { return m_ColorAttachment; }
 
@@ -21,5 +21,8 @@ namespace TituEngine
 
 		uint32_t m_ColorAttachment;
 		uint32_t m_DepthStencilAtachment;
+
+	protected:
+		virtual void Rebuild() override;
 	};
 }

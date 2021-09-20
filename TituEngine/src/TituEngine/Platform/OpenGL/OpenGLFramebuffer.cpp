@@ -14,6 +14,8 @@ namespace TituEngine
 		if (m_RendererID != 0)
 		{
 			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachment);
+			glDeleteTextures(1, &m_DepthStencilAtachment);
 			m_RendererID = 0;
 		}
 	}
@@ -21,6 +23,7 @@ namespace TituEngine
 	void OpenGLFramebuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glViewport(0, 0, m_FramebufferSpecs.Width, m_FramebufferSpecs.Height);
 	}
 
 	void OpenGLFramebuffer::UnBind()
@@ -28,8 +31,23 @@ namespace TituEngine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
+	{
+		m_FramebufferSpecs.Width = width;
+		m_FramebufferSpecs.Height = height;
+
+		Rebuild();
+	}
+
 	void OpenGLFramebuffer::Rebuild()
 	{
+		if (m_RendererID)
+		{
+			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachment);
+			glDeleteTextures(1, &m_DepthStencilAtachment);
+		}
+
 		glCreateFramebuffers(1, &m_RendererID);
 		Bind();
 

@@ -22,7 +22,7 @@ namespace TituEngine
 		virtual void Bind() = 0;
 		virtual void UnBind() = 0;
 
-		virtual void Rebuild() = 0;
+		virtual void Resize(uint32_t width, uint32_t height) = 0;
 
 		virtual const uint32_t GetColorAttachment() const = 0;
 
@@ -31,5 +31,6 @@ namespace TituEngine
 		FramebufferSpecs m_FramebufferSpecs;
 
 		Framebuffer(const FramebufferSpecs& framebufferSpecs);
+		virtual void Rebuild() = 0;
 	};
 }
