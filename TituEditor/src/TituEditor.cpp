@@ -15,6 +15,7 @@ namespace TituEngine
 		m_Framebuffer = Framebuffer::Create(fbSpecs);
 
 		m_Camera = new OrthographicCamera(1280.0f / 720.0f);
+		m_CameraController = new OrthographicCameraController(m_Camera);
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -172,7 +173,6 @@ namespace TituEngine
 			}
 
 			ImGui::End(); //sandbox inspector
-
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 				ImGui::Begin("Viewport");
@@ -182,8 +182,7 @@ namespace TituEngine
 					m_ViewPortPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
-					float aspectRatio = m_ViewPortPanelSize.x / m_ViewPortPanelSize.y;
-					m_Camera->SetProjection(-aspectRatio, aspectRatio, -1.0f, 1.0f);
+					m_CameraController->OnResize(m_ViewPortPanelSize.x, m_ViewPortPanelSize.y);
 				}
 
 				uint32_t textureID = m_Framebuffer->GetColorAttachment();
@@ -226,6 +225,6 @@ namespace TituEngine
 
 	void TituEditorLayer::OnEvent(Event& e)
 	{
-
+		m_CameraController->OnEvent(e);
 	}
 }

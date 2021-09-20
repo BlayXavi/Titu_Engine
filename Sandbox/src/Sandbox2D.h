@@ -31,7 +31,7 @@ public:
 private:
 
 	OrthographicCamera* m_Camera = nullptr;
-	OrthographicCameraController m_OrthographicCameraController;
+	OrthographicCameraController m_CameraController;
 	glm::vec4 m_QuadColor;
 	glm::vec4 m_QuadTextureColor;
 	glm::ivec2 m_BackgroundTileSize;

@@ -26,7 +26,7 @@ Sandbox2DLayer::Sandbox2DLayer()
 	m_Framebuffer = Framebuffer::Create(spec);
 
 	m_Camera = new OrthographicCamera(1280.0f / 720.0f);
-	m_OrthographicCameraController.SetCamera(m_Camera);
+	m_CameraController.SetCamera(m_Camera);
 	m_QuadTexture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 	m_QuadTexture2 = Texture2D::Create("assets/textures2D/blending_transparent_window.png");
 	m_SpriteSheet = Texture2D::Create("assets/textures2D/base_Spritesheet.png");
@@ -166,7 +166,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 	TE_PROFILE_PROFILE_FUNC();
 
 	{
-		m_OrthographicCameraController.OnUpdate(ts);
+		m_CameraController.OnUpdate(ts);
 	}
 
 	currentTimeStep = ts;
@@ -272,5 +272,5 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 
 void Sandbox2DLayer::OnEvent(Event& e)
 {
-	m_OrthographicCameraController.OnEvent(e);
+	m_CameraController.OnEvent(e);
 }

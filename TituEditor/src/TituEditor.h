@@ -13,6 +13,8 @@
 
 #include "TituEngine/Instrumentation/Profiler.h"
 
+#include "Controller/OrthographicCameraController.h"
+
 #define FPS_DEBUG_COUNT 120
 
 namespace TituEngine
@@ -29,12 +31,12 @@ namespace TituEngine
 		void OnEvent(Event& e) override;
 
 	private:
-
-		OrthographicCamera* m_Camera = nullptr;
-		SubTexture2D* m_SubTextures2D[10];
-		Texture2D* m_SpriteSheet = nullptr;
-
 		Timestep currentTimeStep;
+
+		OrthographicCameraController* m_CameraController = nullptr;
+		OrthographicCamera* m_Camera = nullptr;
+		Texture2D* m_SpriteSheet = nullptr;
+		SubTexture2D* m_SubTextures2D[10];
 
 		Framebuffer* m_Framebuffer = nullptr;
 		glm::vec2 m_ViewPortPanelSize = { 0.0f, 0.0f };
