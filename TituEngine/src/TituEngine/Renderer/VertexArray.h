@@ -7,7 +7,7 @@ namespace TituEngine
 	{
 	public:
 		VertexArray() {}
-		virtual  ~VertexArray() {};
+		virtual  ~VertexArray() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;

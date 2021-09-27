@@ -35,6 +35,8 @@ namespace TituEngine
 	class Texture2D : public Texture
 	{
 	public:
+		virtual ~Texture2D() = default;
+
 		static Texture2D* Create(uint32_t width, uint32_t height);
 		static Texture2D* Create(const std::string& path);
 

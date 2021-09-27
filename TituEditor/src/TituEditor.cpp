@@ -114,7 +114,7 @@ namespace TituEngine
 
 			if (ImGui::TreeNode("Global Stats"))
 			{
-				std::pair<float, float> mousePos = InputBridge::GetMousePosition();
+				std::pair<float, float> mousePos = Input::GetMousePosition();
 				std::string xy = std::to_string((int)mousePos.first) + ", " + std::to_string((int)mousePos.second);
 				ImGui::LabelText(xy.c_str(), "MousePos: ", "");
 
@@ -205,6 +205,10 @@ namespace TituEngine
 		std::cout << std::setprecision(2);
 		std::cout << ms << " FPS ";
 		std::cout << (int)fps << std::endl;*/
+
+		if (Input::IsKeyPressed(TE_KEY_W))
+			std::cout << "Key W Presed" << std::endl;
+
 		TE_PROFILE_PROFILE_FUNC();
 
 		currentTimeStep = ts;

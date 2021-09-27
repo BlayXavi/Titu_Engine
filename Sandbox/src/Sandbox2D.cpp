@@ -171,7 +171,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 
 	currentTimeStep = ts;
 
-	if (InputBridge::IsButtonMousePressed(TE_MOUSE_BUTTON_1))
+	if (Input::IsButtonMousePressed(TE_MOUSE_BUTTON_1))
 	{
 		for (size_t i = 0; i < m_particlesPerFrame; i++)
 		{
@@ -184,7 +184,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 			pps.rotationSpeed = m_particleAngularVel;
 			pps.lifeTime = m_particleLifeTime;
 
-			std::pair<float, float> mousePos = InputBridge::GetMousePosition();
+			std::pair<float, float> mousePos = Input::GetMousePosition();
 			glm::vec3 tempPos = m_Camera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
 
 			pps.posStart = { tempPos.x, tempPos.y };
@@ -195,23 +195,23 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 
 	{
 		TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::ProcessInput");
-		if (InputBridge::IsKeyPressed(TE_KEY_D))
+		if (Input::IsKeyPressed(TE_KEY_D))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(m_TriangleSpeed * ts, 0.0f, 0.0f));
-		if (InputBridge::IsKeyPressed(TE_KEY_A))
+		if (Input::IsKeyPressed(TE_KEY_A))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(-m_TriangleSpeed * ts, 0.0f, 0.0f));
-		if (InputBridge::IsKeyPressed(TE_KEY_W))
+		if (Input::IsKeyPressed(TE_KEY_W))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, m_TriangleSpeed * ts, 0.0f));
-		if (InputBridge::IsKeyPressed(TE_KEY_S))
+		if (Input::IsKeyPressed(TE_KEY_S))
 			m_TriangleTransform = glm::translate(m_TriangleTransform, glm::vec3(0.0f, -m_TriangleSpeed * ts, 0.0f));
 
-		if (InputBridge::IsKeyPressed(TE_KEY_Z))
+		if (Input::IsKeyPressed(TE_KEY_Z))
 			m_TriangleTransform = glm::rotate(m_TriangleTransform, m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
-		if (InputBridge::IsKeyPressed(TE_KEY_X))
+		if (Input::IsKeyPressed(TE_KEY_X))
 			m_TriangleTransform = glm::rotate(m_TriangleTransform, -m_TriangleAngularSpeed * ts, glm::vec3(0.0f, 0.0f, 1.0f));
 
-		if (InputBridge::IsKeyPressed(TE_KEY_Q))
+		if (Input::IsKeyPressed(TE_KEY_Q))
 			m_CameraRotation += m_CameraAngularSpeed * ts;
-		else if (InputBridge::IsKeyPressed(TE_KEY_E))
+		else if (Input::IsKeyPressed(TE_KEY_E))
 			m_CameraRotation -= m_CameraAngularSpeed * ts;
 
 		m_squareRotationAccumulated += 180.0f * ts;

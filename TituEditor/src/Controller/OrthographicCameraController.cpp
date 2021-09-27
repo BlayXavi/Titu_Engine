@@ -47,14 +47,14 @@ void OrthographicCameraController::OnUpdate(Timestep ts)
 		return;
 
 	glm::vec3 pos = m_CameraPosition;
-	if (InputBridge::IsKeyPressed(TE_KEY_UP))
+	if (Input::IsKeyPressed(TE_KEY_UP))
 		pos.y += m_CameraSpeed * ts;
-	else if (InputBridge::IsKeyPressed(TE_KEY_DOWN))
+	else if (Input::IsKeyPressed(TE_KEY_DOWN))
 		pos.y -= m_CameraSpeed * ts;
 	
-	if (InputBridge::IsKeyPressed(TE_KEY_RIGHT))
+	if (Input::IsKeyPressed(TE_KEY_RIGHT))
 		pos.x += m_CameraSpeed * ts;
-	else if (InputBridge::IsKeyPressed(TE_KEY_LEFT))
+	else if (Input::IsKeyPressed(TE_KEY_LEFT))
 		pos.x -= m_CameraSpeed * ts;
 
 	SetPosition(pos);
