@@ -49,5 +49,7 @@ namespace TituEngine
 		float m_AverageMS = 0;
 
 		bool m_VSync;
+		bool m_ViewPortFocused = false;
+		bool m_ViewPortHovered = false;
 	};
 }

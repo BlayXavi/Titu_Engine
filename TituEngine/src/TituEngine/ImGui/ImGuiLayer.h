@@ -18,7 +18,11 @@ namespace TituEngine
 		virtual void EndRender();
 		virtual void OnImGuiRender();
 		
+		virtual void SetBlockEvents(bool block) { m_BlockEvents = block; }
+
 	private:
+		bool m_BlockEvents = false;
+
 		float m_Time = 0.0f;
 	};
 }

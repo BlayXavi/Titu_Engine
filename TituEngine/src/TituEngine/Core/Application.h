@@ -26,8 +26,8 @@ namespace TituEngine
 		inline int GetFrameCount() { return m_FrameCount; }
 
 		inline static Application& Instance() { return *s_Instance; }
-		ImGuiLayer* m_ImGuiLayer;
 
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 		void Close() { m_Runing = false; }
 
 	private:
@@ -36,6 +36,8 @@ namespace TituEngine
 		bool OnWindowResized(WindowResizeEvent& e);
 
 	private:
+		ImGuiLayer* m_ImGuiLayer;
+
 		std::unique_ptr<Window> m_Window;
 		bool m_Runing = true;
 		bool m_Minimized = false;
