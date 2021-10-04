@@ -46,6 +46,7 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		{
+			//Dockspace
 			{
 				static bool dockspaceOpen = true;
 				static bool opt_fullscreen_persistant = true;
@@ -92,6 +93,7 @@ namespace TituEngine
 				}
 			}
 
+			//Tool Bar
 			if (ImGui::BeginMenuBar())
 			{
 				if (ImGui::BeginMenu("File"))
@@ -107,6 +109,7 @@ namespace TituEngine
 				ImGui::EndMenuBar();
 			}
 
+			//Sandbox Inspector
 			{
 				ImGui::Begin("Sandbox Inspector");
 
@@ -176,6 +179,7 @@ namespace TituEngine
 				ImGui::End(); //sandbox inspector
 			}
 
+			//Viewport
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 				ImGui::Begin("Viewport");
@@ -192,10 +196,10 @@ namespace TituEngine
 					m_ViewPortPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
-					m_CameraController->OnResize(m_ViewPortPanelSize.x, m_ViewPortPanelSize.y);
+					m_CameraController->OnResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
-				uint32_t textureID = m_Framebuffer->GetColorAttachment();
+				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment();
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
 				ImGui::End(); //viewport
 				ImGui::PopStyleVar();
@@ -215,7 +219,6 @@ namespace TituEngine
 		std::cout << std::setprecision(2);
 		std::cout << ms << " FPS ";
 		std::cout << (int)fps << std::endl;*/
-
 
 		TE_PROFILE_PROFILE_FUNC();
 
