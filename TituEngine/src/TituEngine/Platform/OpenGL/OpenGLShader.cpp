@@ -157,6 +157,7 @@ namespace TituEngine
 			glDetachShader(program, id);
 			glDeleteShader(id);
 		}
+		glShaderIDs.clear();
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -171,6 +172,7 @@ namespace TituEngine
 
 		for (auto& id : glShaderIDs)
 			glDeleteShader(id);
+		glShaderIDs.clear();
 
 		m_UniformLocationCache.clear();
 	}

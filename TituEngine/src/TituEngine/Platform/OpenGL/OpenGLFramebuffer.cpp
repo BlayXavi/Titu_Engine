@@ -33,6 +33,12 @@ namespace TituEngine
 
 	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
 	{
+		if (width == 0 || height == 0)
+		{
+			TE_ASSERT(false, "Error. unconsistend size on OpenGLFrameBuffer H[{0}] W[{1}]", height, width);
+			return;
+		}
+
 		m_FramebufferSpecs.Width = width;
 		m_FramebufferSpecs.Height = height;
 
