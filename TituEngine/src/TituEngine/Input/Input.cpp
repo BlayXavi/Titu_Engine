@@ -6,6 +6,43 @@
 
 namespace TituEngine
 {
+	float Input::m_MouseX = 0.0f;
+	float Input::m_MouseY = 0.0f;
+	float Input::m_MouseXLastFrame = 0.0f;
+	float Input::m_MouseYLastFrame = 0.0f;
+	float Input::m_MouseDeltaX = 0.0f;
+	float Input::m_MouseDeltaY = 0.0f;
+
+	float Input::MouseDeltaX()
+	{
+		return m_MouseDeltaX;
+	}
+
+	float Input::MouseDeltaY()
+	{
+		return m_MouseDeltaY;
+	}
+
+	float Input::GetMouseX()
+	{
+		return m_MouseX;
+	}
+
+	float Input::GetMouseY()
+	{
+		return m_MouseY;
+	}
+
+	std::pair<float, float> Input::GetMousePosition()
+	{
+		return std::pair<float, float>(m_MouseX, m_MouseY);
+	}
+
+	std::pair<float, float> Input::GetMouseDeltaPosition()
+	{
+		return std::pair<float, float>(m_MouseDeltaX, m_MouseDeltaY);
+	}
+
 #ifdef TE_PLATFORM_WINDOWS
 	GLFWwindow* m_MainWindow = nullptr;
 
@@ -28,26 +65,22 @@ namespace TituEngine
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	float Input::GetMouseX()
-	{
-		auto [x, y] = GetMousePosition();
-		return (float)x;
-	}
-
-	float Input::GetMouseY()
-	{
-		auto [x, y] = GetMousePosition();
-		return y;
-	}
-
-	inline std::pair<float, float> Input::GetMousePosition()
+	void Input::UpdateMouse()
 	{
 		if (m_MainWindow == nullptr)
 			m_MainWindow = static_cast<GLFWwindow*>(Application::Instance().GetWindow().GetNativeWindow());
 
+		m_MouseXLastFrame = m_MouseX;
+		m_MouseYLastFrame = m_MouseY;
+
 		double xpos, ypos;
 		glfwGetCursorPos(m_MainWindow, &xpos, &ypos);
-		return { (float)xpos, (float)ypos };
+
+		m_MouseX = (float)xpos;
+		m_MouseY = (float)ypos;
+
+		m_MouseDeltaX = m_MouseXLastFrame - m_MouseX;
+		m_MouseDeltaY = m_MouseYLastFrame - m_MouseY;
 	}
 
 #else

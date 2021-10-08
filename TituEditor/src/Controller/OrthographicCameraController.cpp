@@ -57,6 +57,12 @@ void OrthographicCameraController::OnUpdate(Timestep ts)
 	else if (Input::IsKeyPressed(TE_KEY_LEFT) || Input::IsKeyPressed(TE_KEY_A))
 		pos.x -= m_CameraSpeed * ts;
 
+	if (Input::IsButtonMousePressed(TE_MOUSE_BUTTON_3))
+	{
+		pos.x += Input::MouseDeltaX() * ts;
+		pos.y += Input::MouseDeltaY() * -ts;
+	}
+
 	SetPosition(pos);
 }
 

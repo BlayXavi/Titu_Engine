@@ -46,6 +46,9 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		{
+			static bool show_rendererStats = false;
+			static bool show_MouseStats = false;
+			static bool show_ImGuiDemo = false;
 			//Dockspace
 			{
 				static bool dockspaceOpen = true;
@@ -106,77 +109,101 @@ namespace TituEngine
 					ImGui::EndMenu();
 				}
 
+				if (ImGui::BeginMenu("TituEngine"))
+				{
+					ImGui::MenuItem("Renderer stats", NULL, &show_rendererStats);
+					ImGui::MenuItem("Mouse stats", NULL, &show_MouseStats);
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Helpers"))
+				{
+					ImGui::MenuItem("Show ImGui DemoWindow", NULL, &show_ImGuiDemo);
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenuBar();
 			}
 
 			//Sandbox Inspector
 			{
-				ImGui::Begin("Sandbox Inspector");
-
-				if (ImGui::Checkbox("Vsync", &m_VSync))
-					Application::Instance().GetWindow().SetVSync(m_VSync);
-
-				if (ImGui::TreeNode("Global Stats"))
+				if (show_rendererStats)
 				{
+					ImGui::Begin("Render Stats");
+
+					if (ImGui::Checkbox("Vsync", &m_VSync))
+						Application::Instance().GetWindow().SetVSync(m_VSync);
+
+					//if (ImGui::TreeNode("Render Stats"))
+					{
+						// Plots can display overlay texts
+						// (in this example, we will display an average value)
+						{
+							float ms = currentTimeStep.GetDeltaTimeMilliseconds();
+							float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
+
+							ImGui::Checkbox("Animate FPS Graph", &m_UpdateFPS);
+
+							if (m_UpdateFPS)
+							{
+								m_AverageFPS = 0;
+								m_AverageMS = 0;
+								for (int n = 1; n < FPS_DEBUG_COUNT; n++)
+								{
+									debugFPS[n - 1] = debugFPS[n];
+									debugMS[n - 1] = debugMS[n];
+									m_AverageFPS += debugFPS[n];
+									m_AverageMS += debugMS[n];
+
+								}
+
+								debugFPS[FPS_DEBUG_COUNT - 1] = fps;
+								debugMS[FPS_DEBUG_COUNT - 1] = ms;
+								m_AverageFPS += debugFPS[FPS_DEBUG_COUNT - 1];
+								m_AverageMS += debugMS[FPS_DEBUG_COUNT - 1];
+
+								m_AverageFPS /= (float)FPS_DEBUG_COUNT;
+								m_AverageMS /= (float)FPS_DEBUG_COUNT;
+							}
+
+							char overlay[32];
+							sprintf_s(overlay, "FPS Avg: %f", m_AverageFPS);
+							ImGui::PlotHistogram("FPS", debugFPS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageFPS * 1.5f, ImVec2(0, 80.0f));
+							ImGui::Separator();
+							sprintf_s(overlay, "MS Avg: %f", m_AverageMS);
+							ImGui::PlotHistogram("ms", debugMS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageMS * 1.5f, ImVec2(0, 80.0f));
+
+							ImGui::Text("Batches [%d]", Renderer2D::RenderStats::GetDrawCalls());
+							ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
+							ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
+
+							//ImGui::TreePop();
+						}
+					}
+
+					ImGui::End(); //Render Stats
+				}
+
+				if (show_MouseStats)
+				{
+					ImGui::Begin("Mouse Stats");
+
 					std::pair<float, float> mousePos = Input::GetMousePosition();
 					std::string xy = std::to_string((int)mousePos.first) + ", " + std::to_string((int)mousePos.second);
 					ImGui::LabelText(xy.c_str(), "MousePos: ", "");
+
+					std::pair<float, float> mousePosDelta = Input::GetMouseDeltaPosition();
+					xy = std::to_string((int)mousePosDelta.first) + ", " + std::to_string((int)mousePosDelta.second);
+					ImGui::LabelText(xy.c_str(), "MouseDelta: ", "");
 
 					glm::vec2 mousePosWorld = m_Camera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
 					std::string xyWorld = std::to_string(mousePosWorld.x) + ", " + std::to_string(mousePosWorld.y);
 					ImGui::LabelText(xyWorld.c_str(), "MousePosWorld: ", "");
 
-					ImGui::TreePop();
+					ImGui::End(); //Mouse Stats
+
 				}
 
-				if (ImGui::TreeNode("Render Stats"))
-				{
-					// Plots can display overlay texts
-					// (in this example, we will display an average value)
-					{
-						float ms = currentTimeStep.GetDeltaTimeMilliseconds();
-						float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
-
-						ImGui::Checkbox("Animate FPS Graph", &m_UpdateFPS);
-
-						if (m_UpdateFPS)
-						{
-							m_AverageFPS = 0;
-							m_AverageMS = 0;
-							for (int n = 1; n < FPS_DEBUG_COUNT; n++)
-							{
-								debugFPS[n - 1] = debugFPS[n];
-								debugMS[n - 1] = debugMS[n];
-								m_AverageFPS += debugFPS[n];
-								m_AverageMS += debugMS[n];
-
-							}
-
-							debugFPS[FPS_DEBUG_COUNT - 1] = fps;
-							debugMS[FPS_DEBUG_COUNT - 1] = ms;
-							m_AverageFPS += debugFPS[FPS_DEBUG_COUNT - 1];
-							m_AverageMS += debugMS[FPS_DEBUG_COUNT - 1];
-
-							m_AverageFPS /= (float)FPS_DEBUG_COUNT;
-							m_AverageMS /= (float)FPS_DEBUG_COUNT;
-						}
-
-						char overlay[32];
-						sprintf_s(overlay, "FPS Avg: %f", m_AverageFPS);
-						ImGui::PlotHistogram("FPS Histogram", debugFPS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageFPS * 1.5f, ImVec2(0, 80.0f));
-						ImGui::Separator();
-						sprintf_s(overlay, "MS Avg: %f", m_AverageMS);
-						ImGui::PlotHistogram("ms Histogram", debugMS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageMS * 1.5f, ImVec2(0, 80.0f));
-
-						ImGui::Text("Batches [%d]", Renderer2D::RenderStats::GetDrawCalls());
-						ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
-						ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
-
-						ImGui::TreePop();
-					}
-				}
-
-				ImGui::End(); //sandbox inspector
 			}
 
 			//Viewport
@@ -187,8 +214,6 @@ namespace TituEngine
 				m_ViewPortFocused = ImGui::IsWindowFocused();
 				m_ViewPortHovered = ImGui::IsWindowHovered();
 				Application::Instance().GetImGuiLayer()->SetBlockEvents(!m_ViewPortFocused || !m_ViewPortHovered);
-
-				TE_CORE_INFO("F {0} / H {1}", m_ViewPortFocused, m_ViewPortHovered);
 
 				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 				if (m_ViewPortPanelSize != *(glm::vec2*)&viewportPanelSize)
@@ -205,9 +230,11 @@ namespace TituEngine
 				ImGui::PopStyleVar();
 			}
 
+			if (show_ImGuiDemo)
+				ImGui::ShowDemoWindow();
+
 			ImGui::End(); //dockspace 
 		}
-
 	}
 
 	void TituEditorLayer::OnUpdate(Timestep ts)
