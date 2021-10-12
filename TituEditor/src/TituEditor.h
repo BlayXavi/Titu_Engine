@@ -31,6 +31,9 @@ namespace TituEngine
 		void OnEvent(Event& e) override;
 
 	private:
+		Scene* m_Scene = nullptr;
+		SpriteRendererComponent* tempSpriteRendererComponent;
+
 		Timestep currentTimeStep;
 
 		OrthographicCameraController* m_CameraController = nullptr;

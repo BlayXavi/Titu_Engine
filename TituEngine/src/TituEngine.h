@@ -24,3 +24,7 @@
 #include "TituEngine/Renderer/Shader.h"
 
 #include "TituEngine/Renderer/Camera.h"
+
+#include "TituEngine/Scene/Scene.h"
+#include "TituEngine/Scene/Entity.h"
+#include "TituEngine/Scene/Components.h"

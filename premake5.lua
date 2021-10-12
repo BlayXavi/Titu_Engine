@@ -18,6 +18,7 @@ IncludeDir["Glad"] = "TituEngine/vendor/Glad/include"
 IncludeDir["ImGui"] = "TituEngine/vendor/imgui"
 IncludeDir["glm"] = "TituEngine/vendor/glm"
 IncludeDir["stb"] = "TituEngine/vendor/stb"
+IncludeDir["entt"] = "TituEngine/vendor/entt/include"
 
 --like c++ this will COPY the content of the path here
 include "TituEngine/vendor/Glad"
@@ -61,7 +62,8 @@ project "TituEngine"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb}"
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -170,6 +172,7 @@ project "TituEditor"
 		"TituEngine/src",
 		"TituEngine/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links

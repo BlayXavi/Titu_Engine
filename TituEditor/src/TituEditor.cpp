@@ -8,6 +8,11 @@ namespace TituEngine
 	TituEditorLayer::TituEditorLayer()
 		: Layer("SandBox 2D Layer")
 	{
+		m_Scene = new Scene();
+		Entity entity = m_Scene->CreateEntity();
+		TransformComponent tc = entity.AddComponent<TransformComponent>();
+		tempSpriteRendererComponent = &entity.AddComponent<SpriteRendererComponent>();
+
 		FramebufferSpecs fbSpecs;
 		fbSpecs.Width = 1280;
 		fbSpecs.Height = 720;
@@ -130,6 +135,8 @@ namespace TituEngine
 				if (show_rendererStats)
 				{
 					ImGui::Begin("Render Stats");
+
+					ImGui::ColorPicker4("Color", &tempSpriteRendererComponent->Color[0]);
 
 					if (ImGui::Checkbox("Vsync", &m_VSync))
 						Application::Instance().GetWindow().SetVSync(m_VSync);
@@ -261,7 +268,8 @@ namespace TituEngine
 		Renderer2D::BeginScene(m_Camera);
 		{
 			TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
-			Renderer2D::DrawQuad({ -1.0f, 0.0f, 1.0f }, m_SubTextures2D[9]->GetSpriteSize(), { 1.0f, 1.0f, 1.0f, 1.0f }, m_SubTextures2D[9], { 1.0f, 1.0f });
+			m_Scene->OnUpdate(ts);
+			//Renderer2D::DrawQuad({ -1.0f, 0.0f, 1.0f }, m_SubTextures2D[9]->GetSpriteSize(), { 1.0f, 1.0f, 1.0f, 1.0f }, m_SubTextures2D[9], { 1.0f, 1.0f });
 		}
 
 		Renderer2D::EndScene();
