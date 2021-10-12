@@ -12,6 +12,7 @@ namespace TituEngine
 		Entity entity = m_Scene->CreateEntity();
 		TransformComponent tc = entity.AddComponent<TransformComponent>();
 		tempSpriteRendererComponent = &entity.AddComponent<SpriteRendererComponent>();
+		entity.AddOrGetComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f });
 
 		FramebufferSpecs fbSpecs;
 		fbSpecs.Width = 1280;
