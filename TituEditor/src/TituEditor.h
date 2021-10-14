@@ -13,7 +13,7 @@
 
 #include "TituEngine/Instrumentation/Profiler.h"
 
-#include "Controller/OrthographicCameraController.h"
+#include "Controller/EditorOrthographicCameraController.h"
 
 #define FPS_DEBUG_COUNT 120
 
@@ -31,13 +31,16 @@ namespace TituEngine
 		void OnEvent(Event& e) override;
 
 	private:
+		Camera* m_ActiveCamera = nullptr;
+
 		Scene* m_Scene = nullptr;
 		SpriteRendererComponent* tempSpriteRendererComponent;
 
 		Timestep currentTimeStep;
 
-		OrthographicCameraController* m_CameraController = nullptr;
-		OrthographicCamera* m_Camera = nullptr;
+		EditorOrthographicCameraController* m_CameraController = nullptr;
+		TransformedCamera* m_EditorCamera = nullptr;
+		Camera* m_GameCamera = nullptr;
 		Texture2D* m_SpriteSheet = nullptr;
 		SubTexture2D* m_SubTextures2D[10];
 

@@ -10,7 +10,10 @@ namespace TituEngine
 	class Entity
 	{
 	public:
+		Entity() = default;
 		Entity(Scene* scene);
+		Entity(const Entity& other) = default;
+
 		~Entity() = default;
 
 		template<typename T, typename ...Args>
@@ -44,6 +47,8 @@ namespace TituEngine
 				return false;
 			return true;
 		}
+
+		operator bool() const { return m_EnttHandle != entt::null; }
 
 	private:
 		Scene* m_Scene = nullptr;

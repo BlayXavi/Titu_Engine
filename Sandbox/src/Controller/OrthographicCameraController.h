@@ -12,14 +12,14 @@
 
 using namespace TituEngine;
 
-class OrthographicCameraController
+class EditorOrthographicCameraController
 {
 public:
-	OrthographicCameraController();
-	OrthographicCameraController(OrthographicCamera* camera);
-	OrthographicCameraController(OrthographicCamera* camera, const glm::vec3& position);
+	EditorOrthographicCameraController();
+	EditorOrthographicCameraController(OrthographicCamera* camera);
+	EditorOrthographicCameraController(OrthographicCamera* camera, const glm::vec3& position);
 
-	~OrthographicCameraController();
+	~EditorOrthographicCameraController();
 
 	void OnUpdate(Timestep ts);
 	void OnEvent(Event& e);
@@ -36,7 +36,7 @@ private:
 	bool OnWindowResized(WindowResizeEvent& e);
 
 private:
-	OrthographicCamera* m_Camera = nullptr;
+	OrthographicCamera* m_EditorCamera = nullptr;
 	float m_ZoomLevel = 1.0f;
 	float m_CameraSpeed = 1.0f;
 

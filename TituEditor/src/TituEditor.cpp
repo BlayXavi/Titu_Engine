@@ -6,13 +6,12 @@
 namespace TituEngine
 {
 	TituEditorLayer::TituEditorLayer()
-		: Layer("SandBox 2D Layer")
+		: Layer("TituEditor Layer")
 	{
 		m_Scene = new Scene();
 		Entity entity = m_Scene->CreateEntity();
 		TransformComponent tc = entity.AddComponent<TransformComponent>();
-		tempSpriteRendererComponent = &entity.AddComponent<SpriteRendererComponent>();
-		entity.AddOrGetComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f });
+		tempSpriteRendererComponent = &entity.AddOrGetComponent<SpriteRendererComponent>();
 
 		FramebufferSpecs fbSpecs;
 		fbSpecs.Width = 1280;
@@ -20,8 +19,15 @@ namespace TituEngine
 		fbSpecs.Samples = 1;
 		m_Framebuffer = Framebuffer::Create(fbSpecs);
 
-		m_Camera = new OrthographicCamera(1280.0f / 720.0f);
-		m_CameraController = new OrthographicCameraController(m_Camera);
+		m_EditorCamera = new TransformedCamera();
+		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
+		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
+		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
+
+		m_GameCamera = new Camera();
+		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
+		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
+		m_ActiveCamera = m_EditorCamera;
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -44,7 +50,14 @@ namespace TituEngine
 
 	TituEditorLayer::~TituEditorLayer()
 	{
-		delete m_Camera;
+		delete m_CameraController;
+		delete m_EditorCamera;
+		delete m_GameCamera;
+		delete m_SpriteSheet;
+		delete m_Framebuffer;
+		for (size_t i = 0; i < 10; i++)
+			delete m_SubTextures2D[i];
+		delete m_Scene;
 	}
 
 	void TituEditorLayer::OnImGuiRender()
@@ -137,6 +150,11 @@ namespace TituEngine
 				{
 					ImGui::Begin("Render Stats");
 
+					if (ImGui::Selectable("Camera Editor", m_ActiveCamera == m_EditorCamera))
+						m_ActiveCamera = m_EditorCamera;
+					else if (ImGui::Selectable("Camera Game", m_ActiveCamera == m_GameCamera))
+						m_ActiveCamera = m_GameCamera;
+
 					ImGui::ColorPicker4("Color", &tempSpriteRendererComponent->Color[0]);
 
 					if (ImGui::Checkbox("Vsync", &m_VSync))
@@ -185,6 +203,7 @@ namespace TituEngine
 							ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
 							ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
 
+
 							//ImGui::TreePop();
 						}
 					}
@@ -204,14 +223,13 @@ namespace TituEngine
 					xy = std::to_string((int)mousePosDelta.first) + ", " + std::to_string((int)mousePosDelta.second);
 					ImGui::LabelText(xy.c_str(), "MouseDelta: ", "");
 
-					glm::vec2 mousePosWorld = m_Camera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
+					glm::mat4 viewProjectionMatrix = m_ActiveCamera == m_EditorCamera ? m_EditorCamera->GetViewProjectionMatrix() : glm::mat4(1.0f);
+					glm::vec2 mousePosWorld = m_ActiveCamera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second, viewProjectionMatrix);
 					std::string xyWorld = std::to_string(mousePosWorld.x) + ", " + std::to_string(mousePosWorld.y);
 					ImGui::LabelText(xyWorld.c_str(), "MousePosWorld: ", "");
 
 					ImGui::End(); //Mouse Stats
-
 				}
-
 			}
 
 			//Viewport
@@ -229,7 +247,9 @@ namespace TituEngine
 					m_ViewPortPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
-					m_CameraController->OnResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					//m_CameraController->OnResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					m_EditorCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					m_GameCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
 				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment();
@@ -266,7 +286,9 @@ namespace TituEngine
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
-		Renderer2D::BeginScene(m_Camera);
+		glm::mat4 viewProjectionMatrix = m_ActiveCamera == m_EditorCamera ? m_EditorCamera->GetViewProjectionMatrix() : m_GameCamera->GetProjectionMatrix();
+
+		Renderer2D::BeginScene(m_EditorCamera, viewProjectionMatrix);
 		{
 			TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
 			m_Scene->OnUpdate(ts);

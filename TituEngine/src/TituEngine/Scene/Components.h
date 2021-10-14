@@ -3,6 +3,8 @@
 #include <glm/vec4.hpp> // glm::mat4
 #include <glm/mat4x4.hpp> // glm::mat4
 
+#include "TituEngine/Renderer/Camera.h"
+
 namespace TituEngine
 {
 	struct TransformComponent
@@ -29,5 +31,14 @@ namespace TituEngine
 
 		operator glm::vec4& () { return Color; }
 		operator const glm::vec4& () const { return Color; }
+	};
+
+	struct CameraComponent
+	{
+		TituEngine::Camera Camera;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(TituEngine::Camera& camera) : Camera(camera) {};
 	};
 }

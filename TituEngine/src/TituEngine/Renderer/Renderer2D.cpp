@@ -19,7 +19,7 @@ namespace TituEngine
 
 	struct Renderer2DData
 	{
-		const glm::mat4* m_CameraViewProjectionMatrix;
+		glm::mat4 m_CameraViewProjectionMatrix;
 		VertexArray* QuadVertexArray = nullptr;
 
 		Shader* BatchRenderingShader = nullptr;
@@ -149,15 +149,15 @@ namespace TituEngine
 		s_Data.currentTexSlots = -1;
 	}
 
-	void Renderer2D::BeginScene(const Camera* camera)
+	void Renderer2D::BeginScene(const Camera* camera, const glm::mat4& view_Projection_matrix)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
 		camera = camera;
-		s_Data.m_CameraViewProjectionMatrix = &camera->GetViewProjectionMatrix();
+		s_Data.m_CameraViewProjectionMatrix = view_Projection_matrix;
 
 		s_Data.BatchRenderingShader->Bind();
-		s_Data.BatchRenderingShader->SetMat4("u_ModelViewProjectionMatrix", *(s_Data.m_CameraViewProjectionMatrix));
+		s_Data.BatchRenderingShader->SetMat4("u_ModelViewProjectionMatrix", s_Data.m_CameraViewProjectionMatrix);
 
 		RenderStats::Reset();
 		ResetBatchingData();

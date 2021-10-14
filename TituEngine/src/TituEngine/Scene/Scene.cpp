@@ -13,7 +13,7 @@ namespace TituEngine
 
 	Scene::~Scene()
 	{
-
+		m_Registry.clear();
 	}
 
 	Entity Scene::CreateEntity()

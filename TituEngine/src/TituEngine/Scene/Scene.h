@@ -9,7 +9,7 @@ namespace TituEngine
 	{
 	public: 
 		Scene();
-		~Scene();
+		virtual ~Scene();
 
 		Entity CreateEntity();
 		void OnUpdate(Timestep ts);

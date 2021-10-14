@@ -4,46 +4,46 @@
 
 using namespace TituEngine;
 
-OrthographicCameraController::OrthographicCameraController()
-	: m_Camera(nullptr), m_CameraPosition(glm::vec3(0.0f)), m_ZoomLevelMin(0.1f), m_ZoomLevelMax(10.0f)
+EditorOrthographicCameraController::EditorOrthographicCameraController()
+	: m_EditorCamera(nullptr), m_CameraPosition(glm::vec3(0.0f)), m_ZoomLevelMin(0.1f), m_ZoomLevelMax(10.0f)
 {
 }
 
-OrthographicCameraController::OrthographicCameraController(OrthographicCamera* camera)
-	: m_Camera(camera), m_CameraPosition(glm::vec3(0.0f)), m_ZoomLevelMin(0.1f), m_ZoomLevelMax(10.0f)
-{
-
-}
-
-
-OrthographicCameraController::OrthographicCameraController(OrthographicCamera* camera, const glm::vec3& position)
-	: m_Camera(camera), m_CameraPosition(position)
+EditorOrthographicCameraController::EditorOrthographicCameraController(OrthographicCamera* camera)
+	: m_EditorCamera(camera), m_CameraPosition(glm::vec3(0.0f)), m_ZoomLevelMin(0.1f), m_ZoomLevelMax(10.0f)
 {
 
 }
 
-OrthographicCameraController::~OrthographicCameraController()
+
+EditorOrthographicCameraController::EditorOrthographicCameraController(OrthographicCamera* camera, const glm::vec3& position)
+	: m_EditorCamera(camera), m_CameraPosition(position)
 {
-	m_Camera = nullptr;
+
 }
 
-void OrthographicCameraController::SetPosition(const glm::vec3& position)
+EditorOrthographicCameraController::~EditorOrthographicCameraController()
+{
+	m_EditorCamera = nullptr;
+}
+
+void EditorOrthographicCameraController::SetPosition(const glm::vec3& position)
 {
 	m_CameraPosition = position;
-	m_Camera->SetPosition(position);
+	m_EditorCamera->SetPosition(position);
 }
 
-void OrthographicCameraController::SetZoomMinMax(float min, float max)
+void EditorOrthographicCameraController::SetZoomMinMax(float min, float max)
 {
 	m_ZoomLevelMin = min;
 	m_ZoomLevelMin = max;
 }
 
-void OrthographicCameraController::OnUpdate(Timestep ts)
+void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 {
 	TE_PROFILE_PROFILE_FUNC();
 
-	if (m_Camera == nullptr)
+	if (m_EditorCamera == nullptr)
 		return;
 
 	glm::vec3 pos = m_CameraPosition;
@@ -60,31 +60,31 @@ void OrthographicCameraController::OnUpdate(Timestep ts)
 	SetPosition(pos);
 }
 
-void OrthographicCameraController::SetCamera(OrthographicCamera* camera)
+void EditorOrthographicCameraController::SetCamera(OrthographicCamera* camera)
 {
-	m_Camera = camera;
+	m_EditorCamera = camera;
 }
 
-void OrthographicCameraController::OnEvent(Event& e)
+void EditorOrthographicCameraController::OnEvent(Event& e)
 {
 	EventDispatcher eDispatcher(e);
 	
-	eDispatcher.Dispatch<MouseScrolledEvent>(std::bind(&OrthographicCameraController::OnMouseScrolled, this, std::placeholders::_1));
-	eDispatcher.Dispatch<WindowResizeEvent>	(std::bind(&OrthographicCameraController::OnWindowResized, this, std::placeholders::_1));
+	eDispatcher.Dispatch<MouseScrolledEvent>(std::bind(&EditorOrthographicCameraController::OnMouseScrolled, this, std::placeholders::_1));
+	eDispatcher.Dispatch<WindowResizeEvent>	(std::bind(&EditorOrthographicCameraController::OnWindowResized, this, std::placeholders::_1));
 }
 
-bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
+bool EditorOrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
 	m_ZoomLevel += e.GetYOffset();
 	m_ZoomLevel = std::clamp(m_ZoomLevel, m_ZoomLevelMin, m_ZoomLevelMax);
-	float aspectRatio = m_Camera->GetAspectRatio();
-	m_Camera->SetProjection(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	float aspectRatio = m_EditorCamera->GetAspectRatio();
+	m_EditorCamera->SetProjection(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	return false;
 }
 
-bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
+bool EditorOrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 {
 	float newAspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-	m_Camera->SetProjection(-newAspectRatio * m_ZoomLevel, newAspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	m_EditorCamera->SetProjection(-newAspectRatio * m_ZoomLevel, newAspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	return false;
 }

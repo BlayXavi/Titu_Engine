@@ -25,8 +25,8 @@ Sandbox2DLayer::Sandbox2DLayer()
 	spec.Height = 720;
 	m_Framebuffer = Framebuffer::Create(spec);
 
-	m_Camera = new OrthographicCamera(1280.0f / 720.0f);
-	m_CameraController.SetCamera(m_Camera);
+	m_EditorCamera = new editorOrthographicCamera(1280.0f / 720.0f);
+	m_CameraController.SetCamera(m_EditorCamera);
 	m_QuadTexture = Texture2D::Create("assets/textures2D/Checkerboard.png");
 	m_QuadTexture2 = Texture2D::Create("assets/textures2D/blending_transparent_window.png");
 	m_SpriteSheet = Texture2D::Create("assets/textures2D/base_Spritesheet.png");
@@ -75,7 +75,7 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 Sandbox2DLayer::~Sandbox2DLayer()
 {
-	delete m_Camera;
+	delete m_EditorCamera;
 }
 
 void Sandbox2DLayer::OnImGuiRender()
@@ -185,7 +185,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 			pps.lifeTime = m_particleLifeTime;
 
 			std::pair<float, float> mousePos = Input::GetMousePosition();
-			glm::vec3 tempPos = m_Camera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
+			glm::vec3 tempPos = m_EditorCamera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second);
 
 			pps.posStart = { tempPos.x, tempPos.y };
 
@@ -225,7 +225,7 @@ void Sandbox2DLayer::OnUpdate(Timestep ts)
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	RenderCommand::Clear();
 
-	Renderer2D::BeginScene(m_Camera);
+	Renderer2D::BeginScene(m_EditorCamera);
 	{
 		TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
 		/*int count = 0;

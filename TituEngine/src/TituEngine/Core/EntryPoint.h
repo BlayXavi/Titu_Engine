@@ -8,6 +8,7 @@ TituEngine::Application* TituEngine::CreateApplication();
 
 int main(int argc, char** argv)
 {
+	
 	TituEngine::Log::Init();
 
 	TE_PROFILE_BEGIN_SESSION("App init", "TituEngine_initApp.json");

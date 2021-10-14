@@ -12,34 +12,33 @@
 
 using namespace TituEngine;
 
-class OrthographicCameraController
+class EditorOrthographicCameraController
 {
 public:
-	OrthographicCameraController();
-	OrthographicCameraController(OrthographicCamera* camera);
-	OrthographicCameraController(OrthographicCamera* camera, const glm::vec3& position);
+	EditorOrthographicCameraController();
+	EditorOrthographicCameraController(TransformedCamera* camera);
+	EditorOrthographicCameraController(TransformedCamera* camera, const glm::vec3& position);
 
-	~OrthographicCameraController();
+	~EditorOrthographicCameraController();
 
 	void OnUpdate(Timestep ts);
 	void OnEvent(Event& e);
 
-	void OnResize(uint32_t width, uint32_t height);
+	//void OnResize(uint32_t width, uint32_t height);
 
-	void SetCamera(OrthographicCamera* camera);
+	void SetCamera(TransformedCamera* camera);
 	void SetPosition(const glm::vec3& position);
 
 	void SetZoomMinMax(float min, float max);
-	void SetZoomLevel(float zoom) { m_ZoomLevel = zoom; }
-	inline const float& GetZoomLevel() { return m_ZoomLevel; }
+	void SetZoomLevel(float zoom) { m_EditorCamera->SetOrthographicSize(zoom); }
+	inline const float& GetZoomLevel() { return m_EditorCamera->GetOrthographicSize(); }
 
 private:
 	bool OnMouseScrolled(MouseScrolledEvent& e);
 	bool OnWindowResized(WindowResizeEvent& e);
 
 private:
-	OrthographicCamera* m_Camera = nullptr;
-	float m_ZoomLevel = 1.0f;
+	TransformedCamera* m_EditorCamera = nullptr;
 	float m_CameraSpeed = 1.0f;
 
 	float m_ZoomLevelMin = 0.1f;
