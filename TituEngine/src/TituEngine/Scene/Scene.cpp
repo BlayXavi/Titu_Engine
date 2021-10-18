@@ -23,6 +23,13 @@ namespace TituEngine
 
 	void Scene::OnUpdate(Timestep ts)
 	{
+		//Update
+		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			{
+				nsc.Instance->OnUpdate(ts);
+			});
+
+		//Render
 		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 		for (auto entity : group)
 		{

@@ -1,12 +1,13 @@
 #pragma once
 
 #include "TituEngine/Core/Core.h"
+#include "TituEngine/Scene/Scene.h"
+
 #include "entt.hpp"
 
 namespace TituEngine
 {
-	class Scene;
-
+	class TituEditorLayer;
 	class Entity
 	{
 	public:
@@ -53,5 +54,30 @@ namespace TituEngine
 	private:
 		Scene* m_Scene = nullptr;
 		entt::entity m_EnttHandle = entt::null;
+
 	};
+
+	class ScriptableEntity
+	{
+	public:
+		virtual ~ScriptableEntity() = default;
+
+		template<class T>
+		T& GetComponent()
+		{
+			return m_Entity.GetComponent<T>();
+		}
+
+	protected:
+		friend Scene;
+
+		virtual void OnCreate() {}
+		virtual void OnDestroy() {}
+		virtual void OnUpdate(Timestep ts) {}
+
+	private:
+		friend TituEditorLayer;
+		Entity m_Entity;
+	};
+
 }

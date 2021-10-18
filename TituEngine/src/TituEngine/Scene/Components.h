@@ -41,4 +41,20 @@ namespace TituEngine
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(TituEngine::Camera& camera) : Camera(camera) {};
 	};
+
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* Instance;
+
+		ScriptableEntity* (*InstantiateScript)();
+		void (*DestroyScript)(NativeScriptComponent*);
+
+		template<class T>
+		void Bind()
+		{
+			InstantiateScript = []() {return static_cast<ScriptableEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* ncs) {delete ncs->Instance; ncs->Instance = nullptr; };
+		}
+	};
 }
+

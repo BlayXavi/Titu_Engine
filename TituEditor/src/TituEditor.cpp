@@ -5,6 +5,38 @@
 
 namespace TituEngine
 {
+	class CameraController : public ScriptableEntity
+	{
+	public:
+		bool Active = false;
+
+		void OnCreate() override
+		{
+			auto& transform = GetComponent<TransformComponent>().Transform;
+			transform[3][0] = rand() % 10 - 5.0f;
+		}
+
+		void OnUpdate(Timestep ts) override
+		{
+			if (!Active)
+				return;
+
+			auto& transform = GetComponent<TransformComponent>().Transform;
+
+			float speed = 5.0f;
+
+			if (Input::IsKeyPressed(TE_KEY_A))
+				transform[3][0] -= speed * ts;
+			if (Input::IsKeyPressed(TE_KEY_D))
+				transform[3][0] += speed * ts;
+			if (Input::IsKeyPressed(TE_KEY_W))
+				transform[3][1] += speed * ts;
+			if (Input::IsKeyPressed(TE_KEY_S))
+				transform[3][1] -= speed * ts;
+		}
+	};
+
+
 	TituEditorLayer::TituEditorLayer()
 		: Layer("TituEditor Layer")
 	{
@@ -24,10 +56,17 @@ namespace TituEngine
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
 
-		m_GameCamera = new Camera();
+		m_GameCameraEntity = m_Scene->CreateEntity();
+		m_GameCameraEntity.AddComponent<TransformComponent>();
+		m_GameCamera = &m_GameCameraEntity.AddComponent<CameraComponent>().Camera;
 		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_ActiveCamera = m_EditorCamera;
+
+		NativeScriptComponent& nsc = m_GameCameraEntity.AddComponent<NativeScriptComponent>();
+		nsc.Bind<CameraController>();
+		nsc.Instance = nsc.InstantiateScript();
+		nsc.Instance->m_Entity = m_GameCameraEntity;
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -52,7 +91,6 @@ namespace TituEngine
 	{
 		delete m_CameraController;
 		delete m_EditorCamera;
-		delete m_GameCamera;
 		delete m_SpriteSheet;
 		delete m_Framebuffer;
 		for (size_t i = 0; i < 10; i++)
@@ -151,9 +189,15 @@ namespace TituEngine
 					ImGui::Begin("Render Stats");
 
 					if (ImGui::Selectable("Camera Editor", m_ActiveCamera == m_EditorCamera))
+					{
 						m_ActiveCamera = m_EditorCamera;
+						((CameraController*)m_GameCameraEntity.GetComponent<NativeScriptComponent>().Instance)->Active = false;
+					}
 					else if (ImGui::Selectable("Camera Game", m_ActiveCamera == m_GameCamera))
+					{
 						m_ActiveCamera = m_GameCamera;
+						((CameraController*)m_GameCameraEntity.GetComponent<NativeScriptComponent>().Instance)->Active = true;
+					}
 
 					ImGui::ColorPicker4("Color", &tempSpriteRendererComponent->Color[0]);
 
@@ -286,7 +330,12 @@ namespace TituEngine
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
-		glm::mat4 viewProjectionMatrix = m_ActiveCamera == m_EditorCamera ? m_EditorCamera->GetViewProjectionMatrix() : m_GameCamera->GetProjectionMatrix();
+		glm::mat4 viewProjectionMatrix;
+
+		if (m_ActiveCamera == m_EditorCamera)
+			viewProjectionMatrix = m_EditorCamera->GetViewProjectionMatrix();
+		else
+			viewProjectionMatrix = m_GameCamera->GetProjectionMatrix() * glm::inverse(m_GameCameraEntity.GetComponent<TransformComponent>().Transform);
 
 		Renderer2D::BeginScene(m_EditorCamera, viewProjectionMatrix);
 		{

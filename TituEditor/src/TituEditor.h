@@ -40,9 +40,11 @@ namespace TituEngine
 
 		EditorOrthographicCameraController* m_CameraController = nullptr;
 		TransformedCamera* m_EditorCamera = nullptr;
-		Camera* m_GameCamera = nullptr;
 		Texture2D* m_SpriteSheet = nullptr;
 		SubTexture2D* m_SubTextures2D[10];
+
+		Camera* m_GameCamera = nullptr;
+		Entity m_GameCameraEntity;
 
 		Framebuffer* m_Framebuffer = nullptr;
 		glm::vec2 m_ViewPortPanelSize = { 0.0f, 0.0f };
