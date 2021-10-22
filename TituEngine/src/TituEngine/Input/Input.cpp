@@ -12,35 +12,13 @@ namespace TituEngine
 	float Input::m_MouseYLastFrame = 0.0f;
 	float Input::m_MouseDeltaX = 0.0f;
 	float Input::m_MouseDeltaY = 0.0f;
+	float Input::m_ScrollDelta = 0.0f;
+	bool Input::m_ScrollDeltaDirty = false;
 
-	float Input::MouseDeltaX()
+	void Input::OnMouseScrollEvent(MouseScrolledEvent& e)
 	{
-		return m_MouseDeltaX;
-	}
-
-	float Input::MouseDeltaY()
-	{
-		return m_MouseDeltaY;
-	}
-
-	float Input::GetMouseX()
-	{
-		return m_MouseX;
-	}
-
-	float Input::GetMouseY()
-	{
-		return m_MouseY;
-	}
-
-	std::pair<float, float> Input::GetMousePosition()
-	{
-		return std::pair<float, float>(m_MouseX, m_MouseY);
-	}
-
-	std::pair<float, float> Input::GetMouseDeltaPosition()
-	{
-		return std::pair<float, float>(m_MouseDeltaX, m_MouseDeltaY);
+		m_ScrollDelta += e.GetYOffset();
+		m_ScrollDeltaDirty = true;
 	}
 
 #ifdef TE_PLATFORM_WINDOWS
@@ -81,6 +59,15 @@ namespace TituEngine
 
 		m_MouseDeltaX = m_MouseXLastFrame - m_MouseX;
 		m_MouseDeltaY = m_MouseYLastFrame - m_MouseY;
+	}
+
+	void Input::PostUpdateMouse()
+	{
+		if (m_ScrollDeltaDirty)
+		{
+			m_ScrollDelta = 0.0f;
+			m_ScrollDeltaDirty = false;
+		}
 	}
 
 #else

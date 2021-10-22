@@ -5,6 +5,7 @@
 namespace TituEngine
 {
 	class Entity;
+
 	class Scene
 	{
 	public: 
@@ -12,10 +13,9 @@ namespace TituEngine
 		virtual ~Scene();
 
 		Entity CreateEntity();
+		Entity CreateEntity(const std::string& name);
 		void OnUpdate(Timestep ts);
 
-	private:
-		friend Entity;
 		entt::registry m_Registry;	
 	};
 }

@@ -4,6 +4,7 @@
 #include "Timestep.h"
 #include "TituEngine/Events/Event.h"
 #include "TituEngine/Events/ApplicationEvent.h"
+#include "TituEngine/Events/MouseEvent.h"
 #include "TituEngine/Layer/LayerStack.h"
 #include "TituEngine/ImGui/ImGuiLayer.h"
 
@@ -34,6 +35,7 @@ namespace TituEngine
 		void Run();
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
+		bool OnMouseScrollEvent(MouseScrolledEvent& e);
 
 	private:
 		ImGuiLayer* m_ImGuiLayer;

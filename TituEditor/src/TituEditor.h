@@ -15,6 +15,8 @@
 
 #include "Controller/EditorOrthographicCameraController.h"
 
+#include "Editor/SceneHierarchyPanel.h"
+
 #define FPS_DEBUG_COUNT 120
 
 namespace TituEngine
@@ -31,6 +33,8 @@ namespace TituEngine
 		void OnEvent(Event& e) override;
 
 	private:
+		SceneHierarchyPanel m_SceneHierarchyPanel;
+
 		Camera* m_ActiveCamera = nullptr;
 
 		Scene* m_Scene = nullptr;

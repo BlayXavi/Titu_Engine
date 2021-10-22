@@ -18,8 +18,8 @@ namespace TituEngine
 
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		const glm::mat4& GetInversedProjectionMatrix() const { return m_InversedProjectionMatrix; }
-		
-		void SetProjectionType(Projection projection) { m_ProjectionType = projection; }
+
+		void SetProjectionType(Projection projection) { m_ProjectionType = projection; RecalculateProjectionMatrix(); }
 		Projection GetProjectionType() const { return m_ProjectionType; }
 
 		glm::vec3 ScreenSpacePosToWorldPos(const float& x, const float& y, const glm::mat4& model);
@@ -32,10 +32,19 @@ namespace TituEngine
 		float GetOrthographicSize() const { return m_OrthographicSize; }
 		void SetOrthographicSize(float size) { m_OrthographicSize = size; RecalculateProjectionMatrix(); }
 
+		float GetFOV() { return m_FieldOfView; }
+		void SetFOV(float fov) { m_FieldOfView = fov; RecalculateProjectionMatrix(); }
+
+		float GetNearPlane() { return m_NearPlane; }
+		void SetNearPlane(float plane) { m_NearPlane = plane; RecalculateProjectionMatrix(); }
+
+		float GetFarPlane() { return m_FarPlane; }
+		void SetFarPlane(float plane) { m_FarPlane = plane; RecalculateProjectionMatrix(); }
+
 	protected:
 
 		Projection m_ProjectionType = Projection::ORTHOGRAPHIC;
-		
+
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
 		glm::mat4 m_InversedProjectionMatrix = glm::mat4(1.0f);
 
@@ -45,6 +54,8 @@ namespace TituEngine
 		float m_AspectRatio;
 
 		float m_OrthographicSize;
+
+		float m_FieldOfView;
 
 		virtual void RecalculateProjectionMatrix();
 	};

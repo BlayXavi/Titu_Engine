@@ -11,3 +11,7 @@ Sandbox/*.json
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+
+*_runApp.json
+*_initApp.json
+*shutdownApp.json

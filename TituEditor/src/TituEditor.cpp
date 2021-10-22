@@ -5,7 +5,7 @@
 
 namespace TituEngine
 {
-	class CameraController : public ScriptableEntity
+	class CameraController : public NativeScript
 	{
 	public:
 		bool Active = false;
@@ -33,6 +33,12 @@ namespace TituEngine
 				transform[3][1] += speed * ts;
 			if (Input::IsKeyPressed(TE_KEY_S))
 				transform[3][1] -= speed * ts;
+			if (Input::IsKeyPressed(TE_KEY_Q))
+				transform[3][2] += speed * ts;
+			if (Input::IsKeyPressed(TE_KEY_E))
+				transform[3][2] -= speed * ts;
+
+			transform[3][2] -= Input::GetScrollDelta() * speed * ts;
 		}
 	};
 
@@ -41,7 +47,7 @@ namespace TituEngine
 		: Layer("TituEditor Layer")
 	{
 		m_Scene = new Scene();
-		Entity entity = m_Scene->CreateEntity();
+		Entity entity = m_Scene->CreateEntity("Entity1");
 		TransformComponent tc = entity.AddComponent<TransformComponent>();
 		tempSpriteRendererComponent = &entity.AddOrGetComponent<SpriteRendererComponent>();
 
@@ -56,8 +62,9 @@ namespace TituEngine
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
 
-		m_GameCameraEntity = m_Scene->CreateEntity();
-		m_GameCameraEntity.AddComponent<TransformComponent>();
+		m_GameCameraEntity = m_Scene->CreateEntity("Camera Entity");
+		TransformComponent& t = m_GameCameraEntity.AddComponent<TransformComponent>();
+		t.Transform[3][2] = 3.0f;
 		m_GameCamera = &m_GameCameraEntity.AddComponent<CameraComponent>().Camera;
 		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
@@ -103,10 +110,10 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		{
-			static bool show_rendererStats = false;
+			static bool show_rendererStats = true;
 			static bool show_MouseStats = false;
 			static bool show_ImGuiDemo = false;
-			//Dockspace
+			//Dockspace Init
 			{
 				static bool dockspaceOpen = true;
 				static bool opt_fullscreen_persistant = true;
@@ -181,6 +188,8 @@ namespace TituEngine
 
 				ImGui::EndMenuBar();
 			}
+
+			m_SceneHierarchyPanel.OnImGuiRender(m_Scene);
 
 			//Sandbox Inspector
 			{
@@ -311,6 +320,8 @@ namespace TituEngine
 
 	void TituEditorLayer::OnUpdate(Timestep ts)
 	{
+		TE_PROFILE_PROFILE_FUNC();
+
 		/*float ms = currentTimeStep.GetDeltaTimeMilliseconds();
 		float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
 		std::cout << std::fixed;
@@ -318,8 +329,6 @@ namespace TituEngine
 		std::cout << std::setprecision(2);
 		std::cout << ms << " FPS ";
 		std::cout << (int)fps << std::endl;*/
-
-		TE_PROFILE_PROFILE_FUNC();
 
 		currentTimeStep = ts;
 
@@ -350,6 +359,7 @@ namespace TituEngine
 
 	void TituEditorLayer::OnEvent(Event& e)
 	{
+		TE_PROFILE_PROFILE_FUNC();
 		m_CameraController->OnEvent(e);
 	}
 }

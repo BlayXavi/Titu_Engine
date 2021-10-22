@@ -111,7 +111,7 @@ public:
 namespace TituEngine
 {
 
-#if TE_ENABLE_PROFILER_
+#if TE_ENABLE_PROFILER
 #define TE_PROFILE_BEGIN_SESSION(name, filepath) Instrumentor::Get().BeginSession(name, filepath);
 #define TE_PROFILE_END_SESSION() Instrumentor::Get().EndSession();
 #define TE_PROFILE_PROFILE_SCOPE(name)	TituEngine::Profiler Profile(##name);

@@ -39,6 +39,7 @@ namespace TituEngine
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResized));
+		dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_FN(OnMouseScrollEvent));
 
 		for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); ++it)
 		{
@@ -81,7 +82,10 @@ namespace TituEngine
 				for (Layer* layer : m_LayerStack) //compiler understand it because of implementation of begin() & end()
 					layer->OnImGuiRender();
 				m_ImGuiLayer->EndRender();
+				
+				TituEngine::Input::PostUpdateMouse();
 			}
+
 
 			m_Window->OnUpdate();
 			m_FrameCount++;
@@ -110,4 +114,9 @@ namespace TituEngine
 		return false;
 	}
 
+	bool Application::OnMouseScrollEvent(MouseScrolledEvent& e)
+	{
+		Input::OnMouseScrollEvent(e);
+		return false;
+	}
 }

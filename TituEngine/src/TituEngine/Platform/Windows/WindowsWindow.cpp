@@ -158,8 +158,15 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		glfwPollEvents();
-		m_Context->SwapBuffers();
+		{
+			TE_PROFILE_PROFILE_SCOPE("glfwPollEvents");
+			glfwPollEvents();
+		}
+
+		{
+			TE_PROFILE_PROFILE_SCOPE("SwapBuffers");
+			m_Context->SwapBuffers();
+		}
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

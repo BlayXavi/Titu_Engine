@@ -7,13 +7,13 @@
 
 namespace TituEngine
 {
-	class TituEditorLayer;
 	class Entity
 	{
 	public:
 		Entity() = default;
-		Entity(Scene* scene);
+		Entity(Scene* const scene);
 		Entity(const Entity& other) = default;
+		Entity(const entt::entity& eHandle, Scene* const scene);
 
 		~Entity() = default;
 
@@ -41,7 +41,7 @@ namespace TituEngine
 		}
 
 		template<typename T>
-		bool HasComponent()
+		bool HasComponent() const
 		{
 			T* c = m_Scene->m_Registry.try_get<T>(m_EnttHandle);
 			if (c == nullptr)
@@ -50,34 +50,15 @@ namespace TituEngine
 		}
 
 		operator bool() const { return m_EnttHandle != entt::null; }
+		bool operator ==(Entity other) const { return m_EnttHandle == other.m_EnttHandle && m_Scene == other.m_Scene; }
+		bool operator !=(Entity other) const { return !(other == *this); }
+		operator entt::entity() const { return m_EnttHandle; }
+		operator uint32_t() const { return (uint32_t)m_EnttHandle; }
 
 	private:
 		Scene* m_Scene = nullptr;
-		entt::entity m_EnttHandle = entt::null;
+		entt::entity m_EnttHandle{ entt::null };
 
-	};
-
-	class ScriptableEntity
-	{
-	public:
-		virtual ~ScriptableEntity() = default;
-
-		template<class T>
-		T& GetComponent()
-		{
-			return m_Entity.GetComponent<T>();
-		}
-
-	protected:
-		friend Scene;
-
-		virtual void OnCreate() {}
-		virtual void OnDestroy() {}
-		virtual void OnUpdate(Timestep ts) {}
-
-	private:
-		friend TituEditorLayer;
-		Entity m_Entity;
 	};
 
 }

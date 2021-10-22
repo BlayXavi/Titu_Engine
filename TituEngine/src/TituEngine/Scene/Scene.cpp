@@ -8,7 +8,6 @@ namespace TituEngine
 {
 	Scene::Scene()
 	{
-
 	}
 
 	Scene::~Scene()
@@ -19,6 +18,13 @@ namespace TituEngine
 	Entity Scene::CreateEntity()
 	{
 		return Entity(this);
+	}
+
+	Entity Scene::CreateEntity(const std::string& name)
+	{
+		Entity e = Entity(this);
+		e.AddComponent<TagComponent>(name);
+		return e;
 	}
 
 	void Scene::OnUpdate(Timestep ts)

@@ -4,9 +4,25 @@
 #include <glm/mat4x4.hpp> // glm::mat4
 
 #include "TituEngine/Renderer/Camera.h"
+#include "Scene.h"
+#include "Entity.h"
 
 namespace TituEngine
 {
+	struct TagComponent
+	{
+		std::string Tag;
+		TagComponent() = default;
+		TagComponent(const TagComponent&) = default;
+		TagComponent(const std::string& tag) :
+			Tag(tag) {}
+
+		operator std::string& () { return Tag; }
+		operator const char* () { return Tag.c_str(); }
+		bool operator ==(TagComponent other) { return  Tag.compare(other.Tag) == 0; }
+		bool operator !=(TagComponent other) { return  !(other == *this); }
+	};
+
 	struct TransformComponent
 	{
 		glm::mat4 Transform{ 1.0f };
@@ -42,19 +58,45 @@ namespace TituEngine
 		CameraComponent(TituEngine::Camera& camera) : Camera(camera) {};
 	};
 
+	class TituEditorLayer; //temp
+	class NativeScript
+	{
+	public:
+		virtual ~NativeScript() = default;
+
+		template<class T>
+		T& GetComponent()
+		{
+			return m_Entity.GetComponent<T>();
+		}
+
+	protected:
+		friend Scene;
+
+		virtual void OnCreate() {}
+		virtual void OnDestroy() {}
+		virtual void OnUpdate(Timestep ts) {}
+
+	private:
+		friend TituEditorLayer;
+		Entity m_Entity;
+	};
+
+	//References and Call the binded NativeScript
 	struct NativeScriptComponent
 	{
-		ScriptableEntity* Instance;
+		NativeScript* Instance;
 
-		ScriptableEntity* (*InstantiateScript)();
+		NativeScript* (*InstantiateScript)();
 		void (*DestroyScript)(NativeScriptComponent*);
 
 		template<class T>
 		void Bind()
 		{
-			InstantiateScript = []() {return static_cast<ScriptableEntity*>(new T()); };
+			InstantiateScript = []() {return static_cast<NativeScript*>(new T()); };
 			DestroyScript = [](NativeScriptComponent* ncs) {delete ncs->Instance; ncs->Instance = nullptr; };
 		}
+
 	};
 }
 
