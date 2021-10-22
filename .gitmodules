@@ -12,5 +12,5 @@
 	branch = docking
 [submodule "TituEngine/vendor/glm"]
 	path = TituEngine/vendor/glm
-	url = https://github.com/g-truc/glm.gi
+	url = https://github.com/g-truc/glm
 	branch = master
