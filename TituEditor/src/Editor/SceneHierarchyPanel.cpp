@@ -7,29 +7,33 @@ namespace TituEngine
 {
 	void SceneHierarchyPanel::OnImGuiRender(Scene* const context)
 	{
-		ImGui::Begin("Scene Hierarchy");
 		context->m_Registry.each([&](auto entityID)
 			{
 				Entity e{ entityID, context };
 				DrawEntityNode(e);
 			});
 
-		ImGui::End();
 	}
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity& e)
 	{
+		ImGui::Begin("Scene Hierarchy");
+
 		TagComponent& tagC = e.GetComponent<TagComponent>();
 
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)e, ImGuiTreeNodeFlags_OpenOnArrow, tagC);
-		if (ImGui::IsItemClicked)
+		if (ImGui::IsItemClicked(0))
 			m_LastSelectedEntity = e;
 
 		if (opened)
-		{
-			DrawEntityPanel(m_LastSelectedEntity);
 			ImGui::TreePop();
-		}
+		ImGui::End();
+
+		ImGui::Begin("Inspector");
+		if (m_LastSelectedEntity == e)
+			DrawEntityPanel(m_LastSelectedEntity);
+		ImGui::End();
+
 	}
 
 	void SceneHierarchyPanel::DrawEntityPanel(Entity& e)

@@ -11,7 +11,7 @@ namespace TituEngine
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
-		: m_CurrentTime(0.0f)
+		: m_CurrentTime(0.0f), m_FrameCount(0)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
