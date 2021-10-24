@@ -5,7 +5,7 @@ namespace TituEngine
 {
 	//-------------------------------------------CAMERA-------------------------------------
 	Camera::Camera()
-		: m_ProjectionMatrix(1.0f), m_AspectRatio(1.0f), m_NearPlane(-10.0f), m_FarPlane(10.0f), m_OrthographicSize(1.0f), m_FieldOfView(90.0f)
+		: m_ProjectionMatrix(1.0f), m_AspectRatio(1.0f), m_NearPlane(0.001f), m_FarPlane(100.0f), m_OrthographicSize(1.0f), m_FieldOfView(90.0f)
 	{
 	}
 
@@ -51,8 +51,8 @@ namespace TituEngine
 		}
 		else if (m_ProjectionType == Projection::PERSPECTIVE)
 		{
-			//TE_ASSERT(false, "PERSPECTIVE PROJECTION NOT SUPPORTED YET.");
-			m_ProjectionMatrix = glm::perspective(m_FieldOfView * 0.0174533f, m_AspectRatio, m_NearPlane, m_FarPlane);
+			
+			m_ProjectionMatrix = glm::perspective(glm::radians(m_FieldOfView), m_AspectRatio, m_NearPlane, m_FarPlane);
 		}
 	}
 

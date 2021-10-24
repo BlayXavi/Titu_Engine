@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/vec3.hpp> // glm::mat4
 #include <glm/vec4.hpp> // glm::mat4
 #include <glm/mat4x4.hpp> // glm::mat4
 
@@ -25,15 +26,50 @@ namespace TituEngine
 
 	struct TransformComponent
 	{
-		glm::mat4 Transform{ 1.0f };
-
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(glm::mat4& transform)
 			: Transform(transform) {}
+		TransformComponent(glm::vec3& translation)
+			: Translation(translation)
+		{
+			UpdateTransform();
+		}
+
+		void SetTranslation(glm::vec3& translation) { Translation = translation; UpdateTransform(); }
+		void SetRotation(glm::vec3& rotation) { Rotation = rotation; UpdateTransform(); }
+		void SetScale(glm::vec3& scale) { Scale = scale; UpdateTransform(); }
+
+		glm::vec3 GetTranslation() const { return Translation; }
+		glm::vec3 GetRotation() const { return Rotation; }
+		glm::vec3 GetScale() const { return Scale; }
+
+		glm::mat4 GetTransform() const { return Transform; }
+
+		void SetTranslationAndRotation(glm::vec3& translation, glm::vec3& rotation) { Translation = translation; Rotation = rotation; UpdateTransform(); }
+		void SetTranslationAndRotationAndScale(glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale) { Translation = translation; Rotation = rotation; Scale = scale; UpdateTransform(); }
 
 		operator glm::mat4& () { return Transform; }
 		operator const glm::mat4& () const { return Transform; }
+
+	private:
+
+		glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
+
+		void UpdateTransform()
+		{
+			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), Rotation.x, { 1, 0, 0 })
+				* glm::rotate(glm::mat4(1.0f), Rotation.y, { 0, 1, 0 })
+				* glm::rotate(glm::mat4(1.0f), Rotation.z, { 0, 0, 1 });
+
+			Transform = glm::translate(glm::mat4(1.0f), Translation)
+				* rotation
+				* glm::scale(glm::mat4(1.0f), Scale);
+		}
+
+		glm::mat4 Transform{ 1.0f };
 	};
 
 	struct SpriteRendererComponent

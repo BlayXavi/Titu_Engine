@@ -29,6 +29,7 @@ namespace TituEngine
 
 		virtual void SetOrthographicProjection(float left, float right, float up, float down);
 		void SetViewportSize(uint32_t width, uint32_t height);
+
 		float GetOrthographicSize() const { return m_OrthographicSize; }
 		void SetOrthographicSize(float size) { m_OrthographicSize = size; RecalculateProjectionMatrix(); }
 

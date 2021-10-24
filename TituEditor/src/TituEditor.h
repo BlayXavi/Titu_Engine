@@ -16,6 +16,7 @@
 #include "Controller/EditorOrthographicCameraController.h"
 
 #include "Editor/SceneHierarchyPanel.h"
+#include "Editor/ComponentPanelDrawer.h"
 
 #define FPS_DEBUG_COUNT 120
 

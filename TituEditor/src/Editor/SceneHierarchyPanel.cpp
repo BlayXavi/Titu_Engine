@@ -20,14 +20,20 @@ namespace TituEngine
 		ImGui::Begin("Scene Hierarchy");
 
 		TagComponent& tagC = e.GetComponent<TagComponent>();
-
+		bool changed = false;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)e, ImGuiTreeNodeFlags_OpenOnArrow, tagC);
 		if (ImGui::IsItemClicked(0))
+		{
 			m_LastSelectedEntity = e;
+			changed = true;
+		}
 
 		if (opened)
 			ImGui::TreePop();
 		ImGui::End();
+
+		if (changed)
+			return;
 
 		ImGui::Begin("Inspector");
 		if (m_LastSelectedEntity == e)
@@ -38,6 +44,12 @@ namespace TituEngine
 
 	void SceneHierarchyPanel::DrawEntityPanel(Entity& e)
 	{
+		if (e.HasComponent<TransformComponent>())
+		{
+			TransformComponent& tc = e.GetComponent<TransformComponent>();
+			ComponentPanelDrawer::DrawTransformComponent(tc);
+		}
+
 		if (e.HasComponent<CameraComponent>())
 		{
 			CameraComponent& cc = e.GetComponent<CameraComponent>();

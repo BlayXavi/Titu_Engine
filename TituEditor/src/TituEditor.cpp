@@ -12,8 +12,6 @@ namespace TituEngine
 
 		void OnCreate() override
 		{
-			auto& transform = GetComponent<TransformComponent>().Transform;
-			transform[3][0] = rand() % 10 - 5.0f;
 		}
 
 		void OnUpdate(Timestep ts) override
@@ -21,24 +19,27 @@ namespace TituEngine
 			if (!Active)
 				return;
 
-			auto& transform = GetComponent<TransformComponent>().Transform;
+			TransformComponent& tc = GetComponent<TransformComponent>();
+			glm::vec3 pos= tc.GetTranslation();
 
 			float speed = 5.0f;
 
 			if (Input::IsKeyPressed(TE_KEY_A))
-				transform[3][0] -= speed * ts;
+				pos.x -= speed * ts;
 			if (Input::IsKeyPressed(TE_KEY_D))
-				transform[3][0] += speed * ts;
+				pos.x += speed * ts;
 			if (Input::IsKeyPressed(TE_KEY_W))
-				transform[3][1] += speed * ts;
+				pos.y += speed * ts;
 			if (Input::IsKeyPressed(TE_KEY_S))
-				transform[3][1] -= speed * ts;
+				pos.y -= speed * ts;
 			if (Input::IsKeyPressed(TE_KEY_Q))
-				transform[3][2] += speed * ts;
+				pos.z += speed * ts;
 			if (Input::IsKeyPressed(TE_KEY_E))
-				transform[3][2] -= speed * ts;
+				pos.z -= speed * ts;
 
-			transform[3][2] -= Input::GetScrollDelta() * speed * ts;
+			pos.z -= Input::GetScrollDelta() * speed * ts;
+
+			tc.SetTranslation(pos);
 		}
 	};
 
@@ -64,11 +65,14 @@ namespace TituEngine
 
 		m_GameCameraEntity = m_Scene->CreateEntity("Camera Entity");
 		TransformComponent& t = m_GameCameraEntity.AddComponent<TransformComponent>();
-		t.Transform[3][2] = 3.0f;
+		t.SetTranslation(t.GetTranslation() + glm::vec3(0.0f, 0.0f, 3.0f));
 		m_GameCamera = &m_GameCameraEntity.AddComponent<CameraComponent>().Camera;
 		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_ActiveCamera = m_EditorCamera;
+		m_EditorCamera->SetPosition(m_EditorCamera->GetPosition() + glm::vec3(0.0f, 0.0f, 3.0f));
+		m_EditorCamera->SetNearPlane(-10.0f);
+		m_EditorCamera->SetFarPlane(10.0f);
 
 		NativeScriptComponent& nsc = m_GameCameraEntity.AddComponent<NativeScriptComponent>();
 		nsc.Bind<CameraController>();
@@ -112,6 +116,7 @@ namespace TituEngine
 		{
 			static bool show_rendererStats = true;
 			static bool show_MouseStats = false;
+			static bool show_EditorCamera = false;
 			static bool show_ImGuiDemo = false;
 			//Dockspace Init
 			{
@@ -177,6 +182,7 @@ namespace TituEngine
 				{
 					ImGui::MenuItem("Renderer stats", NULL, &show_rendererStats);
 					ImGui::MenuItem("Mouse stats", NULL, &show_MouseStats);
+					ImGui::MenuItem("Editor Camera Setigns", NULL, &show_EditorCamera);
 					ImGui::EndMenu();
 				}
 
@@ -283,6 +289,15 @@ namespace TituEngine
 
 					ImGui::End(); //Mouse Stats
 				}
+
+				if (show_EditorCamera)
+				{
+					ImGui::Begin("Editor Camera");
+
+					ComponentPanelDrawer::DrawCamera(*m_EditorCamera);
+
+					ImGui::End();
+				}
 			}
 
 			//Viewport
@@ -295,7 +310,7 @@ namespace TituEngine
 				Application::Instance().GetImGuiLayer()->SetBlockEvents(!m_ViewPortFocused || !m_ViewPortHovered);
 
 				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-				if (m_ViewPortPanelSize != *(glm::vec2*)&viewportPanelSize)
+				if (m_ViewPortPanelSize != *(glm::vec2*) & viewportPanelSize)
 				{
 					m_ViewPortPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
@@ -344,7 +359,7 @@ namespace TituEngine
 		if (m_ActiveCamera == m_EditorCamera)
 			viewProjectionMatrix = m_EditorCamera->GetViewProjectionMatrix();
 		else
-			viewProjectionMatrix = m_GameCamera->GetProjectionMatrix() * glm::inverse(m_GameCameraEntity.GetComponent<TransformComponent>().Transform);
+			viewProjectionMatrix = m_GameCamera->GetProjectionMatrix() * glm::inverse(m_GameCameraEntity.GetComponent<TransformComponent>().GetTransform());
 
 		Renderer2D::BeginScene(m_EditorCamera, viewProjectionMatrix);
 		{
