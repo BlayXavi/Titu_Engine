@@ -37,7 +37,7 @@ namespace TituEngine
 	void Scene::OnUpdate(Timestep ts)
 	{
 		//Update
-		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+		m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
 			{
 				nsc.Instance->OnUpdate(ts);
 			});
@@ -50,6 +50,14 @@ namespace TituEngine
 
 			Renderer2D::DrawQuad(transform, sprite.Color);
 		}
+	}
+
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_Registry.view<CameraComponent>().each([=](auto entity, CameraComponent& cc)
+			{
+				cc.Camera.SetViewportSize(width, height);
+			});
 	}
 }
 

@@ -3,8 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "TituEngine/Core/Application.h"
-
 namespace TituEngine
 {
 	class Camera

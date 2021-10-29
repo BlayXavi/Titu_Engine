@@ -68,7 +68,9 @@ void EditorOrthographicCameraController::OnEvent(Event& e)
 {
 	EventDispatcher eDispatcher(e);
 	
-	eDispatcher.Dispatch<MouseScrolledEvent>(std::bind(&EditorOrthographicCameraController::OnMouseScrolled, this, std::placeholders::_1));
+	//eDispatcher.Dispatch<MouseScrolledEvent>(std::bind(&EditorOrthographicCameraController::OnMouseScrolled, this, std::placeholders::_1));
+	eDispatcher.Dispatch<MouseScrolledEvent>([this](MouseScrolledEvent mse)->bool {return this->OnMouseScrolled(mse); });
+	//eDispatcher.Dispatch<MouseScrolledEvent>(TE_BIND_EVENT_FN(OnMouseScrolled(e)));
 }
 
 //void EditorOrthographicCameraController::OnResize(uint32_t width, uint32_t height)

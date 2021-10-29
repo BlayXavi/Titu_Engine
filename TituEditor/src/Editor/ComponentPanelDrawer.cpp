@@ -1,21 +1,12 @@
 #include "tepch.h"
 #include "ComponentPanelDrawer.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
+
 #include <glm/gtx/matrix_decompose.hpp>
 
 
 namespace TituEngine
 {
-	void ComponentPanelDrawer::DrawTagComponent(TagComponent& tag)
-	{
-		std::string& t = tag.Tag;
-		static char buffer[64] = "";
-		//memset(buffer, 0, sizeof(buffer));
-		strcpy_s(buffer, sizeof(buffer), t.c_str());
-		if (ImGui::InputText("Entity Name", buffer, sizeof(buffer), ImGuiInputTextFlags_CharsNoBlank))
-			t = std::string(buffer);
-	}
+	ImGuiTreeNodeFlags ComponentPanelDrawer::m_TreeNodeFlags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap;
 
 	bool ComponentPanelDrawer::DrawVec3(std::string label, glm::vec3& values, const glm::vec3& resetValue)
 	{
@@ -91,22 +82,6 @@ namespace TituEngine
 		return modified;
 	}
 
-	void ComponentPanelDrawer::DrawTransformComponent(TransformComponent& transform)
-	{
-		if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth, "Transform Component"))
-		{
-			glm::vec3 translation = transform.GetTranslation();
-			bool modified = DrawVec3("Position", translation, {0.0f, 0.0f, 0.0f});
-			glm::vec3 rotation = transform.GetRotation();
-			modified |= DrawVec3("Rotation", rotation, { 0.0f, 0.0f, 0.0f });
-			glm::vec3 scale = transform.GetScale();
-			modified |= DrawVec3("Scale", scale, { 1.0f, 1.0f, 1.0f });
-			if (modified)
-				transform.SetTranslationAndRotationAndScale(translation, rotation, scale);
-			ImGui::TreePop();
-		}
-	}
-
 	void ComponentPanelDrawer::DrawCamera(Camera& c)
 	{
 		const char* projectionTypes[] = { "Orothographic", "Perspective" };
@@ -137,13 +112,65 @@ namespace TituEngine
 			c.SetFarPlane(farPlane);
 	}
 
-	void ComponentPanelDrawer::DrawCameraComponent(CameraComponent& cameraComponent)
+	/*template<typename C>
+	void ComponentPanelDrawer::DrawComponent(Entity& e, C& Component)
 	{
-		if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth, "Camera Component"))
+		if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), m_TreeNodeFlags, typeid(T).name()))
 		{
-			Camera& c = cameraComponent.Camera;
-			DrawCamera(c);
-			ImGui::TreePop();
+			static bool removed = false;
+			ComponentSettings(e, removed);
+			if (!removed)
+			{
+				DrawComponentInternal(e, Component);
+			}
 		}
+	}*/
+
+	template<>
+	void ComponentPanelDrawer::DrawComponentInternal(Entity& e, TagComponent& tag)
+	{
+		std::string& t = tag.Tag;
+		static char buffer[64] = "";
+		//memset(buffer, 0, sizeof(buffer));
+		strcpy_s(buffer, sizeof(buffer), t.c_str());
+		if (ImGui::InputText("Entity Name", buffer, sizeof(buffer), ImGuiInputTextFlags_CharsNoBlank))
+			t = std::string(buffer);
 	}
+
+	template<>
+	void ComponentPanelDrawer::DrawComponentInternal<TransformComponent>(Entity& e, TransformComponent& transform)
+	{
+		glm::vec3 translation = transform.GetTranslation();
+		bool modified = DrawVec3("Position", translation, { 0.0f, 0.0f, 0.0f });
+		glm::vec3 rotation = transform.GetRotation();
+		modified |= DrawVec3("Rotation", rotation, { 0.0f, 0.0f, 0.0f });
+		glm::vec3 scale = transform.GetScale();
+		modified |= DrawVec3("Scale", scale, { 1.0f, 1.0f, 1.0f });
+		if (modified)
+			transform.SetTranslationAndRotationAndScale(translation, rotation, scale);
+	}
+
+	template<>
+	void ComponentPanelDrawer::DrawComponentInternal<CameraComponent>(Entity& e, CameraComponent& cameraComponent)
+	{
+		static bool removed = false;
+		Camera& c = cameraComponent.Camera;
+		DrawCamera(c);
+	}
+
+	template<>
+	void ComponentPanelDrawer::DrawComponentInternal<SpriteRendererComponent>(Entity& e, SpriteRendererComponent& spriteRenderer)
+	{
+		static bool removed = false;
+		glm::vec4& color = spriteRenderer.Color;
+
+		ImGui::ColorEdit4("Color", (float*)&color);
+	}
+
+	template<typename C>
+	void ComponentPanelDrawer::DrawComponentInternal(Entity& e, C& Component)
+	{
+		static_assert(false);
+	}
+
 }

@@ -379,5 +379,6 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 		m_CameraController->OnEvent(e);
+		//m_Scene->OnViewportResize(e);
 	}
 }

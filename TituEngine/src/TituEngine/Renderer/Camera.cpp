@@ -1,6 +1,6 @@
 #include "tepch.h"
 #include "Camera.h"
-
+#include "TituEngine/Core/Application.h"
 namespace TituEngine
 {
 	//-------------------------------------------CAMERA-------------------------------------

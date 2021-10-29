@@ -14,7 +14,7 @@ namespace TituEngine
 
 		void OnImGuiRender(Scene* const m_Context);
 
-		void DeselectEntity() { m_LastSelectedEntity = m_EntityNull; }
+		void DeselectEntity() { m_SelectedEntity = m_EntityNull; }
 
 	private:
 		void DrawEntityNode(Entity& e);
@@ -22,7 +22,7 @@ namespace TituEngine
 
 		Scene* m_Context = nullptr;
 
-		Entity m_LastSelectedEntity;
+		Entity m_SelectedEntity;
 		Entity m_EntityNull;
 	};
 }

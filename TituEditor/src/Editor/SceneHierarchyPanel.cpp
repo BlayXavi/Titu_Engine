@@ -1,8 +1,9 @@
-#include "SceneHierarchyPanel.h"
 #include "imgui/imgui.h"
-#include "TituEngine/Scene/Components.h"
-#include "ComponentPanelDrawer.h"
 
+#include "SceneHierarchyPanel.h"
+#include "ComponentPanelDrawer.h"
+#include "TituEngine/Scene/Components.h"
+#include "TituEngine/Core/Log.h"
 namespace TituEngine
 {
 	void SceneHierarchyPanel::OnImGuiRender(Scene* const context)
@@ -34,11 +35,11 @@ namespace TituEngine
 	{
 		TagComponent& tagC = e.GetComponent<TagComponent>();
 		bool changed = false;
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | (m_LastSelectedEntity == e ? ImGuiTreeNodeFlags_Selected : 0);
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)e, flags, tagC); 
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | (m_SelectedEntity == e ? ImGuiTreeNodeFlags_Selected : 0);
+		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)e, flags, tagC);
 		if (ImGui::IsItemClicked(0))
 		{
-			m_LastSelectedEntity = e;
+			m_SelectedEntity = e;
 			changed = true;
 		}
 
@@ -46,7 +47,7 @@ namespace TituEngine
 		{
 			if (ImGui::MenuItem("Destroy Entity"))
 			{
-				if (m_LastSelectedEntity == e)
+				if (m_SelectedEntity == e)
 					DeselectEntity();
 				m_Context->DestroyEntity(e);
 			}
@@ -56,33 +57,64 @@ namespace TituEngine
 		if (opened)
 			ImGui::TreePop();
 
-		if (m_LastSelectedEntity == e && !changed)
+		if (m_SelectedEntity == e && !changed)
 		{
-			ImGui::Begin("Inspector");
-			DrawEntityPanel(m_LastSelectedEntity);
-			ImGui::End();
+			DrawEntityPanel(m_SelectedEntity);
 		}
 
 	}
 
 	void SceneHierarchyPanel::DrawEntityPanel(Entity& e)
 	{
+		ImGui::Begin("Inspector");
+
 		if (e.HasComponent<TagComponent>())
 		{
 			TagComponent& tag = e.GetComponent<TagComponent>();
-			ComponentPanelDrawer::DrawTagComponent(tag);
+			ComponentPanelDrawer::DrawComponent(e, tag);
 		}
 
 		if (e.HasComponent<TransformComponent>())
 		{
 			TransformComponent& tc = e.GetComponent<TransformComponent>();
-			ComponentPanelDrawer::DrawTransformComponent(tc);
+			ComponentPanelDrawer::DrawComponent<TransformComponent>(e, tc);
 		}
 
 		if (e.HasComponent<CameraComponent>())
 		{
 			CameraComponent& cc = e.GetComponent<CameraComponent>();
-			ComponentPanelDrawer::DrawCameraComponent(cc);
+			ComponentPanelDrawer::DrawComponent(e, cc);
 		}
+
+		if (e.HasComponent<SpriteRendererComponent>())
+		{
+			SpriteRendererComponent& srC = e.GetComponent<SpriteRendererComponent>();
+			ComponentPanelDrawer::DrawComponent(e, srC);
+		}
+
+		if (ImGui::Button("Add Componnet"))
+			ImGui::OpenPopup("AddComponent");
+
+		if (ImGui::BeginPopup("AddComponent"))
+		{
+			if (ImGui::MenuItem("Transform Component"))
+			{
+				m_SelectedEntity.AddComponent<TransformComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			else if (ImGui::MenuItem("Camera Component"))
+			{
+				m_SelectedEntity.AddComponent<CameraComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("SpriteRenderer Component"))
+			{
+				m_SelectedEntity.AddComponent<SpriteRendererComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+
+		ImGui::End();
 	}
 }

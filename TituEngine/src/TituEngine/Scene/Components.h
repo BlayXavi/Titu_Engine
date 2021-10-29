@@ -12,6 +12,8 @@ namespace TituEngine
 {
 	struct TagComponent
 	{
+		const char* PrettyName = "Tag Component";
+
 		std::string Tag;
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
@@ -26,6 +28,8 @@ namespace TituEngine
 
 	struct TransformComponent
 	{
+		const char* PrettyName = "Transform Component";
+
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(glm::mat4& transform)
@@ -74,6 +78,9 @@ namespace TituEngine
 
 	struct SpriteRendererComponent
 	{
+		const char* PrettyName = "Sprite Renderer Component";
+
+
 		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f }; //white color
 
 		SpriteRendererComponent() = default;
@@ -87,6 +94,8 @@ namespace TituEngine
 
 	struct CameraComponent
 	{
+		const char* PrettyName = "Camera Component Component";
+
 		TituEngine::Camera Camera;
 
 		CameraComponent() = default;
@@ -98,6 +107,8 @@ namespace TituEngine
 	class NativeScript
 	{
 	public:
+		char* PrettyName = "Native Script";
+
 		virtual ~NativeScript() = default;
 
 		template<class T>

@@ -55,6 +55,17 @@ namespace TituEngine
 			return true;
 		}
 
+		template<typename T>
+		void DestroyComponent()
+		{
+			if (!HasComponent<T>())
+			{
+				TE_ASSERT(false, "ENTITY DOES NOT HAVE COMPONENT");
+				return;
+			}
+			m_Scene->m_Registry.remove<T>(m_EnttHandle);
+		}
+
 		operator bool() const { return m_EnttHandle != entt::null; }
 		bool operator ==(Entity other) const { return m_EnttHandle == other.m_EnttHandle && m_Scene == other.m_Scene; }
 		bool operator !=(Entity other) const { return !(other == *this); }
