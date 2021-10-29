@@ -6,7 +6,7 @@
 
 namespace TituEngine
 {
-	ImGuiTreeNodeFlags ComponentPanelDrawer::m_TreeNodeFlags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap;
+	ImGuiTreeNodeFlags ComponentPanelDrawer::m_TreeNodeFlags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_Bullet;
 
 	bool ComponentPanelDrawer::DrawVec3(std::string label, glm::vec3& values, const glm::vec3& resetValue)
 	{

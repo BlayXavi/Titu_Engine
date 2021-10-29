@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #include "VertexArray.h"
 
-#include "Shader.h"
 
 #define VERTEX_PER_QUAD 4
 #define INDICES_PER_QUAD 6
@@ -29,11 +28,11 @@ namespace TituEngine
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 		virtual void EnableDepthTest(bool enable) = 0;
 
-		inline static API GetAPIID() { return s_RendererAPI; }
+		inline static API GetAPIID() { return s_RendererAPIID; }
 		static RendererAPI* Create();
 
 	private:
-		static API s_RendererAPI;
+		static API s_RendererAPIID;
 	};
 
 	class Renderer

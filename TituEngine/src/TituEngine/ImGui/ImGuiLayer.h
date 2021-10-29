@@ -20,6 +20,8 @@ namespace TituEngine
 		
 		virtual void SetBlockEvents(bool block) { m_BlockEvents = block; }
 
+		void SetDefaultTheme();
+
 	private:
 		bool m_BlockEvents = false;
 

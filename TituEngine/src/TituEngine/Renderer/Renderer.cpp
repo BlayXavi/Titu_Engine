@@ -7,7 +7,7 @@
 namespace TituEngine
 {
 	//---------------------------------RENDERER API---------------------------------
-	RendererAPI::API RendererAPI::s_RendererAPI = API::OpenGL;
+	RendererAPI::API RendererAPI::s_RendererAPIID = API::OpenGL;
 	
 	RendererAPI* RendererAPI::Create()
 	{

@@ -46,7 +46,6 @@ namespace TituEngine
 
 	static Renderer2DData s_Data;
 
-
 	int Renderer2D::RenderStats::DrawCalls = 0;
 	int Renderer2D::RenderStats::Quads = 0;
 
