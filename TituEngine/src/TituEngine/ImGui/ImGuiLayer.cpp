@@ -19,21 +19,19 @@ namespace TituEngine
 
 	void ImGuiLayer::SetDefaultTheme()
 	{
-		ImGuiStyle& style = ImGui::GetStyle();
-
-		ImVec4* colors = style.Colors;
+		ImVec4* colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
-		colors[ImGuiCol_WindowBg] = ImVec4(0.39f, 0.39f, 0.39f, 1.00f);
-		colors[ImGuiCol_ChildBg] = ImVec4(0.39f, 0.39f, 0.39f, 1.00f);
+		colors[ImGuiCol_WindowBg] = ImVec4(0.49f, 0.49f, 0.49f, 1.00f);
+		colors[ImGuiCol_ChildBg] = ImVec4(0.49f, 0.49f, 0.49f, 1.00f);
 		colors[ImGuiCol_PopupBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
 		colors[ImGuiCol_Border] = ImVec4(0.11f, 0.11f, 0.11f, 0.71f);
 		colors[ImGuiCol_BorderShadow] = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
-		colors[ImGuiCol_FrameBg] = ImVec4(0.39f, 0.39f, 0.39f, 0.54f);
+		colors[ImGuiCol_FrameBg] = ImVec4(0.33f, 0.33f, 0.33f, 0.54f);
 		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.82f, 0.82f, 0.82f, 0.40f);
 		colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.67f);
 		colors[ImGuiCol_TitleBg] = ImVec4(0.43f, 0.43f, 0.43f, 1.00f);
-		colors[ImGuiCol_TitleBgActive] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
+		colors[ImGuiCol_TitleBgActive] = ImVec4(0.32f, 0.32f, 0.32f, 1.00f);
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.17f, 0.17f, 0.17f, 0.90f);
 		colors[ImGuiCol_MenuBarBg] = ImVec4(0.34f, 0.34f, 0.34f, 1.00f);
 		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.24f, 0.24f, 0.24f, 0.53f);
@@ -57,7 +55,7 @@ namespace TituEngine
 		colors[ImGuiCol_ResizeGripActive] = ImVec4(0.00f, 0.00f, 0.00f, 0.95f);
 		colors[ImGuiCol_Tab] = ImVec4(0.26f, 0.26f, 0.26f, 1.00f);
 		colors[ImGuiCol_TabHovered] = ImVec4(0.49f, 0.49f, 0.49f, 1.00f);
-		colors[ImGuiCol_TabActive] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+		colors[ImGuiCol_TabActive] = ImVec4(0.57f, 0.57f, 0.57f, 1.00f);
 		colors[ImGuiCol_TabUnfocused] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
 		colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.33f, 0.33f, 0.33f, 1.00f);
 		colors[ImGuiCol_DockingPreview] = ImVec4(0.85f, 0.85f, 0.85f, 0.28f);
@@ -72,6 +70,8 @@ namespace TituEngine
 		colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
 		colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
 		colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+		
+		ImGuiStyle& style = ImGui::GetStyle();
 
 		style.PopupRounding = 3;
 
@@ -96,7 +96,6 @@ namespace TituEngine
 		style.ScrollbarRounding = 1;
 		style.GrabRounding = 1;
 		style.LogSliderDeadzone = 1;
-
 	}
 
 	void ImGuiLayer::OnAttach()
