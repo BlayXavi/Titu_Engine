@@ -20,7 +20,7 @@ namespace TituEngine
 		void DrawEntityNode(Entity& e);
 		void DrawEntityPanel(Entity& e);
 
-		Scene* m_Context;
+		Scene* m_Context = nullptr;
 
 		Entity m_LastSelectedEntity;
 		Entity m_EntityNull;

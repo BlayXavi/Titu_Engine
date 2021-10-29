@@ -17,11 +17,10 @@ namespace TituEngine
 			t = std::string(buffer);
 	}
 
-	bool ComponentPanelDrawer::DrawVec3(std::string label, glm::vec3& values)
+	bool ComponentPanelDrawer::DrawVec3(std::string label, glm::vec3& values, const glm::vec3& resetValue)
 	{
 		bool modified = false;
 
-		float resetValue = 0.0f;
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
@@ -40,7 +39,7 @@ namespace TituEngine
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		if (ImGui::Button("X", buttonSize))
 		{
-			values.x = resetValue;
+			values.x = resetValue.x;
 			modified = true;
 		}
 		ImGui::PopStyleColor(3);
@@ -56,7 +55,7 @@ namespace TituEngine
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
 		if (ImGui::Button("Y", buttonSize))
 		{
-			values.y = resetValue;
+			values.y = resetValue.y;
 			modified = true;
 		}
 		ImGui::PopStyleColor(3);
@@ -67,14 +66,12 @@ namespace TituEngine
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
-		resetValue = 1.0f;
-
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
 		if (ImGui::Button("Z", buttonSize))
 		{
-			values.z = resetValue;
+			values.z = resetValue.z;
 			modified = true;
 		}
 		ImGui::PopStyleColor(3);
@@ -99,11 +96,11 @@ namespace TituEngine
 		if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth, "Transform Component"))
 		{
 			glm::vec3 translation = transform.GetTranslation();
-			bool modified = DrawVec3("Position", translation);
+			bool modified = DrawVec3("Position", translation, {0.0f, 0.0f, 0.0f});
 			glm::vec3 rotation = transform.GetRotation();
-			modified |= DrawVec3("Rotation", rotation);
+			modified |= DrawVec3("Rotation", rotation, { 0.0f, 0.0f, 0.0f });
 			glm::vec3 scale = transform.GetScale();
-			modified |= DrawVec3("Scale", scale);
+			modified |= DrawVec3("Scale", scale, { 1.0f, 1.0f, 1.0f });
 			if (modified)
 				transform.SetTranslationAndRotationAndScale(translation, rotation, scale);
 			ImGui::TreePop();
