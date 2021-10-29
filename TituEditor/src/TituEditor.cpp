@@ -183,6 +183,7 @@ namespace TituEngine
 
 				if (ImGui::BeginMenu("TituEngine"))
 				{
+					ImGui::MenuItem("Scene Hierarchy", NULL, &SceneHierarchyPanel::m_OpenSceneHierarchy);
 					ImGui::MenuItem("Renderer stats", NULL, &show_rendererStats);
 					ImGui::MenuItem("Mouse stats", NULL, &show_MouseStats);
 					ImGui::MenuItem("Editor Camera Setigns", NULL, &show_EditorCamera);
@@ -204,7 +205,7 @@ namespace TituEngine
 			{
 				if (show_rendererStats)
 				{
-					ImGui::Begin("Render Stats");
+					ImGui::Begin("Render Stats", &show_rendererStats);
 
 					if (ImGui::Selectable("Camera Editor", m_ActiveCamera == m_EditorCamera))
 					{
@@ -275,7 +276,7 @@ namespace TituEngine
 
 				if (show_MouseStats)
 				{
-					ImGui::Begin("Mouse Stats");
+					ImGui::Begin("Mouse Stats", &show_MouseStats);
 
 					std::pair<float, float> mousePos = Input::GetMousePosition();
 					std::string xy = std::to_string((int)mousePos.first) + ", " + std::to_string((int)mousePos.second);
@@ -295,7 +296,7 @@ namespace TituEngine
 
 				if (show_EditorCamera)
 				{
-					ImGui::Begin("Editor Camera");
+					ImGui::Begin("Editor Camera", &show_EditorCamera);
 
 					ComponentPanelDrawer::DrawCamera(*m_EditorCamera);
 
@@ -330,7 +331,7 @@ namespace TituEngine
 			}
 
 			if (show_ImGuiDemo)
-				ImGui::ShowDemoWindow();
+				ImGui::ShowDemoWindow(&show_ImGuiDemo);
 
 			ImGui::End(); //dockspace 
 		}

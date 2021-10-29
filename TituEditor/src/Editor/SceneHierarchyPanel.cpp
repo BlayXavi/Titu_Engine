@@ -6,29 +6,34 @@
 #include "TituEngine/Core/Log.h"
 namespace TituEngine
 {
+	bool SceneHierarchyPanel::m_OpenSceneHierarchy = false;
+
 	void SceneHierarchyPanel::OnImGuiRender(Scene* const context)
 	{
 		m_Context = context;
-
-		ImGui::Begin("Scene Hierarchy");
-
-		if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered())
-			DeselectEntity();
-
-		context->m_Registry.each([&](auto entityID)
-			{
-				Entity e{ entityID, context };
-				DrawEntityNode(e);
-			});
-
-		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		
+		if (m_OpenSceneHierarchy)
 		{
-			if (ImGui::MenuItem("Create Empty Entity"))
-				context->CreateEntity();
-			ImGui::EndPopup();
-		}
+			ImGui::Begin("Scene Hierarchy", &m_OpenSceneHierarchy);
 
-		ImGui::End();
+			if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered())
+				DeselectEntity();
+
+			context->m_Registry.each([&](auto entityID)
+				{
+					Entity e{ entityID, context };
+					DrawEntityNode(e);
+				});
+
+			if (ImGui::BeginPopupContextWindow(0, 1, false))
+			{
+				if (ImGui::MenuItem("Create Empty Entity"))
+					context->CreateEntity();
+				ImGui::EndPopup();
+			}
+
+			ImGui::End();
+		}
 	}
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity& e)

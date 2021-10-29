@@ -8,6 +8,7 @@ namespace TituEngine
 	class SceneHierarchyPanel
 	{
 	public:
+		static bool m_OpenSceneHierarchy;
 
 		SceneHierarchyPanel() = default;
 		virtual ~SceneHierarchyPanel() = default;
