@@ -4,12 +4,12 @@
 
 
 EditorOrthographicCameraController::EditorOrthographicCameraController()
-	: m_EditorCamera(nullptr), m_CameraPosition(glm::vec3(0.0f)), m_ZoomLevelMin(0.1f), m_ZoomLevelMax(10.0f)
+	: m_EditorCamera(nullptr), m_CameraPosition(glm::vec3(0.0f))
 {
 }
 
 EditorOrthographicCameraController::EditorOrthographicCameraController(TransformedCamera* m_EditorCamera)
-	: m_EditorCamera(m_EditorCamera), m_CameraPosition(glm::vec3(0.0f)), m_ZoomLevelMin(0.1f), m_ZoomLevelMax(10.0f)
+	: m_EditorCamera(m_EditorCamera), m_CameraPosition(glm::vec3(0.0f))
 {
 
 }
@@ -30,12 +30,6 @@ void EditorOrthographicCameraController::SetPosition(const glm::vec3& position)
 {
 	m_CameraPosition = position;
 	m_EditorCamera->SetPosition(position);
-}
-
-void EditorOrthographicCameraController::SetZoomMinMax(float min, float max)
-{
-	m_ZoomLevelMin = min;
-	m_ZoomLevelMin = max;
 }
 
 void EditorOrthographicCameraController::OnUpdate(Timestep ts)
@@ -87,7 +81,6 @@ bool EditorOrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
 	float m_ZoomLevel = m_EditorCamera->GetOrthographicSize();
 	m_ZoomLevel += e.GetYOffset();
-	m_ZoomLevel = std::clamp(m_ZoomLevel, m_ZoomLevelMin, m_ZoomLevelMax);
 	m_EditorCamera->SetOrthographicSize(m_ZoomLevel);
 	return false;
 }

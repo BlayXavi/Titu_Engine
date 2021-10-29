@@ -191,6 +191,7 @@ project "TituEditor"
 	filter "configurations:Debug"
 		defines "TE_DEBUG"
 		defines "TE_ENABLE_PROFILER"
+		defines "TE_ENABLE_ASSERTS"
 		runtime "Debug"
 		symbols "on"
 

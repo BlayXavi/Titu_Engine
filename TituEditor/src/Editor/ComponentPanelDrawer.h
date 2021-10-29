@@ -6,6 +6,8 @@ namespace TituEngine
 	class ComponentPanelDrawer
 	{
 	public:
+		static void DrawTagComponent(TagComponent& tag);
+
 		static void DrawTransformComponent(TransformComponent& transform);
 		static void DrawCameraComponent(CameraComponent& transform);
 

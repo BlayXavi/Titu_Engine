@@ -29,7 +29,6 @@ public:
 	void SetCamera(TransformedCamera* camera);
 	void SetPosition(const glm::vec3& position);
 
-	void SetZoomMinMax(float min, float max);
 	void SetZoomLevel(float zoom) { m_EditorCamera->SetOrthographicSize(zoom); }
 	inline const float& GetZoomLevel() { return m_EditorCamera->GetOrthographicSize(); }
 
@@ -40,9 +39,6 @@ private:
 private:
 	TransformedCamera* m_EditorCamera = nullptr;
 	float m_CameraSpeed = 1.0f;
-
-	float m_ZoomLevelMin = 0.1f;
-	float m_ZoomLevelMax = 10.0f;
 
 	glm::vec3 m_CameraPosition;
 };

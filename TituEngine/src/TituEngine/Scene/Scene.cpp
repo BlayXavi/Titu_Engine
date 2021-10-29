@@ -17,7 +17,9 @@ namespace TituEngine
 
 	Entity Scene::CreateEntity()
 	{
-		return Entity(this);
+		Entity e = Entity(this);
+		e.AddComponent<TagComponent>("Empty_Entity");
+		return e;
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -25,6 +27,11 @@ namespace TituEngine
 		Entity e = Entity(this);
 		e.AddComponent<TagComponent>(name);
 		return e;
+	}
+
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_Registry.destroy(entity);
 	}
 
 	void Scene::OnUpdate(Timestep ts)

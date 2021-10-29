@@ -31,6 +31,12 @@ namespace TituEngine
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
+			if (HasComponent<T>())
+			{
+				TE_ASSERT(false, "COMPONENT ALREADY ADDED");
+				return GetComponent<T>();
+			}
+
 			return m_Scene->m_Registry.emplace<T>(m_EnttHandle, std::forward<Args>(args)...);
 		}
 
@@ -58,7 +64,6 @@ namespace TituEngine
 	private:
 		Scene* m_Scene = nullptr;
 		entt::entity m_EnttHandle{ entt::null };
-
 	};
 
 }

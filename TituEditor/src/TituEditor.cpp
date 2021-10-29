@@ -51,6 +51,9 @@ namespace TituEngine
 		Entity entity = m_Scene->CreateEntity("Entity1");
 		TransformComponent tc = entity.AddComponent<TransformComponent>();
 		tempSpriteRendererComponent = &entity.AddOrGetComponent<SpriteRendererComponent>();
+		Entity entity2 = m_Scene->CreateEntity("Entity2");
+		TransformComponent tc2 = entity2.AddComponent<TransformComponent>(glm::vec3(1.0f, 0.0f, 0.0f));
+		&entity2.AddOrGetComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 0.2f, 1.0f));
 
 		FramebufferSpecs fbSpecs;
 		fbSpecs.Width = 1280;
@@ -63,7 +66,7 @@ namespace TituEngine
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
 
-		m_GameCameraEntity = m_Scene->CreateEntity("Camera Entity");
+		m_GameCameraEntity = m_Scene->CreateEntity("Camera_Entity");
 		TransformComponent& t = m_GameCameraEntity.AddComponent<TransformComponent>();
 		t.SetTranslation(t.GetTranslation() + glm::vec3(0.0f, 0.0f, 3.0f));
 		m_GameCamera = &m_GameCameraEntity.AddComponent<CameraComponent>().Camera;

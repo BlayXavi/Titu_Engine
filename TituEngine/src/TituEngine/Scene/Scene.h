@@ -14,6 +14,9 @@ namespace TituEngine
 
 		Entity CreateEntity();
 		Entity CreateEntity(const std::string& name);
+
+		void DestroyEntity(Entity entity);
+
 		void OnUpdate(Timestep ts);
 
 		entt::registry m_Registry;	

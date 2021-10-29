@@ -7,6 +7,16 @@
 
 namespace TituEngine
 {
+	void ComponentPanelDrawer::DrawTagComponent(TagComponent& tag)
+	{
+		std::string& t = tag.Tag;
+		static char buffer[64] = "";
+		//memset(buffer, 0, sizeof(buffer));
+		strcpy_s(buffer, sizeof(buffer), t.c_str());
+		if (ImGui::InputText("Entity Name", buffer, sizeof(buffer), ImGuiInputTextFlags_CharsNoBlank))
+			t = std::string(buffer);
+	}
+
 	bool ComponentPanelDrawer::DrawVec3(std::string label, glm::vec3& values)
 	{
 		bool modified = false;
@@ -36,7 +46,7 @@ namespace TituEngine
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f"))
+		if (ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.4f"))
 			modified = true;
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -52,7 +62,7 @@ namespace TituEngine
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f"))
+		if (ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.4f"))
 			modified = true;
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -70,7 +80,7 @@ namespace TituEngine
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f"))
+		if (ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.4f"))
 			modified = true;
 
 		ImGui::PopItemWidth();
@@ -86,7 +96,7 @@ namespace TituEngine
 
 	void ComponentPanelDrawer::DrawTransformComponent(TransformComponent& transform)
 	{
-		if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth, "Camera Component"))
+		if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth, "Transform Component"))
 		{
 			glm::vec3 translation = transform.GetTranslation();
 			bool modified = DrawVec3("Position", translation);
@@ -110,26 +120,25 @@ namespace TituEngine
 
 		if (c.GetProjectionType() == Camera::Projection::PERSPECTIVE)
 		{
-			static float fov = c.GetFOV();
+			float fov = c.GetFOV();
 			if (ImGui::DragFloat("Field of View", &fov, 1.0f, 0.1f, 180.0f))
 				c.SetFOV(fov);
 		}
 		else
 		{
-			static float oSize = c.GetOrthographicSize();
+			float oSize = c.GetOrthographicSize();
 			if (ImGui::DragFloat("Orthographic Size", &oSize, 1.0f, 1.0f, 100.0f))
 				c.SetOrthographicSize(oSize);
 		}
 
-		static float nearPlane = c.GetNearPlane();
+		float nearPlane = c.GetNearPlane();
 		if (ImGui::DragFloat("NearPlane", &nearPlane, 1.0f, -100.0f, 1000.0f))
 			c.SetNearPlane(nearPlane);
 
-		static float farPlane = c.GetFarPlane();
+		float farPlane = c.GetFarPlane();
 		if (ImGui::DragFloat("FarPlane", &farPlane, 1.0f, -100.0f, 1000.0f))
 			c.SetFarPlane(farPlane);
 	}
-
 
 	void ComponentPanelDrawer::DrawCameraComponent(CameraComponent& cameraComponent)
 	{
