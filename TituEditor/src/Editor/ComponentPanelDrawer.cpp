@@ -28,6 +28,7 @@ namespace TituEngine
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		//ImGui::Font 
 		if (ImGui::Button("X", buttonSize))
 		{
 			values.x = resetValue.x;
@@ -126,14 +127,13 @@ namespace TituEngine
 		}
 	}*/
 
-	template<>
-	void ComponentPanelDrawer::DrawComponentInternal(Entity& e, TagComponent& tag)
+	void ComponentPanelDrawer::DrawTagComponent(Entity& e, TagComponent& tag)
 	{
 		std::string& t = tag.Tag;
-		static char buffer[64] = "";
+		static char buffer[32] = "";
 		//memset(buffer, 0, sizeof(buffer));
 		strcpy_s(buffer, sizeof(buffer), t.c_str());
-		if (ImGui::InputText("Entity Name", buffer, sizeof(buffer), ImGuiInputTextFlags_CharsNoBlank))
+		if (ImGui::InputText("##TAG", buffer, sizeof(buffer), ImGuiInputTextFlags_CharsNoBlank))
 			t = std::string(buffer);
 	}
 

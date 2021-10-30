@@ -10,6 +10,8 @@ namespace TituEngine
 	{
 	public:
 
+		static void DrawTagComponent(Entity& e, TagComponent& tag);
+
 		template<typename C>
 		static void DrawComponent(Entity& e, C& Component)
 		{

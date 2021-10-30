@@ -20,7 +20,7 @@ namespace TituEngine
 				return;
 
 			TransformComponent& tc = GetComponent<TransformComponent>();
-			glm::vec3 pos= tc.GetTranslation();
+			glm::vec3 pos = tc.GetTranslation();
 
 			float speed = 5.0f;
 
@@ -223,52 +223,48 @@ namespace TituEngine
 					if (ImGui::Checkbox("Vsync", &m_VSync))
 						Application::Instance().GetWindow().SetVSync(m_VSync);
 
-					//if (ImGui::TreeNode("Render Stats"))
+					// Plots can display overlay texts
+					// (in this example, we will display an average value)
 					{
-						// Plots can display overlay texts
-						// (in this example, we will display an average value)
+						float ms = currentTimeStep.GetDeltaTimeMilliseconds();
+						float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
+
+						ImGui::Checkbox("Animate FPS Graph", &m_UpdateFPS);
+
+						if (m_UpdateFPS)
 						{
-							float ms = currentTimeStep.GetDeltaTimeMilliseconds();
-							float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
-
-							ImGui::Checkbox("Animate FPS Graph", &m_UpdateFPS);
-
-							if (m_UpdateFPS)
+							m_AverageFPS = 0;
+							m_AverageMS = 0;
+							for (int n = 1; n < FPS_DEBUG_COUNT; n++)
 							{
-								m_AverageFPS = 0;
-								m_AverageMS = 0;
-								for (int n = 1; n < FPS_DEBUG_COUNT; n++)
-								{
-									debugFPS[n - 1] = debugFPS[n];
-									debugMS[n - 1] = debugMS[n];
-									m_AverageFPS += debugFPS[n];
-									m_AverageMS += debugMS[n];
+								debugFPS[n - 1] = debugFPS[n];
+								debugMS[n - 1] = debugMS[n];
+								m_AverageFPS += debugFPS[n];
+								m_AverageMS += debugMS[n];
 
-								}
-
-								debugFPS[FPS_DEBUG_COUNT - 1] = fps;
-								debugMS[FPS_DEBUG_COUNT - 1] = ms;
-								m_AverageFPS += debugFPS[FPS_DEBUG_COUNT - 1];
-								m_AverageMS += debugMS[FPS_DEBUG_COUNT - 1];
-
-								m_AverageFPS /= (float)FPS_DEBUG_COUNT;
-								m_AverageMS /= (float)FPS_DEBUG_COUNT;
 							}
 
-							char overlay[32];
-							sprintf_s(overlay, "FPS Avg: %f", m_AverageFPS);
-							ImGui::PlotHistogram("FPS", debugFPS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageFPS * 1.5f, ImVec2(0, 80.0f));
-							ImGui::Separator();
-							sprintf_s(overlay, "MS Avg: %f", m_AverageMS);
-							ImGui::PlotHistogram("ms", debugMS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageMS * 1.5f, ImVec2(0, 80.0f));
+							debugFPS[FPS_DEBUG_COUNT - 1] = fps;
+							debugMS[FPS_DEBUG_COUNT - 1] = ms;
+							m_AverageFPS += debugFPS[FPS_DEBUG_COUNT - 1];
+							m_AverageMS += debugMS[FPS_DEBUG_COUNT - 1];
 
-							ImGui::Text("Batches [%d]", Renderer2D::RenderStats::GetDrawCalls());
-							ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
-							ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
-
-
-							//ImGui::TreePop();
+							m_AverageFPS /= (float)FPS_DEBUG_COUNT;
+							m_AverageMS /= (float)FPS_DEBUG_COUNT;
 						}
+
+						char overlay[32];
+						sprintf_s(overlay, "FPS Avg: %f", m_AverageFPS);
+						ImGui::PlotHistogram("FPS", debugFPS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageFPS * 1.5f, ImVec2(0, 80.0f));
+						ImGui::Separator();
+						sprintf_s(overlay, "MS Avg: %f", m_AverageMS);
+						ImGui::PlotHistogram("ms", debugMS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageMS * 1.5f, ImVec2(0, 80.0f));
+
+						ImGui::Text("Batches [%d]", Renderer2D::RenderStats::GetDrawCalls());
+						ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
+						ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
+
+
 					}
 
 					ImGui::End(); //Render Stats
@@ -314,7 +310,7 @@ namespace TituEngine
 				Application::Instance().GetImGuiLayer()->SetBlockEvents(!m_ViewPortFocused || !m_ViewPortHovered);
 
 				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-				if (m_ViewPortPanelSize != *(glm::vec2*) & viewportPanelSize)
+				if (m_ViewPortPanelSize != *(glm::vec2*)&viewportPanelSize)
 				{
 					m_ViewPortPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);

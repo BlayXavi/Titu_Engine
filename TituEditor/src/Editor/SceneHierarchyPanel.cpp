@@ -11,7 +11,7 @@ namespace TituEngine
 	void SceneHierarchyPanel::OnImGuiRender(Scene* const context)
 	{
 		m_Context = context;
-		
+
 		if (m_OpenSceneHierarchy)
 		{
 			ImGui::Begin("Scene Hierarchy", &m_OpenSceneHierarchy);
@@ -71,53 +71,62 @@ namespace TituEngine
 
 	void SceneHierarchyPanel::DrawEntityPanel(Entity& e)
 	{
-		ImGui::Begin("Inspector");
-
-		if (e.HasComponent<TagComponent>())
+		bool opened = true;
+		ImGui::Begin("Inspector", &opened);
+		if (!opened)
 		{
-			TagComponent& tag = e.GetComponent<TagComponent>();
-			ComponentPanelDrawer::DrawComponent(e, tag);
+			DeselectEntity();
 		}
-
-		if (e.HasComponent<TransformComponent>())
+		else
 		{
-			TransformComponent& tc = e.GetComponent<TransformComponent>();
-			ComponentPanelDrawer::DrawComponent<TransformComponent>(e, tc);
-		}
-
-		if (e.HasComponent<CameraComponent>())
-		{
-			CameraComponent& cc = e.GetComponent<CameraComponent>();
-			ComponentPanelDrawer::DrawComponent(e, cc);
-		}
-
-		if (e.HasComponent<SpriteRendererComponent>())
-		{
-			SpriteRendererComponent& srC = e.GetComponent<SpriteRendererComponent>();
-			ComponentPanelDrawer::DrawComponent(e, srC);
-		}
-
-		if (ImGui::Button("Add Componnet"))
-			ImGui::OpenPopup("AddComponent");
-
-		if (ImGui::BeginPopup("AddComponent"))
-		{
-			if (ImGui::MenuItem("Transform Component"))
+			if (e.HasComponent<TagComponent>())
 			{
-				m_SelectedEntity.AddComponent<TransformComponent>();
-				ImGui::CloseCurrentPopup();
+				TagComponent& tag = e.GetComponent<TagComponent>();
+				ComponentPanelDrawer::DrawTagComponent(e, tag);
 			}
-			else if (ImGui::MenuItem("Camera Component"))
+
+			ImGui::SameLine();
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("AddComponent");
+
+			if (ImGui::BeginPopup("AddComponent"))
 			{
-				m_SelectedEntity.AddComponent<CameraComponent>();
-				ImGui::CloseCurrentPopup();
+				if (ImGui::MenuItem("Transform Component"))
+				{
+					m_SelectedEntity.AddComponent<TransformComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+				else if (ImGui::MenuItem("Camera Component"))
+				{
+					m_SelectedEntity.AddComponent<CameraComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::MenuItem("SpriteRenderer Component"))
+				{
+					m_SelectedEntity.AddComponent<SpriteRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
 			}
-			if (ImGui::MenuItem("SpriteRenderer Component"))
+
+			if (e.HasComponent<TransformComponent>())
 			{
-				m_SelectedEntity.AddComponent<SpriteRendererComponent>();
-				ImGui::CloseCurrentPopup();
+				TransformComponent& tc = e.GetComponent<TransformComponent>();
+				ComponentPanelDrawer::DrawComponent<TransformComponent>(e, tc);
 			}
-			ImGui::EndPopup();
+
+			if (e.HasComponent<CameraComponent>())
+			{
+				CameraComponent& cc = e.GetComponent<CameraComponent>();
+				ComponentPanelDrawer::DrawComponent(e, cc);
+			}
+
+			if (e.HasComponent<SpriteRendererComponent>())
+			{
+				SpriteRendererComponent& srC = e.GetComponent<SpriteRendererComponent>();
+				ComponentPanelDrawer::DrawComponent(e, srC);
+			}
+
 		}
 
 		ImGui::End();

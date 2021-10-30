@@ -27,6 +27,7 @@ error Platform not supported
 #ifdef TE_ENABLE_ASSERTS
 //false to trigger assert
 #define TE_ASSERT(x, ...) {if(!(x)){TE_CORE_ERROR("Assertion Failed"); TE_CORE_ERROR(__VA_ARGS__); __debugbreak(); } }
+#define TE_ASSERT_NOT_IMPLEMENTED TE_ASSERT(false, "Not implemented yet.");
 #else
 #define TE_ASSERT(x, ...)
 #endif
