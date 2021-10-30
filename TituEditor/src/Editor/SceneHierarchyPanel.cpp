@@ -6,7 +6,7 @@
 #include "TituEngine/Core/Log.h"
 namespace TituEngine
 {
-	bool SceneHierarchyPanel::m_OpenSceneHierarchy = false;
+	bool SceneHierarchyPanel::m_OpenSceneHierarchy = true;
 
 	void SceneHierarchyPanel::OnImGuiRender(Scene* const context)
 	{
