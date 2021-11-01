@@ -19,11 +19,15 @@ IncludeDir["ImGui"] = "TituEngine/vendor/imgui"
 IncludeDir["glm"] = "TituEngine/vendor/glm"
 IncludeDir["stb"] = "TituEngine/vendor/stb"
 IncludeDir["entt"] = "TituEngine/vendor/entt/include"
+IncludeDir["yaml"] = "TituEngine/vendor/yaml-cpp/include"
 
 --like c++ this will COPY the content of the path here
+group "Dependencies"
 include "TituEngine/vendor/Glad"
 include "TituEngine/vendor/GLFW"
 include "TituEngine/vendor/imgui"
+include "TituEngine/vendor/yaml-cpp"
+group ""
 
 project "TituEngine"
 	location "TituEngine"
@@ -65,7 +69,8 @@ project "TituEngine"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml}"
 	}
 
 	links
@@ -73,6 +78,7 @@ project "TituEngine"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"yaml-cpp",
 		"opengl32.lib"
 	}
 
@@ -124,7 +130,7 @@ project "Sandbox"
 		"TituEngine/vendor/spdlog/include",
 		"TituEngine/src",
 		"TituEngine/vendor",
-		"%{IncludeDir.glm}",
+		"%{IncludeDir.glm}"
 	}
 
 	links

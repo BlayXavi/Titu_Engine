@@ -14,3 +14,6 @@
 	path = TituEngine/vendor/glm
 	url = https://github.com/g-truc/glm
 	branch = master
+[submodule "TituEngine/vendor/yaml-cpp"]
+	path = TituEngine/vendor/yaml-cpp
+	url = https://github.com/TheCherno/yaml-cpp.git

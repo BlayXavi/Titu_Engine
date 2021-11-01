@@ -30,6 +30,7 @@ error Platform not supported
 #define TE_ASSERT_NOT_IMPLEMENTED TE_ASSERT(false, "Not implemented yet.");
 #else
 #define TE_ASSERT(x, ...)
+#define TE_ASSERT_NOT_IMPLEMENTED
 #endif
 
 #define BIT(x) (1<<x)

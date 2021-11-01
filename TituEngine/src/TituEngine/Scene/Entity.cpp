@@ -11,7 +11,7 @@ namespace TituEngine
 	}
 
 	Entity::Entity(const entt::entity& handle, Scene* const scene) :
-		m_Scene(scene), m_EnttHandle(handle)
+		m_EnttHandle(handle), m_Scene(scene)
 	{
 	}
 }

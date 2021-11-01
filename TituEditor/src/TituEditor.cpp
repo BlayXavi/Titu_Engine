@@ -1,6 +1,8 @@
 #include "TituEditor.h"
 #include <iomanip>
 
+#include "TituEngine/Scene/SceneSerializer.h"
+
 #define QUADS_COUNT 50000
 
 namespace TituEngine
@@ -47,13 +49,6 @@ namespace TituEngine
 	TituEditorLayer::TituEditorLayer()
 		: Layer("TituEditor Layer")
 	{
-		m_Scene = new Scene();
-		Entity entity = m_Scene->CreateEntity("Entity1");
-		TransformComponent tc = entity.AddComponent<TransformComponent>();
-		tempSpriteRendererComponent = &entity.AddOrGetComponent<SpriteRendererComponent>();
-		Entity entity2 = m_Scene->CreateEntity("Entity2");
-		TransformComponent tc2 = entity2.AddComponent<TransformComponent>(glm::vec3(1.0f, 0.0f, 0.0f));
-		&entity2.AddOrGetComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 0.2f, 1.0f));
 
 		FramebufferSpecs fbSpecs;
 		fbSpecs.Width = 1280;
@@ -64,23 +59,35 @@ namespace TituEngine
 		m_EditorCamera = new TransformedCamera();
 		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
+		m_EditorCamera->SetPosition(m_EditorCamera->GetPosition() + glm::vec3(0.0f, 0.0f, 3.0f));
+		m_EditorCamera->SetNearPlane(-10.0f);
+		m_EditorCamera->SetFarPlane(10.0f);
+		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
+		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
+		m_ActiveCamera = m_EditorCamera;
+
+		m_Scene = new Scene();
+		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
+#if 0
+		Entity entity = m_Scene->CreateEntity("Entity1");
+		TransformComponent tc = entity.AddComponent<TransformComponent>();
+		tempSpriteRendererComponent = &entity.AddOrGetComponent<SpriteRendererComponent>();
+		Entity entity2 = m_Scene->CreateEntity("Entity2");
+		TransformComponent tc2 = entity2.AddComponent<TransformComponent>(glm::vec3(1.0f, 0.0f, 0.0f));
+		&entity2.AddOrGetComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 0.2f, 1.0f));
 
 		m_GameCameraEntity = m_Scene->CreateEntity("Camera_Entity");
 		TransformComponent& t = m_GameCameraEntity.AddComponent<TransformComponent>();
 		t.SetTranslation(t.GetTranslation() + glm::vec3(0.0f, 0.0f, 3.0f));
 		m_GameCamera = &m_GameCameraEntity.AddComponent<CameraComponent>().Camera;
-		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
-		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
-		m_ActiveCamera = m_EditorCamera;
-		m_EditorCamera->SetPosition(m_EditorCamera->GetPosition() + glm::vec3(0.0f, 0.0f, 3.0f));
-		m_EditorCamera->SetNearPlane(-10.0f);
-		m_EditorCamera->SetFarPlane(10.0f);
+
 
 		NativeScriptComponent& nsc = m_GameCameraEntity.AddComponent<NativeScriptComponent>();
 		nsc.Bind<CameraController>();
 		nsc.Instance = nsc.InstantiateScript();
 		nsc.Instance->m_Entity = m_GameCameraEntity;
+#endif
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -187,6 +194,17 @@ namespace TituEngine
 					ImGui::MenuItem("Renderer stats", NULL, &show_rendererStats);
 					ImGui::MenuItem("Mouse stats", NULL, &show_MouseStats);
 					ImGui::MenuItem("Editor Camera Setigns", NULL, &show_EditorCamera);
+
+					if (ImGui::MenuItem("Serailize Scene"))
+					{
+						SceneSerializer::SerializeScene(m_Scene, "assets\\scene\\basic_scene.tituscene");
+					}
+
+					if (ImGui::MenuItem("Deserialize Scene"))
+					{
+						SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_scene.tituscene");
+					}
+
 					ImGui::EndMenu();
 				}
 
@@ -217,8 +235,6 @@ namespace TituEngine
 						m_ActiveCamera = m_GameCamera;
 						((CameraController*)m_GameCameraEntity.GetComponent<NativeScriptComponent>().Instance)->Active = true;
 					}
-
-					ImGui::ColorPicker4("Color", &tempSpriteRendererComponent->Color[0]);
 
 					if (ImGui::Checkbox("Vsync", &m_VSync))
 						Application::Instance().GetWindow().SetVSync(m_VSync);
@@ -317,7 +333,7 @@ namespace TituEngine
 
 					//m_CameraController->OnResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 					m_EditorCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
-					m_GameCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					//m_GameCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
 				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment();

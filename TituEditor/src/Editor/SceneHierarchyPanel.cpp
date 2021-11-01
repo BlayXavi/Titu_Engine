@@ -4,6 +4,7 @@
 #include "ComponentPanelDrawer.h"
 #include "TituEngine/Scene/Components.h"
 #include "TituEngine/Core/Log.h"
+
 namespace TituEngine
 {
 	bool SceneHierarchyPanel::m_OpenSceneHierarchy = true;

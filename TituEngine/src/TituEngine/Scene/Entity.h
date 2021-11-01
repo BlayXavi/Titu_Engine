@@ -47,6 +47,12 @@ namespace TituEngine
 		}
 
 		template<typename T>
+		T& GetComponent() const
+		{
+			return m_Scene->m_Registry.get<T>(m_EnttHandle);
+		}
+
+		template<typename T>
 		bool HasComponent() const
 		{
 			T* c = m_Scene->m_Registry.try_get<T>(m_EnttHandle);
