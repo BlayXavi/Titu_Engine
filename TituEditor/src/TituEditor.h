@@ -33,7 +33,9 @@ namespace TituEngine
 		void OnUpdate(Timestep ts) override;
 		void OnEvent(Event& e) override;
 
+
 	private:
+
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 
 		Camera* m_ActiveCamera = nullptr;
@@ -64,5 +66,14 @@ namespace TituEngine
 		bool m_VSync;
 		bool m_ViewPortFocused = false;
 		bool m_ViewPortHovered = false;
+
+	private:
+
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void NewScene();
+		void OpenScene();
+		void SaveScene();
+
 	};
 }

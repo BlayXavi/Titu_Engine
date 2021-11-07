@@ -4,8 +4,7 @@ workspace "TituEngine"
 	configurations
 	{
 		"Debug",
-		"Release",
-		"Dist"
+		"Release"
 	}
 	
 	startproject "TituEditor"
@@ -103,62 +102,6 @@ project "TituEngine"
 		runtime "Release"
 		optimize "on"
 
-	filter "configurations:Dist"
-		defines "TE_DIST"
-		runtime "Release"
-		symbols "on"
-
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir("bin/" .. outputdir .. "/%{prj.name}")
-	objdir("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.hpp",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	includedirs
-	{
-		"TituEngine/vendor/spdlog/include",
-		"TituEngine/src",
-		"TituEngine/vendor",
-		"%{IncludeDir.glm}"
-	}
-
-	links
-	{
-		"TituEngine"
-	}
-
-	filter "system:windows"
-		staticruntime "on"
-		systemversion "latest"
-
-	filter "configurations:Debug"
-		defines "TE_DEBUG"
-		defines "TE_ENABLE_PROFILER"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "TE_RELEASE"
-		runtime "Release"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "TE_DIST"
-		runtime "Release"
-		symbols "on"
-
-
 project "TituEditor"
 	location "TituEditor"
 	kind "ConsoleApp"
@@ -182,12 +125,14 @@ project "TituEditor"
 		"TituEngine/src",
 		"TituEngine/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.entt}"
 	}
 
 	links
 	{
-		"TituEngine"
+		"TituEngine",
+		"GLFW"
 	}
 
 	filter "system:windows"
@@ -205,8 +150,3 @@ project "TituEditor"
 		defines "TE_RELEASE"
 		runtime "Release"
 		optimize "on"
-
-	filter "configurations:Dist"
-		defines "TE_DIST"
-		runtime "Release"
-		symbols "on"

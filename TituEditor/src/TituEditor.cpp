@@ -3,6 +3,8 @@
 
 #include "TituEngine/Scene/SceneSerializer.h"
 
+#include "Editor/Utils/WindowDialogs.h"
+
 #define QUADS_COUNT 50000
 
 namespace TituEngine
@@ -180,11 +182,26 @@ namespace TituEngine
 			{
 				if (ImGui::BeginMenu("File"))
 				{
+					if (ImGui::MenuItem("New", "Ctrl+N"))
+					{
+						NewScene();
+					}
+
+					if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					{
+						OpenScene();
+					}
+
+					if (ImGui::MenuItem("Save As...", "Ctrl+S"))
+					{
+						SaveScene();
+					}
+
 					// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 					// which we can't undo at the moment without finer window depth/z control.
 					//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-					if (ImGui::MenuItem("Exit Alt+F4")) Application::Instance().Close();
+					if (ImGui::MenuItem("Exit", "Alt+F4")) Application::Instance().Close();
 					ImGui::EndMenu();
 				}
 
@@ -195,15 +212,7 @@ namespace TituEngine
 					ImGui::MenuItem("Mouse stats", NULL, &show_MouseStats);
 					ImGui::MenuItem("Editor Camera Setigns", NULL, &show_EditorCamera);
 
-					if (ImGui::MenuItem("Serailize Scene"))
-					{
-						SceneSerializer::SerializeScene(m_Scene, "assets\\scene\\basic_scene.tituscene");
-					}
 
-					if (ImGui::MenuItem("Deserialize Scene"))
-					{
-						SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_scene.tituscene");
-					}
 
 					ImGui::EndMenu();
 				}
@@ -392,6 +401,55 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 		m_CameraController->OnEvent(e);
-		//m_Scene->OnViewportResize(e);
+		EventDispatcher eDispatcher(e);
+		eDispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent kpe)->bool {return this->OnKeyPressed(kpe); });
+	}
+
+	bool TituEditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		if (e.GetRepeatCount() > 0)
+			return false;
+		bool control = Input::IsKeyPressed(TE_KEY_LEFT_CONTROL) || Input::IsKeyPressed(TE_KEY_RIGHT_CONTROL);
+		bool alt = Input::IsKeyPressed(TE_KEY_LEFT_ALT) || Input::IsKeyPressed(TE_KEY_RIGHT_ALT);
+
+		switch (e.GetKeyCode())
+		{
+		case TE_KEY_N:
+			if (control)
+				NewScene();
+			break;
+		case TE_KEY_O:
+			if (control)
+				OpenScene();
+			break;
+		case TE_KEY_S:
+			if (control)
+				SaveScene();
+		}
+
+		return false;
+	}
+	void TituEditorLayer::NewScene()
+	{
+		delete m_Scene;
+		m_Scene = new Scene();
+	}
+
+	void TituEditorLayer::OpenScene()
+	{
+		std::string fName = FileDialogs::OpenFile("Titu Scene (*.tituscene)\0*.tituscene\0");
+		if (!fName.empty())
+		{
+			delete m_Scene;
+			m_Scene = new Scene();
+			SceneSerializer::DeserializeScene(m_Scene, fName);
+		}
+	}
+
+	void TituEditorLayer::SaveScene()
+	{
+		std::string fName = FileDialogs::SaveFile("Titu Scene (*.tituscene)\0*.tituscene\0");
+		if (!fName.empty())
+			SceneSerializer::SerializeScene(m_Scene, fName);
 	}
 }
