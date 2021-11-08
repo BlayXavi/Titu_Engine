@@ -19,6 +19,7 @@ IncludeDir["glm"] = "TituEngine/vendor/glm"
 IncludeDir["stb"] = "TituEngine/vendor/stb"
 IncludeDir["entt"] = "TituEngine/vendor/entt/include"
 IncludeDir["yaml"] = "TituEngine/vendor/yaml-cpp/include"
+IncludeDir["ImGuizmo"] = "TituEngine/vendor/imguizmo"
 
 --like c++ this will COPY the content of the path here
 group "Dependencies"
@@ -33,7 +34,7 @@ project "TituEngine"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -50,7 +51,9 @@ project "TituEngine"
 		"%{prj.name}/vendor/glm/glm/**.inl",
 		"%{prj.name}/vendor/stb/**.h",
 		"%{prj.name}/vendor/stb/**.hpp",
-		"%{prj.name}/vendor/stb/**.cpp"
+		"%{prj.name}/vendor/stb/**.cpp",
+		"%{prj.name}/vendor/imguizmo/ImGuizmo.h",
+		"%{prj.name}/vendor/imguizmo/ImGuizmo.cpp"
 
 	}
 
@@ -69,7 +72,8 @@ project "TituEngine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.yaml}"
+		"%{IncludeDir.yaml}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links
@@ -80,6 +84,9 @@ project "TituEngine"
 		"yaml-cpp",
 		"opengl32.lib"
 	}
+	
+	filter "files:ImGuizmo.cpp"
+		flags {"NoPCH"}
 
 	filter "system:windows"
 		systemversion "latest"
@@ -107,7 +114,6 @@ project "TituEditor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -136,7 +142,7 @@ project "TituEditor"
 	}
 
 	filter "system:windows"
-		staticruntime "on"
+		staticruntime "off"
 		systemversion "latest"
 
 	filter "configurations:Debug"
