@@ -4,6 +4,9 @@
 #include <glm/vec4.hpp> // glm::mat4
 #include <glm/mat4x4.hpp> // glm::mat4
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 #include "TituEngine/Renderer/Camera.h"
 #include "Scene.h"
 #include "Entity.h"
@@ -54,7 +57,9 @@ namespace TituEngine
 		void SetTranslationAndRotationAndScale(glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale) { Translation = translation; Rotation = rotation; Scale = scale; UpdateTransform(); }
 
 		operator glm::mat4& () { return Transform; }
+		operator glm::mat4* () { return &Transform; }
 		operator const glm::mat4& () const { return Transform; }
+		operator const glm::mat4* () const { return &Transform; }
 
 	private:
 
@@ -64,9 +69,7 @@ namespace TituEngine
 
 		void UpdateTransform()
 		{
-			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), Rotation.x, { 1, 0, 0 })
-				* glm::rotate(glm::mat4(1.0f), Rotation.y, { 0, 1, 0 })
-				* glm::rotate(glm::mat4(1.0f), Rotation.z, { 0, 0, 1 });
+			glm::mat4 rotation = glm::toMat4(glm::quat(Rotation));
 
 			Transform = glm::translate(glm::mat4(1.0f), Translation)
 				* rotation
@@ -79,7 +82,6 @@ namespace TituEngine
 	struct SpriteRendererComponent
 	{
 		const char* PrettyName = "Sprite Renderer Component";
-
 
 		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f }; //white color
 
@@ -101,6 +103,14 @@ namespace TituEngine
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(TituEngine::Camera& camera) : Camera(camera) {};
+
+		void SetAsActiveCamera()
+		{
+			TituEngine::Camera::SetActiveCamera(&Camera, m_ViewMatrix);
+		}
+
+	private:
+		glm::mat4* m_ViewMatrix = nullptr;
 	};
 
 	class TituEditorLayer; //temp

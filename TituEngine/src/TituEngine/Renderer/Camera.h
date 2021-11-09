@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace TituEngine
@@ -8,6 +9,23 @@ namespace TituEngine
 	class Camera
 	{
 	public:
+
+		struct ActiveCameraData
+		{
+		public:
+			ActiveCameraData() : camera(nullptr), viewMatrix(nullptr) { }
+			ActiveCameraData(const ActiveCameraData& data) = default;
+			ActiveCameraData(Camera* cam, glm::mat4* viewMat) : camera(cam), viewMatrix(viewMat) { }
+
+			const Camera* GetCamera()const { return camera; }
+
+			glm::mat4 GetViewMatrix() { return glm::inverse(*viewMatrix); }
+			glm::mat4 GetViewProjectionMatrix() { return camera->GetProjectionMatrix() * GetViewMatrix(); }
+
+		private:
+			Camera* camera;
+			glm::mat4* viewMatrix;
+		};
 
 		enum class Projection { ORTHOGRAPHIC = 0, PERSPECTIVE = 1 };
 
@@ -20,8 +38,8 @@ namespace TituEngine
 		void SetProjectionType(Projection projection) { m_ProjectionType = projection; RecalculateProjectionMatrix(); }
 		Projection GetProjectionType() const { return m_ProjectionType; }
 
-		glm::vec3 ScreenSpacePosToWorldPos(const float& x, const float& y, const glm::mat4& model);
-		glm::vec3 ClipSpacePosToWorldSpace(const float& x, const float& y, const glm::mat4& model);
+		glm::vec3 ScreenSpacePosToWorldPos(const float& x, const float& y, const glm::mat4& model) const;
+		glm::vec3 ClipSpacePosToWorldSpace(const float& x, const float& y, const glm::mat4& model) const;
 
 		const float GetAspectRatio() const { return m_AspectRatio; }
 
@@ -40,6 +58,12 @@ namespace TituEngine
 		float GetFarPlane() { return m_FarPlane; }
 		void SetFarPlane(float plane) { m_FarPlane = plane; RecalculateProjectionMatrix(); }
 
+		static void SetActiveCamera(Camera* const camera, glm::mat4* const viewProjectionMatrix)
+		{
+			Camera::s_ActiveCamera = Camera::ActiveCameraData(camera, viewProjectionMatrix);
+		}
+		static ActiveCameraData GetActiveCamera() { return s_ActiveCamera; }
+
 	protected:
 
 		Projection m_ProjectionType = Projection::ORTHOGRAPHIC;
@@ -57,6 +81,8 @@ namespace TituEngine
 		float m_FieldOfView;
 
 		virtual void RecalculateProjectionMatrix();
+
+		static Camera::ActiveCameraData s_ActiveCamera;
 	};
 
 	class TransformedCamera : public Camera
@@ -76,6 +102,11 @@ namespace TituEngine
 		void SetZRotation(float rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
 
 		virtual void SetOrthographicProjection(float left, float right, float up, float down) override;
+
+		void SetAsActiveCamera()
+		{
+			Camera::SetActiveCamera(this, &m_ViewMatrix);
+		}
 
 	protected:
 		glm::mat4 m_ViewProjectionMatrix = glm::mat4(1.0f);

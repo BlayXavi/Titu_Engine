@@ -8,7 +8,7 @@ namespace TituEngine
 
 	class Scene
 	{
-	public: 
+	public:
 		Scene();
 		virtual ~Scene();
 
@@ -21,9 +21,11 @@ namespace TituEngine
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
+		void SetActiveCamera(Entity& e, struct CameraComponent& cc);
+
 	private:
-		entt::registry m_Registry;	
-		
+		entt::registry m_Registry;
+
 		friend class Entity;
 		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;

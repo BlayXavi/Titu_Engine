@@ -78,8 +78,8 @@ namespace TituEngine
 		operator entt::entity() const { return m_EnttHandle; }
 		operator uint32_t() const { return (uint32_t)m_EnttHandle; }
 
-	private:
 		Scene* m_Scene = nullptr;
+	private:
 		entt::entity m_EnttHandle{ entt::null };
 	};
 

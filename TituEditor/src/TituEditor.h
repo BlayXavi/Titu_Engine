@@ -38,8 +38,6 @@ namespace TituEngine
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 
-		Camera* m_ActiveCamera = nullptr;
-
 		Scene* m_Scene = nullptr;
 		SpriteRendererComponent* tempSpriteRendererComponent;
 

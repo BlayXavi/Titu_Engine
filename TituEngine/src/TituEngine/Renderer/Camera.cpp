@@ -3,20 +3,22 @@
 #include "TituEngine/Core/Application.h"
 namespace TituEngine
 {
+	Camera::ActiveCameraData Camera::s_ActiveCamera;
+
 	//-------------------------------------------CAMERA-------------------------------------
 	Camera::Camera()
 		: m_ProjectionMatrix(1.0f), m_AspectRatio(1.0f), m_NearPlane(0.001f), m_FarPlane(100.0f), m_OrthographicSize(1.0f), m_FieldOfView(90.0f)
 	{
 	}
 
-	glm::vec3 Camera::ScreenSpacePosToWorldPos(const float& x, const float& y, const glm::mat4& model)
+	glm::vec3 Camera::ScreenSpacePosToWorldPos(const float& x, const float& y, const glm::mat4& model)const
 	{
 		std::pair<float, float> windowsSize = { Application::Instance().GetWindow().GetWidth() * 0.5f,  Application::Instance().GetWindow().GetHeight() * 0.5f };
 
 		return ClipSpacePosToWorldSpace(((x - windowsSize.first) / windowsSize.first), (y - windowsSize.second) / (windowsSize.second * -1.0f), model);
 	}
 
-	inline glm::vec3 Camera::ClipSpacePosToWorldSpace(const float& x, const float& y, const glm::mat4& model)
+	inline glm::vec3 Camera::ClipSpacePosToWorldSpace(const float& x, const float& y, const glm::mat4& model) const
 	{
 		glm::vec4 tempPos = { x, y, 0.0f, 1.0f };
 		tempPos = GetInversedProjectionMatrix() * tempPos;
@@ -51,7 +53,7 @@ namespace TituEngine
 		}
 		else if (m_ProjectionType == Projection::PERSPECTIVE)
 		{
-			
+
 			m_ProjectionMatrix = glm::perspective(glm::radians(m_FieldOfView), m_AspectRatio, m_NearPlane, m_FarPlane);
 		}
 	}

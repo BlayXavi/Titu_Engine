@@ -66,8 +66,8 @@ namespace TituEngine
 		m_EditorCamera->SetFarPlane(10.0f);
 		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
+		m_EditorCamera->SetAsActiveCamera();
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
-		m_ActiveCamera = m_EditorCamera;
 
 		m_Scene = new Scene();
 		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
@@ -234,17 +234,6 @@ namespace TituEngine
 				{
 					ImGui::Begin("Render Stats", &show_rendererStats);
 
-					if (ImGui::Selectable("Camera Editor", m_ActiveCamera == m_EditorCamera))
-					{
-						m_ActiveCamera = m_EditorCamera;
-						((CameraController*)m_GameCameraEntity.GetComponent<NativeScriptComponent>().Instance)->Active = false;
-					}
-					else if (ImGui::Selectable("Camera Game", m_ActiveCamera == m_GameCamera))
-					{
-						m_ActiveCamera = m_GameCamera;
-						((CameraController*)m_GameCameraEntity.GetComponent<NativeScriptComponent>().Instance)->Active = true;
-					}
-
 					if (ImGui::Checkbox("Vsync", &m_VSync))
 						Application::Instance().GetWindow().SetVSync(m_VSync);
 
@@ -307,8 +296,8 @@ namespace TituEngine
 					xy = std::to_string((int)mousePosDelta.first) + ", " + std::to_string((int)mousePosDelta.second);
 					ImGui::LabelText(xy.c_str(), "MouseDelta: ", "");
 
-					glm::mat4 viewProjectionMatrix = m_ActiveCamera == m_EditorCamera ? m_EditorCamera->GetViewProjectionMatrix() : glm::mat4(1.0f);
-					glm::vec2 mousePosWorld = m_ActiveCamera->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second, viewProjectionMatrix);
+					glm::mat4 viewProjectionMatrix = Camera::GetActiveCamera().GetViewProjectionMatrix();
+					glm::vec2 mousePosWorld = Camera::GetActiveCamera().GetCamera()->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second, viewProjectionMatrix);
 					std::string xyWorld = std::to_string(mousePosWorld.x) + ", " + std::to_string(mousePosWorld.y);
 					ImGui::LabelText(xyWorld.c_str(), "MousePosWorld: ", "");
 
@@ -379,12 +368,7 @@ namespace TituEngine
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
-		glm::mat4 viewProjectionMatrix;
-
-		if (m_ActiveCamera == m_EditorCamera)
-			viewProjectionMatrix = m_EditorCamera->GetViewProjectionMatrix();
-		else
-			viewProjectionMatrix = m_GameCamera->GetProjectionMatrix() * glm::inverse(m_GameCameraEntity.GetComponent<TransformComponent>().GetTransform());
+		glm::mat4 viewProjectionMatrix = Camera::GetActiveCamera().GetViewProjectionMatrix();
 
 		Renderer2D::BeginScene(m_EditorCamera, viewProjectionMatrix);
 		{
