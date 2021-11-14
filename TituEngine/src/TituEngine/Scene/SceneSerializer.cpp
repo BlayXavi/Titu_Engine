@@ -90,24 +90,29 @@ namespace TituEngine
 
 				Entity deserializedEntt = scene->CreateEntity();
 
-				std::string tag = "";
 				YAML::Node tagCNode = entity["TagComponent"];
-				if (tagCNode)
-					TagComponent& tagComponent = deserializedEntt.AddOrGetComponent<TagComponent>(tagCNode.as<TagComponent>());
 
-				TE_CORE_TRACE("Deserializing entity with ID {0}, name = {1}", enttId, tag);
+
+				if (tagCNode)
+				{
+					TagComponent& tagComponent = deserializedEntt.GetComponent<TagComponent>();
+					tagComponent = tagCNode.as<TagComponent>();
+
+					TE_CORE_TRACE("Deserializing entity with ID {0}, name = {1}", enttId, tagComponent.Tag);
+				}
 
 				YAML::Node tcNode = entity["TransformComponent"];
 				if (tcNode)
-					TransformComponent& transformComponent = deserializedEntt.AddOrGetComponent<TransformComponent>(tcNode.as<TransformComponent>());
+					TransformComponent& transformComponent = deserializedEntt.AddComponent<TransformComponent>(tcNode.as<TransformComponent>());
 
 				YAML::Node ccNode = entity["CameraComponent"];
 				if (ccNode)
-					CameraComponent& cameraComponent = deserializedEntt.AddOrGetComponent<CameraComponent>(ccNode.as<CameraComponent>());
+					CameraComponent& cameraComponent = deserializedEntt.AddComponent<CameraComponent>(ccNode.as<CameraComponent>());
 
 				YAML::Node srCNode = entity["SpriteRendererComponent"];
 				if (srCNode)
-					SpriteRendererComponent& spriteRendererComponent = deserializedEntt.AddOrGetComponent<SpriteRendererComponent>(srCNode.as<SpriteRendererComponent>());
+					SpriteRendererComponent& spriteRendererComponent = deserializedEntt.AddComponent<SpriteRendererComponent>(srCNode.as<SpriteRendererComponent>());
+
 			}
 
 			return true;

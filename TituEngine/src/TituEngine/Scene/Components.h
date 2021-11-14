@@ -3,6 +3,7 @@
 #include <glm/vec3.hpp> // glm::mat4
 #include <glm/vec4.hpp> // glm::mat4
 #include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/gtx/matrix_decompose.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -13,15 +14,23 @@
 
 namespace TituEngine
 {
-	struct TagComponent
+	struct Component
+	{
+		Component() = default;
+		Component(const Entity& e) : Owner(e) { }
+	protected:
+		Entity Owner;
+	};
+
+	struct TagComponent : public Component
 	{
 		const char* PrettyName = "Tag Component";
 
 		std::string Tag;
+
 		TagComponent() = default;
-		TagComponent(const TagComponent&) = default;
-		TagComponent(const std::string& tag) :
-			Tag(tag) {}
+		TagComponent(const Entity& e) : Component(e) { };
+		TagComponent(const Entity& e, const std::string& tag) : Component(e), Tag(tag) {}
 
 		operator std::string& () { return Tag; }
 		operator const char* () { return Tag.c_str(); }
@@ -29,19 +38,22 @@ namespace TituEngine
 		bool operator !=(TagComponent other) { return  !(other == *this); }
 	};
 
-	struct TransformComponent
+	struct TransformComponent : public Component
 	{
 		const char* PrettyName = "Transform Component";
 
 		TransformComponent() = default;
-		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(glm::mat4& transform)
-			: Transform(transform) {}
-		TransformComponent(glm::vec3& translation)
-			: Translation(translation)
+		TransformComponent(const Entity& e) : Component(e) { };
+		TransformComponent(const Entity& e, glm::mat4& transform) : Component(e)
 		{
+			glm::quat rotation;
+			glm::vec3 skew;
+			glm::vec4 perspective;
+			glm::decompose(transform, Scale, rotation, Translation, skew, perspective);
+			Rotation = glm::eulerAngles(glm::conjugate(rotation));
 			UpdateTransform();
 		}
+		TransformComponent(const Entity& e, glm::vec3& translation) : Component(e), Translation(translation) { UpdateTransform(); }
 
 		void SetTranslation(glm::vec3& translation) { Translation = translation; UpdateTransform(); }
 		void SetRotation(glm::vec3& rotation) { Rotation = rotation; UpdateTransform(); }
@@ -79,38 +91,41 @@ namespace TituEngine
 		glm::mat4 Transform{ 1.0f };
 	};
 
-	struct SpriteRendererComponent
+	struct SpriteRendererComponent : public Component
 	{
 		const char* PrettyName = "Sprite Renderer Component";
 
 		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f }; //white color
 
 		SpriteRendererComponent() = default;
-		SpriteRendererComponent(const SpriteRendererComponent&) = default;
-		SpriteRendererComponent(glm::vec4& color)
-			: Color(color) {}
+		SpriteRendererComponent(const Entity& e) : Component(e) { };
+		SpriteRendererComponent(const Entity& e, glm::vec4& color) : Component(e), Color(color) {}
 
 		operator glm::vec4& () { return Color; }
 		operator const glm::vec4& () const { return Color; }
 	};
 
-	struct CameraComponent
+	struct CameraComponent : public Component
 	{
 		const char* PrettyName = "Camera Component Component";
 
 		TituEngine::Camera Camera;
 
 		CameraComponent() = default;
-		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(TituEngine::Camera& camera) : Camera(camera) {};
+		CameraComponent(const Entity& e) : Component(e) { };
+		CameraComponent(const Entity& e, const TituEngine::Camera& c) : Component(e), Camera(c) { };
 
 		void SetAsActiveCamera()
 		{
-			TituEngine::Camera::SetActiveCamera(&Camera, m_ViewMatrix);
+			TransformComponent& T = Owner.GetComponent<TransformComponent>();
+			glm::mat4& viewMat = T.GetTransform();
+			TituEngine::Camera::SetActiveCamera(&Camera, &viewMat); 
 		}
 
+		operator TituEngine::Camera& () { return Camera; }
+		operator const TituEngine::Camera& () { return Camera; }
+
 	private:
-		glm::mat4* m_ViewMatrix = nullptr;
 	};
 
 	class TituEditorLayer; //temp
@@ -140,8 +155,11 @@ namespace TituEngine
 	};
 
 	//References and Call the binded NativeScript
-	struct NativeScriptComponent
+	struct NativeScriptComponent : public Component
 	{
+
+		NativeScriptComponent(const Entity& e) : Component(e), Instance(nullptr), InstantiateScript(nullptr), DestroyScript(nullptr) { }
+
 		NativeScript* Instance;
 
 		NativeScript* (*InstantiateScript)();

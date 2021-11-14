@@ -17,8 +17,9 @@ namespace TituEngine
 			ActiveCameraData(const ActiveCameraData& data) = default;
 			ActiveCameraData(Camera* cam, glm::mat4* viewMat) : camera(cam), viewMatrix(viewMat) { }
 
-			const Camera* GetCamera()const { return camera; }
+			Camera* GetCamera() const { return camera; }
 
+			//returns the inversed of the related mat4
 			glm::mat4 GetViewMatrix() { return glm::inverse(*viewMatrix); }
 			glm::mat4 GetViewProjectionMatrix() { return camera->GetProjectionMatrix() * GetViewMatrix(); }
 

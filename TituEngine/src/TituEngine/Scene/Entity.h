@@ -18,14 +18,12 @@ namespace TituEngine
 		~Entity() = default;
 
 		template<typename T, typename ...Args>
-		T& AddOrGetComponent(Args&&... args)
+		T& AddOrGetComponent()
 		{
 			if (!HasComponent<T>())
-				return AddComponent<T>(std::forward<Args>(args)...);
+				return AddComponent<T>( );
 
-			T& c = GetComponent<T>();
-			c = T(std::forward<Args>(args)...);
-			return  c;
+			return GetComponent<T>();
 		}
 
 		template<typename T, typename... Args>
@@ -37,13 +35,7 @@ namespace TituEngine
 				return GetComponent<T>();
 			}
 
-			return m_Scene->m_Registry.emplace<T>(m_EnttHandle, std::forward<Args>(args)...);
-		}
-
-		template<typename T>
-		T& GetComponent()
-		{
-			return m_Scene->m_Registry.get<T>(m_EnttHandle);
+			return m_Scene->m_Registry.emplace<T>(m_EnttHandle, *this, std::forward<Args>(args)...);
 		}
 
 		template<typename T>

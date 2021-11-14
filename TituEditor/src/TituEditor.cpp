@@ -71,13 +71,14 @@ namespace TituEngine
 
 		m_Scene = new Scene();
 		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
-#if 0
+
+#if 0 
 		Entity entity = m_Scene->CreateEntity("Entity1");
 		TransformComponent tc = entity.AddComponent<TransformComponent>();
-		tempSpriteRendererComponent = &entity.AddOrGetComponent<SpriteRendererComponent>();
+		tempSpriteRendererComponent = &entity.AddComponent<SpriteRendererComponent>();
 		Entity entity2 = m_Scene->CreateEntity("Entity2");
 		TransformComponent tc2 = entity2.AddComponent<TransformComponent>(glm::vec3(1.0f, 0.0f, 0.0f));
-		&entity2.AddOrGetComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 0.2f, 1.0f));
+		&entity2.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 0.2f, 1.0f));
 
 		m_GameCameraEntity = m_Scene->CreateEntity("Camera_Entity");
 		TransformComponent& t = m_GameCameraEntity.AddComponent<TransformComponent>();
@@ -309,7 +310,11 @@ namespace TituEngine
 					ImGui::Begin("Editor Camera", &show_EditorCamera);
 
 					ComponentPanelDrawer::DrawCamera(*m_EditorCamera);
-
+					Camera::ActiveCameraData actCamData = Camera::GetActiveCamera();
+					if (actCamData.GetCamera() != m_EditorCamera && ImGui::Button("Retreive camera control"))
+					{
+						m_EditorCamera->SetAsActiveCamera();
+					}
 					ImGui::End();
 				}
 			}
@@ -330,7 +335,7 @@ namespace TituEngine
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
 					//m_CameraController->OnResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
-					m_EditorCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					Camera::GetActiveCamera().GetCamera()->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 					//m_GameCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
@@ -368,13 +373,13 @@ namespace TituEngine
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
-		glm::mat4 viewProjectionMatrix = Camera::GetActiveCamera().GetViewProjectionMatrix();
+		Camera::ActiveCameraData activeCamera = Camera::GetActiveCamera();
+		glm::mat4 viewProjectionMatrix = activeCamera.GetViewProjectionMatrix();
 
-		Renderer2D::BeginScene(m_EditorCamera, viewProjectionMatrix);
+		Renderer2D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
 		{
 			TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
 			m_Scene->OnUpdate(ts);
-			//Renderer2D::DrawQuad({ -1.0f, 0.0f, 1.0f }, m_SubTextures2D[9]->GetSpriteSize(), { 1.0f, 1.0f, 1.0f, 1.0f }, m_SubTextures2D[9], { 1.0f, 1.0f });
 		}
 
 		Renderer2D::EndScene();
