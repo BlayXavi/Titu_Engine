@@ -39,6 +39,4 @@ private:
 private:
 	TransformedCamera* m_EditorCamera = nullptr;
 	float m_CameraSpeed = 1.0f;
-
-	glm::vec3 m_CameraPosition;
 };

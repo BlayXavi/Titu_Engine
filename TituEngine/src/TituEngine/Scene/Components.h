@@ -3,14 +3,13 @@
 #include <glm/vec3.hpp> // glm::mat4
 #include <glm/vec4.hpp> // glm::mat4
 #include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/gtx/matrix_decompose.hpp>
-
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
 #include "TituEngine/Renderer/Camera.h"
 #include "Scene.h"
 #include "Entity.h"
+#include "TituEngine/Math/Math.h"
 
 namespace TituEngine
 {
@@ -46,11 +45,7 @@ namespace TituEngine
 		TransformComponent(const Entity& e) : Component(e) { };
 		TransformComponent(const Entity& e, glm::mat4& transform) : Component(e)
 		{
-			glm::quat rotation;
-			glm::vec3 skew;
-			glm::vec4 perspective;
-			glm::decompose(transform, Scale, rotation, Translation, skew, perspective);
-			Rotation = glm::eulerAngles(glm::conjugate(rotation));
+			Math::DecomposeTransform(transform, Translation, Rotation, Scale);
 			UpdateTransform();
 		}
 		TransformComponent(const Entity& e, glm::vec3& translation) : Component(e), Translation(translation) { UpdateTransform(); }
@@ -63,7 +58,7 @@ namespace TituEngine
 		glm::vec3 GetRotation() const { return Rotation; }
 		glm::vec3 GetScale() const { return Scale; }
 
-		glm::mat4 GetTransform() const { return Transform; }
+		glm::mat4& GetTransform() { return Transform; }
 
 		void SetTranslationAndRotation(glm::vec3& translation, glm::vec3& rotation) { Translation = translation; Rotation = rotation; UpdateTransform(); }
 		void SetTranslationAndRotationAndScale(glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale) { Translation = translation; Rotation = rotation; Scale = scale; UpdateTransform(); }

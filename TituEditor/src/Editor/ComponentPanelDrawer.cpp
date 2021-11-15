@@ -1,14 +1,11 @@
 #include "tepch.h"
 #include "ComponentPanelDrawer.h"
 
-#include <glm/gtx/matrix_decompose.hpp>
-
-
 namespace TituEngine
 {
 	ImGuiTreeNodeFlags ComponentPanelDrawer::m_TreeNodeFlags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_Bullet;
 
-	bool ComponentPanelDrawer::DrawVec3(std::string label, glm::vec3& values, const glm::vec3& resetValue)
+	bool ComponentPanelDrawer::DrawVec3(std::string label, glm::vec3& values, const glm::vec3& resetValue, const float stepValue)
 	{
 		bool modified = false;
 
@@ -37,7 +34,7 @@ namespace TituEngine
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.4f"))
+		if (ImGui::DragFloat("##X", &values.x, stepValue, 0.0f, 0.0f, "%.4f"))
 			modified = true;
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -53,7 +50,7 @@ namespace TituEngine
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.4f"))
+		if (ImGui::DragFloat("##Y", &values.y, stepValue, 0.0f, 0.0f, "%.4f"))
 			modified = true;
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -69,7 +66,7 @@ namespace TituEngine
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.4f"))
+		if (ImGui::DragFloat("##Z", &values.z, stepValue, 0.0f, 0.0f, "%.4f"))
 			modified = true;
 
 		ImGui::PopItemWidth();
@@ -141,13 +138,13 @@ namespace TituEngine
 	void ComponentPanelDrawer::DrawComponentInternal<TransformComponent>(Entity& e, TransformComponent& transform)
 	{
 		glm::vec3 translation = transform.GetTranslation();
-		bool modified = DrawVec3("Position", translation, { 0.0f, 0.0f, 0.0f });
-		glm::vec3 rotation = transform.GetRotation();
-		modified |= DrawVec3("Rotation", rotation, { 0.0f, 0.0f, 0.0f });
+		bool modified = DrawVec3("Position", translation, { 0.0f, 0.0f, 0.0f }, 0.1f);
+		glm::vec3 rotation = glm::degrees(transform.GetRotation());
+		modified |= DrawVec3("Rotation", rotation, { 0.0f, 0.0f, 0.0f }, 0.1f);
 		glm::vec3 scale = transform.GetScale();
-		modified |= DrawVec3("Scale", scale, { 1.0f, 1.0f, 1.0f });
+		modified |= DrawVec3("Scale", scale, { 1.0f, 1.0f, 1.0f }, 01.f);
 		if (modified)
-			transform.SetTranslationAndRotationAndScale(translation, rotation, scale);
+			transform.SetTranslationAndRotationAndScale(translation, glm::radians(rotation), scale);
 	}
 
 	template<>

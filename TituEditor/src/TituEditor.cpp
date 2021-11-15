@@ -5,6 +5,9 @@
 
 #include "Editor/Utils/WindowDialogs.h"
 
+#include "imguizmo/ImGuizmo.h"
+#include <glm/glm/gtc/type_ptr.hpp>
+
 #define QUADS_COUNT 50000
 
 namespace TituEngine
@@ -334,13 +337,32 @@ namespace TituEngine
 					m_ViewPortPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
-					//m_CameraController->OnResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 					Camera::GetActiveCamera().GetCamera()->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
-					//m_GameCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					m_Scene->OnViewportResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
 				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment();
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
+
+				//Viewport Guizmos
+				Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+				if (selectedEntity)
+				{
+					ImGuizmo::SetOrthographic(false);
+					ImGuizmo::SetDrawlist();
+					ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+					TransformComponent& t = selectedEntity.GetComponent<TransformComponent>();
+					glm::mat4& tMatrix = t;
+					Camera::ActiveCameraData& cam = Camera::GetActiveCamera();
+					glm::mat4 view = cam.GetViewMatrix();
+					glm::mat4 projection = cam.GetProjectionMatrix();
+					if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(tMatrix)))
+						t.SetTranslation(glm::vec3(tMatrix[3]));
+					
+				}
+
+
 				ImGui::End(); //viewport
 				ImGui::PopStyleVar();
 			}

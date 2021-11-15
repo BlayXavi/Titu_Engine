@@ -4,8 +4,6 @@
 #include "Shader.h"
 #include "VertexArray.h"
 
-#include <glm/gtx/matrix_decompose.hpp>
-
 namespace TituEngine
 {
 	struct QuadVertex

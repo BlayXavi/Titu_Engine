@@ -21,6 +21,8 @@ namespace TituEngine
 
 			//returns the inversed of the related mat4
 			glm::mat4 GetViewMatrix() { return glm::inverse(*viewMatrix); }
+			glm::mat4 GetViewMatrixNotInversed() { return *viewMatrix; }
+			glm::mat4 GetProjectionMatrix() { return camera->GetProjectionMatrix(); }
 			glm::mat4 GetViewProjectionMatrix() { return camera->GetProjectionMatrix() * GetViewMatrix(); }
 
 		private:
@@ -48,7 +50,13 @@ namespace TituEngine
 		void SetViewportSize(uint32_t width, uint32_t height);
 
 		float GetOrthographicSize() const { return m_OrthographicSize; }
-		void SetOrthographicSize(float size) { m_OrthographicSize = size; RecalculateProjectionMatrix(); }
+		void SetOrthographicSize(float size) 
+		{ 
+			m_OrthographicSize = size; 
+			if (m_OrthographicSize <= 1.0f)
+				m_OrthographicSize = 1.0f;
+			RecalculateProjectionMatrix(); 
+		}
 
 		float GetFOV() { return m_FieldOfView; }
 		void SetFOV(float fov) { m_FieldOfView = fov; RecalculateProjectionMatrix(); }

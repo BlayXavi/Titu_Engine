@@ -28,7 +28,7 @@ namespace TituEngine
 
 		static void DrawCamera(Camera& cam);
 		//static void DrawTransform(glm::mat4& transform);
-		static bool DrawVec3(std::string label, glm::vec3& values, const glm::vec3& resetValue);
+		static bool DrawVec3(std::string label, glm::vec3& values, const glm::vec3& resetValue, const float stepValue);
 
 	private:
 		static ImGuiTreeNodeFlags m_TreeNodeFlags;

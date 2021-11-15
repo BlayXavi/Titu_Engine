@@ -14,8 +14,9 @@ namespace TituEngine
 		virtual ~SceneHierarchyPanel() = default;
 
 		void OnImGuiRender(Scene* const m_Context);
-
 		void DeselectEntity() { m_SelectedEntity = m_EntityNull; }
+
+		Entity GetSelectedEntity() const { return m_SelectedEntity; }
 
 	private:
 		void DrawEntityNode(Entity& e);

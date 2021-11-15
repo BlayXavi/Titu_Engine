@@ -4,19 +4,19 @@
 
 
 EditorOrthographicCameraController::EditorOrthographicCameraController()
-	: m_EditorCamera(nullptr), m_CameraPosition(glm::vec3(0.0f))
+	: m_EditorCamera(nullptr)
 {
 }
 
 EditorOrthographicCameraController::EditorOrthographicCameraController(TransformedCamera* m_EditorCamera)
-	: m_EditorCamera(m_EditorCamera), m_CameraPosition(glm::vec3(0.0f))
+	: m_EditorCamera(m_EditorCamera)
 {
 
 }
 
 
 EditorOrthographicCameraController::EditorOrthographicCameraController(TransformedCamera* camera, const glm::vec3& position)
-	: m_EditorCamera(m_EditorCamera), m_CameraPosition(position)
+	: m_EditorCamera(m_EditorCamera)
 {
 
 }
@@ -28,7 +28,6 @@ EditorOrthographicCameraController::~EditorOrthographicCameraController()
 
 void EditorOrthographicCameraController::SetPosition(const glm::vec3& position)
 {
-	m_CameraPosition = position;
 	m_EditorCamera->SetPosition(position);
 }
 
@@ -39,7 +38,7 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 	if (m_EditorCamera == nullptr)
 		return;
 
-	glm::vec3 pos = m_CameraPosition;
+	glm::vec3 pos = m_EditorCamera->GetPosition();
 	if (Input::IsKeyPressed(TE_KEY_UP) || Input::IsKeyPressed(TE_KEY_W))
 		pos.y += m_CameraSpeed * ts;
 	else if (Input::IsKeyPressed(TE_KEY_DOWN) || Input::IsKeyPressed(TE_KEY_S))
@@ -82,7 +81,7 @@ void EditorOrthographicCameraController::OnEvent(Event& e)
 bool EditorOrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
 	float m_ZoomLevel = m_EditorCamera->GetOrthographicSize();
-	m_ZoomLevel += e.GetYOffset();
+	m_ZoomLevel -= e.GetYOffset();
 	m_EditorCamera->SetOrthographicSize(m_ZoomLevel);
 	return false;
 }
