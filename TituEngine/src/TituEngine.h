@@ -28,3 +28,6 @@
 #include "TituEngine/Scene/Scene.h"
 #include "TituEngine/Scene/Entity.h"
 #include "TituEngine/Scene/Components.h"
+
+#include "Signals.h"
+

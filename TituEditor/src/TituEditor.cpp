@@ -12,6 +12,9 @@
 
 namespace TituEngine
 {
+
+	Signal<> TituEditorLayer::OnSceneLoaded;
+
 	class CameraController : public NativeScript
 	{
 	public:
@@ -27,7 +30,7 @@ namespace TituEngine
 				return;
 
 			TransformComponent& tc = GetComponent<TransformComponent>();
-			glm::vec3 pos = tc.GetTranslation();
+			glm::vec3 pos = tc.Translation;
 
 			float speed = 5.0f;
 
@@ -46,13 +49,13 @@ namespace TituEngine
 
 			pos.z -= Input::GetScrollDelta() * speed * ts;
 
-			tc.SetTranslation(pos);
+			tc.Translation = (pos);
 		}
 	};
 
 
 	TituEditorLayer::TituEditorLayer()
-		: Layer("TituEditor Layer")
+		: Layer("TituEditor Layer"), m_SelectedTransformManipulation(TRANSFORM_MANIPULATION_OPERATION::TRANSLATE)
 	{
 
 		FramebufferSpecs fbSpecs;
@@ -63,11 +66,11 @@ namespace TituEngine
 
 		m_EditorCamera = new TransformedCamera();
 		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
+		m_EditorCamera->SetOrthographicSize(5.0f);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_EditorCamera->SetPosition(m_EditorCamera->GetPosition() + glm::vec3(0.0f, 0.0f, 3.0f));
-		m_EditorCamera->SetNearPlane(-10.0f);
+		m_EditorCamera->SetNearPlane(0.001f);
 		m_EditorCamera->SetFarPlane(10.0f);
-		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_EditorCamera->SetAsActiveCamera();
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
@@ -281,8 +284,6 @@ namespace TituEngine
 						ImGui::Text("Batches [%d]", Renderer2D::RenderStats::GetDrawCalls());
 						ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
 						ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
-
-
 					}
 
 					ImGui::End(); //Render Stats
@@ -329,7 +330,7 @@ namespace TituEngine
 
 				m_ViewPortFocused = ImGui::IsWindowFocused();
 				m_ViewPortHovered = ImGui::IsWindowHovered();
-				Application::Instance().GetImGuiLayer()->SetBlockEvents(!m_ViewPortFocused || !m_ViewPortHovered);
+				Application::Instance().GetImGuiLayer()->SetBlockEvents(!m_ViewPortFocused && !m_ViewPortHovered);
 
 				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 				if (m_ViewPortPanelSize != *(glm::vec2*)&viewportPanelSize)
@@ -357,9 +358,15 @@ namespace TituEngine
 					Camera::ActiveCameraData& cam = Camera::GetActiveCamera();
 					glm::mat4 view = cam.GetViewMatrix();
 					glm::mat4 projection = cam.GetProjectionMatrix();
-					if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(tMatrix)))
-						t.SetTranslation(glm::vec3(tMatrix[3]));
-					
+					if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), (ImGuizmo::OPERATION)(m_SelectedTransformManipulation), ImGuizmo::LOCAL, glm::value_ptr(tMatrix)))
+					{
+						glm::vec3 Translation, Rotation, Scale;
+						Math::DecomposeTransform(tMatrix, Translation, Rotation, Scale);
+						glm::vec3 deltaRot = Rotation - t.Rotation;
+						t.Translation = (Translation);
+						t.Rotation = (t.Rotation + deltaRot);
+						t.Scale = (Scale);
+					}
 				}
 
 
@@ -436,6 +443,19 @@ namespace TituEngine
 		case TE_KEY_S:
 			if (control)
 				SaveScene();
+			break;
+		case TE_KEY_W:
+			if (Input::IsAnyButtonPressed() == false)
+				m_SelectedTransformManipulation = TRANSFORM_MANIPULATION_OPERATION::TRANSLATE;
+			break;
+		case TE_KEY_E:
+			if (Input::IsAnyButtonPressed() == false)
+				m_SelectedTransformManipulation = TRANSFORM_MANIPULATION_OPERATION::ROTATE;
+			break;
+		case TE_KEY_R:
+			if (Input::IsAnyButtonPressed() == false)
+				m_SelectedTransformManipulation = TRANSFORM_MANIPULATION_OPERATION::SCALE;
+			break;
 		}
 
 		return false;
@@ -444,16 +464,19 @@ namespace TituEngine
 	{
 		delete m_Scene;
 		m_Scene = new Scene();
+		OnSceneLoaded.Dispatch();
 	}
 
 	void TituEditorLayer::OpenScene()
 	{
+
 		std::string fName = FileDialogs::OpenFile("Titu Scene (*.tituscene)\0*.tituscene\0");
 		if (!fName.empty())
 		{
 			delete m_Scene;
 			m_Scene = new Scene();
 			SceneSerializer::DeserializeScene(m_Scene, fName);
+			OnSceneLoaded.Dispatch();
 		}
 	}
 

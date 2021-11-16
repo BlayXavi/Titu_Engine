@@ -125,9 +125,9 @@ namespace TituEngine
 		out << YAML::Key << "TransformComponent";
 		
 		out << YAML::BeginMap;
-		out << YAML::Key << "Translation" << YAML::Value << c.GetTranslation();
-		out << YAML::Key << "Rotation" << YAML::Value << c.GetRotation();
-		out << YAML::Key << "Scale" << YAML::Value << c.GetScale();
+		out << YAML::Key << "Translation" << YAML::Value << c.Translation;
+		out << YAML::Key << "Rotation" << YAML::Value << c.Rotation;
+		out << YAML::Key << "Scale" << YAML::Value << c.Scale;
 		out << YAML::EndMap;
 
 		return out;

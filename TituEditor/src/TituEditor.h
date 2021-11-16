@@ -18,6 +18,8 @@
 #include "Editor/SceneHierarchyPanel.h"
 #include "Editor/ComponentPanelDrawer.h"
 
+#include "Editor/Utils/TituEditorUtilities.h"
+
 #define FPS_DEBUG_COUNT 120
 
 namespace TituEngine
@@ -32,7 +34,8 @@ namespace TituEngine
 
 		void OnUpdate(Timestep ts) override;
 		void OnEvent(Event& e) override;
-
+	public:
+		static Signal<> OnSceneLoaded;
 
 	private:
 
@@ -66,7 +69,7 @@ namespace TituEngine
 		bool m_ViewPortHovered = false;
 
 	private:
-
+		TRANSFORM_MANIPULATION_OPERATION m_SelectedTransformManipulation;
 		bool OnKeyPressed(KeyPressedEvent& e);
 
 		void NewScene();

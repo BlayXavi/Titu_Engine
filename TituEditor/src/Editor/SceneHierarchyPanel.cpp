@@ -5,9 +5,21 @@
 #include "TituEngine/Scene/Components.h"
 #include "TituEngine/Core/Log.h"
 
+#include "../TituEditor.h"
+
 namespace TituEngine
 {
 	bool SceneHierarchyPanel::m_OpenSceneHierarchy = true;
+
+	SceneHierarchyPanel::SceneHierarchyPanel()
+	{
+		m_DeselectEntityHandler = TituEditorLayer::OnSceneLoaded.AddListener(this, &SceneHierarchyPanel::DeselectEntity);
+	}
+
+	SceneHierarchyPanel::~SceneHierarchyPanel()
+	{
+		TituEditorLayer::OnSceneLoaded.RemoveListener(m_DeselectEntityHandler);
+	}
 
 	void SceneHierarchyPanel::OnImGuiRender(Scene* const context)
 	{

@@ -10,15 +10,17 @@ namespace TituEngine
 	public:
 		static bool m_OpenSceneHierarchy;
 
-		SceneHierarchyPanel() = default;
-		virtual ~SceneHierarchyPanel() = default;
+		SceneHierarchyPanel();
+		virtual ~SceneHierarchyPanel();
 
 		void OnImGuiRender(Scene* const m_Context);
-		void DeselectEntity() { m_SelectedEntity = m_EntityNull; }
 
 		Entity GetSelectedEntity() const { return m_SelectedEntity; }
 
 	private:
+		int m_DeselectEntityHandler = -1;
+		void DeselectEntity() { m_SelectedEntity = m_EntityNull; }
+
 		void DrawEntityNode(Entity& e);
 		void DrawEntityPanel(Entity& e);
 

@@ -6,7 +6,7 @@
 
 namespace TituEngine::Math
 {
-	bool DecomposeTransform(const glm::mat4 transform, glm::vec3& translation, glm::vec3 rotation, glm::vec3& scale)
+	bool DecomposeTransform(const glm::mat4 transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale)
 	{
 		using namespace glm;
 		using T = float;
@@ -37,7 +37,7 @@ namespace TituEngine::Math
 		translation = vec3(LocalMatrix[3]);
 		LocalMatrix[3] = vec<4, T>(0, 0, 0, LocalMatrix[3].w);
 
-		vec<3, T> Row[3], Pdum3;
+		vec<3, T> Row[3];
 
 		// Now get scale and shear.
 		for (length_t i = 0; i < 3; ++i)

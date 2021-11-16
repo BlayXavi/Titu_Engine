@@ -43,6 +43,11 @@ namespace TituEngine
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
+	bool Input::IsAnyButtonPressed()
+	{
+		return IsButtonMousePressed(0) || IsButtonMousePressed(1) || IsButtonMousePressed(2);
+	}
+
 	void Input::UpdateMouse()
 	{
 		if (m_MainWindow == nullptr)
