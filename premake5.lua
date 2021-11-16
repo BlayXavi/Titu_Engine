@@ -20,6 +20,7 @@ IncludeDir["stb"] = "TituEngine/vendor/stb"
 IncludeDir["entt"] = "TituEngine/vendor/entt/include"
 IncludeDir["yaml"] = "TituEngine/vendor/yaml-cpp/include"
 IncludeDir["ImGuizmo"] = "TituEngine/vendor/imguizmo"
+IncludeDir["TituSignals"] = "TituEngine/vendor/titusignals/include"
 
 --like c++ this will COPY the content of the path here
 group "Dependencies"
@@ -54,7 +55,6 @@ project "TituEngine"
 		"%{prj.name}/vendor/stb/**.cpp",
 		"%{prj.name}/vendor/imguizmo/ImGuizmo.h",
 		"%{prj.name}/vendor/imguizmo/ImGuizmo.cpp"
-
 	}
 
 	defines
@@ -73,7 +73,8 @@ project "TituEngine"
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yaml}",
-		"%{IncludeDir.ImGuizmo}"
+		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.TituSignals}"
 	}
 
 	links
@@ -132,7 +133,8 @@ project "TituEditor"
 		"TituEngine/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.TituSignals}"
 	}
 
 	links

@@ -20,3 +20,6 @@
 [submodule "TituEngine/vendor/imguizmo"]
 	path = TituEngine/vendor/imguizmo
 	url = https://github.com/TheCherno/ImGuizmo.git
+[submodule "TituEngine/vendor/titusignals"]
+	path = TituEngine/vendor/titusignals
+	url = https://github.com/BlayXavi/TituSignals.git
