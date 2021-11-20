@@ -154,7 +154,7 @@ namespace TituEngine
 		Camera& c = cameraComponent.Camera;
 		DrawCamera(c);
 		if (ImGui::Button("Set as ActiveCamera"))
-			e.m_Scene->SetActiveCamera(e, cameraComponent);
+			cameraComponent.SetAsActiveCamera();
 	}
 
 	template<>

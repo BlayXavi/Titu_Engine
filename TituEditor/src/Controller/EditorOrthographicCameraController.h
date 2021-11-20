@@ -24,8 +24,6 @@ public:
 	void OnUpdate(Timestep ts);
 	void OnEvent(Event& e);
 
-	//void OnResize(uint32_t width, uint32_t height);
-
 	void SetCamera(TransformedCamera* camera);
 	void SetPosition(const glm::vec3& position);
 
@@ -34,7 +32,6 @@ public:
 
 private:
 	bool OnMouseScrolled(MouseScrolledEvent& e);
-	bool OnWindowResized(WindowResizeEvent& e);
 
 private:
 	TransformedCamera* m_EditorCamera = nullptr;

@@ -21,8 +21,6 @@ namespace TituEngine
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
-		void SetActiveCamera(Entity& e, struct CameraComponent& cc);
-
 	private:
 		entt::registry m_Registry;
 

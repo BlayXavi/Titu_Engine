@@ -1,6 +1,7 @@
 #include "tepch.h"
 #include "Camera.h"
 #include "TituEngine/Core/Application.h"
+#include <glm/gtx/quaternion.hpp>
 namespace TituEngine
 {
 	Camera::ActiveCameraData Camera::s_ActiveCamera;
@@ -61,7 +62,7 @@ namespace TituEngine
 	//----------TransformedCamera
 
 	TransformedCamera::TransformedCamera()
-		: m_ViewMatrix(1.0f), m_InversedViewMatrix(1.0f), m_ViewProjectionMatrix(1.0f), m_Rotation(0.0f)
+		: m_ViewMatrix(1.0f), m_ViewProjectionMatrix(1.0f), m_Eye(0.0f), m_Center(0.0f)
 	{
 	}
 
@@ -73,22 +74,13 @@ namespace TituEngine
 
 	void TransformedCamera::RecalculateViewProjectionMatrix()
 	{
-		m_ViewProjectionMatrix = m_ProjectionMatrix * m_InversedViewMatrix;
+		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
-	void TransformedCamera::RecalculateViewMatrix()
+	void TransformedCamera::UpdateViewMatrix()
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position) *
-			glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation), glm::vec3(0, 0, 1));
-
-		m_ViewMatrix = transform;
-		m_InversedViewMatrix = glm::inverse(transform);
+		m_Direction = glm::normalize(m_Center - m_Eye);
+		m_ViewMatrix = glm::lookAt(m_Eye, m_Center, glm::vec3(0.0f, 1.0f, 0.0f));
 		RecalculateViewProjectionMatrix();
-	}
-
-	void TransformedCamera::RecalculateProjectionMatrix()
-	{
-		Camera::RecalculateProjectionMatrix();
-		RecalculateViewMatrix();
 	}
 }

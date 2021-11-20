@@ -9,4 +9,10 @@ namespace TituEngine
 		BOUNDS,
 	};
 
+	enum class COORDINATE_SYSTEM
+	{
+		WORLD = 0,
+		LOCAL = 1
+	};
+
 }

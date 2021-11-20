@@ -57,7 +57,6 @@ namespace TituEngine
 	TituEditorLayer::TituEditorLayer()
 		: Layer("TituEditor Layer"), m_SelectedTransformManipulation(TRANSFORM_MANIPULATION_OPERATION::TRANSLATE)
 	{
-
 		FramebufferSpecs fbSpecs;
 		fbSpecs.Width = 1280;
 		fbSpecs.Height = 720;
@@ -65,10 +64,11 @@ namespace TituEngine
 		m_Framebuffer = Framebuffer::Create(fbSpecs);
 
 		m_EditorCamera = new TransformedCamera();
-		m_EditorCamera->SetProjectionType(Camera::Projection::ORTHOGRAPHIC);
+		m_EditorCamera->SetProjectionType(Camera::Projection::PERSPECTIVE);
+		m_EditorCamera->SetFOV(90.0f);
 		m_EditorCamera->SetOrthographicSize(5.0f);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
-		m_EditorCamera->SetPosition(m_EditorCamera->GetPosition() + glm::vec3(0.0f, 0.0f, 3.0f));
+		m_EditorCamera->LookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f));
 		m_EditorCamera->SetNearPlane(0.001f);
 		m_EditorCamera->SetFarPlane(10.0f);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
@@ -135,7 +135,7 @@ namespace TituEngine
 		{
 			static bool show_rendererStats = true;
 			static bool show_MouseStats = false;
-			static bool show_EditorCamera = false;
+			static bool show_EditorCamera = true;
 			static bool show_ImGuiDemo = false;
 			//Dockspace Init
 			{
@@ -319,6 +319,16 @@ namespace TituEngine
 					{
 						m_EditorCamera->SetAsActiveCamera();
 					}
+
+					glm::mat4 matrix = m_EditorCamera->GetViewMatrix();
+					glm::vec3 vec = m_EditorCamera->GetPosition();
+					ComponentPanelDrawer::DrawVec3("Position: ", vec, glm::vec3(0.0f), 1.0f);
+					vec = glm::normalize(matrix[0]);
+					ComponentPanelDrawer::DrawVec3("Right: ", vec, glm::vec3(0.0f), 1.0f);
+					vec = glm::normalize(matrix[1]);
+					ComponentPanelDrawer::DrawVec3("Up: ", vec, glm::vec3(0.0f), 1.0f);
+					vec = m_EditorCamera->GetDirection();
+					ComponentPanelDrawer::DrawVec3("Forward: ", vec, glm::vec3(0.0f), 1.0f);
 					ImGui::End();
 				}
 			}
@@ -358,7 +368,7 @@ namespace TituEngine
 					Camera::ActiveCameraData& cam = Camera::GetActiveCamera();
 					glm::mat4 view = cam.GetViewMatrix();
 					glm::mat4 projection = cam.GetProjectionMatrix();
-					if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), (ImGuizmo::OPERATION)(m_SelectedTransformManipulation), ImGuizmo::LOCAL, glm::value_ptr(tMatrix)))
+					if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), (ImGuizmo::OPERATION)(m_SelectedTransformManipulation), (ImGuizmo::MODE)(m_SelectedCoordinateSystem), glm::value_ptr(tMatrix)))
 					{
 						glm::vec3 Translation, Rotation, Scale;
 						Math::DecomposeTransform(tMatrix, Translation, Rotation, Scale);
@@ -455,6 +465,10 @@ namespace TituEngine
 		case TE_KEY_R:
 			if (Input::IsAnyButtonPressed() == false)
 				m_SelectedTransformManipulation = TRANSFORM_MANIPULATION_OPERATION::SCALE;
+			break;
+		case TE_KEY_L:
+			if (Input::IsAnyButtonPressed() == false)
+				m_SelectedCoordinateSystem = (m_SelectedCoordinateSystem == COORDINATE_SYSTEM::LOCAL ? COORDINATE_SYSTEM::WORLD : COORDINATE_SYSTEM::LOCAL);
 			break;
 		}
 

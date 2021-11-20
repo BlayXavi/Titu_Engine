@@ -70,6 +70,7 @@ namespace TituEngine
 
 	private:
 		TRANSFORM_MANIPULATION_OPERATION m_SelectedTransformManipulation;
+		COORDINATE_SYSTEM m_SelectedCoordinateSystem;
 		bool OnKeyPressed(KeyPressedEvent& e);
 
 		void NewScene();

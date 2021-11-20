@@ -59,11 +59,4 @@ namespace TituEngine
 				cc.Camera.SetViewportSize(width, height);
 			});
 	}
-
-	void Scene::SetActiveCamera(Entity& e, CameraComponent& cc)
-	{
-		TransformComponent& t = e.GetComponent<TransformComponent>();
-		cc.Camera.SetActiveCamera(&cc.Camera, t);
-	}
 }
-

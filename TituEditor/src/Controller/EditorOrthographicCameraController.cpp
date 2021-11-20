@@ -41,15 +41,14 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 	glm::vec3 pos = m_EditorCamera->GetPosition();
 	if (Input::IsAnyButtonPressed())
 	{
-		if (Input::IsKeyPressed(TE_KEY_UP) || Input::IsKeyPressed(TE_KEY_W))
-			pos.y += m_CameraSpeed * ts;
-		else if (Input::IsKeyPressed(TE_KEY_DOWN) || Input::IsKeyPressed(TE_KEY_S))
-			pos.y -= m_CameraSpeed * ts;
-
-		if (Input::IsKeyPressed(TE_KEY_RIGHT) || Input::IsKeyPressed(TE_KEY_D))
-			pos.x += m_CameraSpeed * ts;
-		else if (Input::IsKeyPressed(TE_KEY_LEFT) || Input::IsKeyPressed(TE_KEY_A))
-			pos.x -= m_CameraSpeed * ts;
+		if (Input::IsKeyPressed(TE_KEY_W))
+		{
+			pos += (m_EditorCamera->GetDirection() * (float)ts);
+		}
+		if (Input::IsKeyPressed(TE_KEY_S))
+		{
+			pos -= m_EditorCamera->GetDirection() * (float)ts;
+		}
 	}
 
 	if (Input::IsButtonMousePressed(TE_MOUSE_BUTTON_3))
@@ -57,8 +56,9 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 		pos.x += Input::MouseDeltaX() * ts;
 		pos.y += Input::MouseDeltaY() * -ts;
 	}
-
+	
 	SetPosition(pos);
+
 }
 
 void EditorOrthographicCameraController::SetCamera(TransformedCamera* camera)
@@ -70,16 +70,8 @@ void EditorOrthographicCameraController::OnEvent(Event& e)
 {
 	EventDispatcher eDispatcher(e);
 
-	//eDispatcher.Dispatch<MouseScrolledEvent>(std::bind(&EditorOrthographicCameraController::OnMouseScrolled, this, std::placeholders::_1));
 	eDispatcher.Dispatch<MouseScrolledEvent>([this](MouseScrolledEvent mse)->bool {return this->OnMouseScrolled(mse); });
-	//eDispatcher.Dispatch<MouseScrolledEvent>(TE_BIND_EVENT_FN(OnMouseScrolled(e)));
 }
-
-//void EditorOrthographicCameraController::OnResize(uint32_t width, uint32_t height)
-//{
-//	float newAspectRatio = (float)width / (float)height;
-//	m_EditorCamera->SetViewportSize(width, height);
-//}
 
 bool EditorOrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
@@ -88,9 +80,4 @@ bool EditorOrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	m_EditorCamera->SetOrthographicSize(m_ZoomLevel);
 	return false;
 }
-//
-//bool EditorOrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
-//{
-//	OnResize(e.GetWidth(), e.GetHeight());
-//	return false;
-//}
+

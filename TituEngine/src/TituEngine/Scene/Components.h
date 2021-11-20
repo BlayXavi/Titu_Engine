@@ -111,7 +111,7 @@ namespace TituEngine
 		{
 			TransformComponent& T = Owner.GetComponent<TransformComponent>();
 			glm::mat4& viewMat = T.GetTransform();
-			TituEngine::Camera::SetActiveCamera(&Camera, &viewMat);
+			TituEngine::Camera::SetActiveCamera(&Camera, &viewMat, true);
 		}
 
 		operator TituEngine::Camera& () { return Camera; }
