@@ -78,12 +78,12 @@ namespace YAML
 	{
 		static bool decode(const Node& node, TituEngine::CameraComponent& component)
 		{
-			component.Camera.SetFOV(node["AspectRatio"].as<float>());
-			component.Camera.SetFOV(node["NearPlane"].as<float>());
-			component.Camera.SetFOV(node["FarPlane"].as<float>());
+			component.Camera.SetAspectRatio(node["AspectRatio"].as<float>());
+			component.Camera.SetNearPlane(node["NearPlane"].as<float>());
+			component.Camera.SetFarPlane(node["FarPlane"].as<float>());
 			component.Camera.SetFOV(node["Fov"].as<float>());
-			component.Camera.SetFOV(node["OrthographicSize"].as<float>());
-			component.Camera.SetFOV(node["ProjectionType"].as<float>());
+			component.Camera.SetOrthographicSize(node["OrthographicSize"].as<float>());
+			component.Camera.SetProjectionType((TituEngine::Camera::Projection)node["ProjectionType"].as<int>());
 			return true;
 		}
 	};
@@ -125,9 +125,9 @@ namespace TituEngine
 		out << YAML::Key << "TransformComponent";
 		
 		out << YAML::BeginMap;
-		out << YAML::Key << "Translation" << YAML::Value << c.Translation;
-		out << YAML::Key << "Rotation" << YAML::Value << c.Rotation;
-		out << YAML::Key << "Scale" << YAML::Value << c.Scale;
+		out << YAML::Key << "Translation" << YAML::Value << c.GetTranslation();
+		out << YAML::Key << "Rotation" << YAML::Value << c.GetRotation();
+		out << YAML::Key << "Scale" << YAML::Value << c.GetScale();
 		out << YAML::EndMap;
 
 		return out;

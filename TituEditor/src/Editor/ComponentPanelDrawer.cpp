@@ -83,7 +83,8 @@ namespace TituEngine
 	void ComponentPanelDrawer::DrawCamera(Camera& c)
 	{
 		const char* projectionTypes[] = { "Orothographic", "Perspective" };
-		static int currentItemSelected = (int)c.GetProjectionType();
+		static int currentItemSelected = 0;
+		currentItemSelected = (int)c.GetProjectionType();
 
 		if (ImGui::Combo("Projection Type", &currentItemSelected, projectionTypes, 2))
 			c.SetProjectionType((Camera::Projection)currentItemSelected);
@@ -137,11 +138,11 @@ namespace TituEngine
 	template<>
 	void ComponentPanelDrawer::DrawComponentInternal<TransformComponent>(Entity& e, TransformComponent& transform)
 	{
-		glm::vec3 translation = transform.Translation;
+		glm::vec3 translation = transform.GetTranslation();
 		bool modified = DrawVec3("Position", translation, { 0.0f, 0.0f, 0.0f }, 0.1f);
-		glm::vec3 rotation = glm::degrees(transform.Rotation);
+		glm::vec3 rotation = glm::degrees(transform.GetRotation());
 		modified |= DrawVec3("Rotation", rotation, { 0.0f, 0.0f, 0.0f }, 0.1f);
-		glm::vec3 scale = transform.Scale;
+		glm::vec3 scale = transform.GetScale();
 		modified |= DrawVec3("Scale", scale, { 1.0f, 1.0f, 1.0f }, 01.f);
 		if (modified)
 			transform.SetTranslationAndRotationAndScale(translation, glm::radians(rotation), scale);

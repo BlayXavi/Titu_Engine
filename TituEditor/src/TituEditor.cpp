@@ -30,7 +30,7 @@ namespace TituEngine
 				return;
 
 			TransformComponent& tc = GetComponent<TransformComponent>();
-			glm::vec3 pos = tc.Translation;
+			glm::vec3 pos = tc.GetTranslation();
 
 			float speed = 5.0f;
 
@@ -49,7 +49,7 @@ namespace TituEngine
 
 			pos.z -= Input::GetScrollDelta() * speed * ts;
 
-			tc.Translation = (pos);
+			tc.GetTranslation() = (pos);
 		}
 	};
 
@@ -329,6 +329,7 @@ namespace TituEngine
 					ComponentPanelDrawer::DrawVec3("Up: ", vec, glm::vec3(0.0f), 1.0f);
 					vec = m_EditorCamera->GetDirection();
 					ComponentPanelDrawer::DrawVec3("Forward: ", vec, glm::vec3(0.0f), 1.0f);
+
 					ImGui::End();
 				}
 			}
@@ -356,7 +357,7 @@ namespace TituEngine
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
 
 				//Viewport Guizmos
-				m_CursorOverGuizmo = ImGuizmo::IsOver();
+				m_UsingGuizmo = ImGuizmo::IsUsing();
 				Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 				if (selectedEntity)
 				{
@@ -364,20 +365,41 @@ namespace TituEngine
 					ImGuizmo::SetDrawlist();
 					ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
-					TransformComponent& t = selectedEntity.GetComponent<TransformComponent>();
-					glm::mat4& tMatrix = t;
-					Camera::ActiveCameraData& cam = Camera::GetActiveCamera();
-					glm::mat4 view = cam.GetViewMatrix();
-					glm::mat4 projection = cam.GetProjectionMatrix();
-					
-					if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), (ImGuizmo::OPERATION)(m_SelectedTransformManipulation), (ImGuizmo::MODE)(m_SelectedCoordinateSystem), glm::value_ptr(tMatrix)))
+					if (selectedEntity.HasComponent<TransformComponent>())
 					{
-						glm::vec3 Translation, Rotation, Scale;
-						Math::DecomposeTransform(tMatrix, Translation, Rotation, Scale);
-						glm::vec3 deltaRot = Rotation - t.Rotation;
-						t.Translation = (Translation);
-						t.Rotation = (t.Rotation + deltaRot);
-						t.Scale = (Scale);
+						TransformComponent& t = selectedEntity.GetComponent<TransformComponent>();
+						glm::mat4& tMatrix = t;
+						Camera::ActiveCameraData& cam = Camera::GetActiveCamera();
+						glm::mat4 view = cam.GetViewMatrix();
+						glm::mat4 projection = cam.GetProjectionMatrix();
+
+						float* snapValue = nullptr;
+						if (Input::IsKeyPressed(TE_KEY_LEFT_CONTROL))
+						{
+							switch (m_SelectedTransformManipulation)
+							{
+							case TRANSFORM_MANIPULATION_OPERATION::TRANSLATE:
+								snapValue = &m_SnapValues.TranslationSnap;
+								break;
+							case TRANSFORM_MANIPULATION_OPERATION::ROTATE:
+								snapValue = &m_SnapValues.RotationSnap;
+								break;
+							case TRANSFORM_MANIPULATION_OPERATION::SCALE:
+								snapValue = &m_SnapValues.ScaleSnap;
+								break;
+							}
+
+						}
+
+						ImGuizmo::MODE guizmoMode = (ImGuizmo::MODE)(m_SelectedCoordinateSystem);
+						guizmoMode = m_SelectedTransformManipulation == (TRANSFORM_MANIPULATION_OPERATION::SCALE) ? ImGuizmo::LOCAL : (ImGuizmo::MODE)m_SelectedCoordinateSystem;
+						if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), (ImGuizmo::OPERATION)(m_SelectedTransformManipulation), guizmoMode, glm::value_ptr(tMatrix), nullptr, snapValue))
+						{
+							glm::vec3 Translation, Rotation, Scale;
+							Math::DecomposeTransform(tMatrix, Translation, Rotation, Scale);
+							glm::vec3 deltaRot = Rotation - t.GetRotation();
+							t.SetTranslationAndRotationAndScale(Translation, t.GetRotation() + deltaRot, Scale);
+						}
 					}
 				}
 
@@ -407,7 +429,7 @@ namespace TituEngine
 
 		currentTimeStep = ts;
 
-		if (m_ViewPortFocused && !m_CursorOverGuizmo)
+		if (m_ViewPortFocused && !m_UsingGuizmo)
 			m_CameraController->OnUpdate(ts);
 
 		m_Framebuffer->Bind();
@@ -476,6 +498,7 @@ namespace TituEngine
 
 		return false;
 	}
+
 	void TituEditorLayer::NewScene()
 	{
 		delete m_Scene;

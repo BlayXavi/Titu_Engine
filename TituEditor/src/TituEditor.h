@@ -68,7 +68,9 @@ namespace TituEngine
 		bool m_ViewPortFocused = false;
 		bool m_ViewPortHovered = false;
 
-		bool m_CursorOverGuizmo = false;
+		bool m_UsingGuizmo = false;
+
+		EditorSnapValues m_SnapValues;
 
 	private:
 		TRANSFORM_MANIPULATION_OPERATION m_SelectedTransformManipulation;
@@ -78,6 +80,5 @@ namespace TituEngine
 		void NewScene();
 		void OpenScene();
 		void SaveScene();
-
 	};
 }

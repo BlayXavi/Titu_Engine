@@ -52,24 +52,34 @@ namespace TituEngine
 		glm::mat4& GetTransform() { return Transform; }
 
 		void SetTranslationAndRotation(glm::vec3& translation, glm::vec3& rotation) { Translation = translation; Rotation = rotation; UpdateTransform(); }
-		void SetTranslationAndRotationAndScale(glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale) { Translation = translation; Rotation = rotation; Scale = scale; UpdateTransform(); }
+		void SetTranslationAndRotationAndScale(glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale) 
+		{
+			Translation = translation; 
+			Rotation = rotation; 
+			Scale = scale; 
+			UpdateTransform(); 
+		}
+
 		void UpdateMatrix(const glm::mat4& transform)
 		{
 			Math::DecomposeTransform(transform, Translation, Rotation, Scale);
 			UpdateTransform();
 		}
 
+		glm::vec3 GetTranslation() const { return Translation; }
+		glm::vec3 GetRotation() const { return Rotation; }
+		glm::vec3 GetScale() const { return Scale; }
+
 		operator glm::mat4& () { return Transform; }
 		operator glm::mat4* () { return &Transform; }
 		operator const glm::mat4& () const { return Transform; }
 		operator const glm::mat4* () const { return &Transform; }
 
+	private:
+
 		glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
-
-	private:
-
 
 		void UpdateTransform()
 		{

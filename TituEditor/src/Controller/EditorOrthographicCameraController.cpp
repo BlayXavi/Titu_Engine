@@ -42,7 +42,6 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 	if (Input::IsAnyButtonPressed(mouseButton))
 	{
 		glm::vec3 eye = m_EditorCamera->GetPosition();
-
 		glm::vec3 center = m_EditorCamera->GetCenter();
 		glm::vec3 dir = m_EditorCamera->GetDirection();
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -80,14 +79,12 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 		{
 			center += right * mouseDelta.first * speedDelta;
 			center += up * mouseDelta.second * speedDelta;
-			m_EditorCamera->LookAt(eye, center);
 		}
 		else if (mouseButton == 1)
 		{
 			//orbit (like span), invert movement
 			eye -= right * mouseDelta.first * speedDelta;
 			eye -= up * mouseDelta.second * speedDelta;
-			m_EditorCamera->LookAt(eye, center);
 		}
 		else if (mouseButton == 2)
 		{
@@ -97,11 +94,9 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 
 			eye -= up * mouseDelta.second * speedDelta;
 			center -= up * mouseDelta.second * speedDelta;
-
-			m_EditorCamera->LookAt(eye, center);
 		}
-		else
-			SetPosition(eye);
+
+		m_EditorCamera->LookAt(eye, center);
 	}
 }
 
@@ -119,9 +114,23 @@ void EditorOrthographicCameraController::OnEvent(Event& e)
 
 bool EditorOrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
-	float m_ZoomLevel = m_EditorCamera->GetOrthographicSize();
-	m_ZoomLevel -= e.GetYOffset();
-	m_EditorCamera->SetOrthographicSize(m_ZoomLevel);
+	if (m_EditorCamera->GetProjectionType() == Camera::Projection::ORTHOGRAPHIC)
+	{
+		float m_ZoomLevel = m_EditorCamera->GetOrthographicSize();
+		m_ZoomLevel -= e.GetYOffset();
+		m_EditorCamera->SetOrthographicSize(m_ZoomLevel);
+	}
+	else
+	{
+		glm::vec3 eye = m_EditorCamera->GetPosition();
+		glm::vec3 center = m_EditorCamera->GetCenter();
+		glm::vec3 dir = m_EditorCamera->GetDirection();
+
+		eye += dir * e.GetYOffset();
+		center += dir * e.GetYOffset();
+
+		m_EditorCamera->LookAt(eye, center);
+	}
 	return false;
 }
 

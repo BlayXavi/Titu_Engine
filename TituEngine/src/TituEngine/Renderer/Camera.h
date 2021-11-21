@@ -47,6 +47,7 @@ namespace TituEngine
 		glm::vec3 ClipSpacePosToWorldSpace(const float& x, const float& y, const glm::mat4& model) const;
 
 		const float GetAspectRatio() const { return m_AspectRatio; }
+		void SetAspectRatio(float aspectRatio) { m_AspectRatio = aspectRatio; }
 
 		virtual void SetOrthographicProjection(float left, float right, float up, float down);
 		void SetViewportSize(uint32_t width, uint32_t height);

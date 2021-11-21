@@ -36,7 +36,7 @@ namespace TituEngine
 	//-------------------------------------------ORHTO CAMERA-------------------------------------
 	void Camera::SetViewportSize(uint32_t width, uint32_t height)
 	{
-		m_AspectRatio = (float)width / float(height);
+		SetAspectRatio((float)width / float(height));
 		RecalculateProjectionMatrix();
 	}
 
