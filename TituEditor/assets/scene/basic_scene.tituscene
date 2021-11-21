@@ -2,27 +2,55 @@ Scene: Scene Name
 Entities:
   - Entity: 123
     TagComponent:
-      Tag: Empty_Entity
+      Tag: Camera_4
     TransformComponent:
-      Translation: [0.351020336, 0.499806851, -0.349474221]
-      Rotation: [1.57079613, 0.785398245, -4.21468513e-08]
-      Scale: [0.999999881, 0.999950647, 0.999983311]
-    SpriteRendererComponent:
-      Color: [0.451476812, 0.451472282, 0.451472282, 1]
-  - Entity: 123
-    TagComponent:
-      Tag: Camera_Entity
-    TransformComponent:
-      Translation: [0, 0, 3]
-      Rotation: [0, -0, 0]
+      Translation: [0.311719716, 0.315172821, -3.39108777]
+      Rotation: [-3.14159203, -0.0141412057, -3.1415925]
       Scale: [1, 1, 1]
     CameraComponent:
-      AspectRatio: 1.15101647
+      AspectRatio: 1
       NearPlane: 0.00100000005
       FarPlane: 100
       Fov: 90
-      OrthographicSize: 1
+      OrthographicSize: 4
       ProjectionType: 0
+  - Entity: 123
+    TagComponent:
+      Tag: Camera_3
+    TransformComponent:
+      Translation: [1.2508477, 0.935634851, 1.36870837]
+      Rotation: [-0.414172024, 0.403773308, 0]
+      Scale: [1, 1, 1.00000012]
+    CameraComponent:
+      AspectRatio: 1
+      NearPlane: 0.00100000005
+      FarPlane: 100
+      Fov: 90
+      OrthographicSize: 5
+      ProjectionType: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Camera_2
+    TransformComponent:
+      Translation: [-0.333847255, 0.918329835, 1.73804891]
+      Rotation: [-0.401425719, -0.396149606, 0]
+      Scale: [1, 0.999999881, 0.99999994]
+    CameraComponent:
+      AspectRatio: 1
+      NearPlane: 0.00100000005
+      FarPlane: 100
+      Fov: 90
+      OrthographicSize: 9
+      ProjectionType: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Entity1
+    TransformComponent:
+      Translation: [0.703615129, 0, 0.00361489505]
+      Rotation: [0, 0.785398245, 0]
+      Scale: [0.999999881, 1, 0.999999881]
+    SpriteRendererComponent:
+      Color: [0.172995806, 0.172994077, 0.172994077, 1]
   - Entity: 123
     TagComponent:
       Tag: Entity2
@@ -34,10 +62,24 @@ Entities:
       Color: [0.556960285, 0.556962013, 0.55695641, 1]
   - Entity: 123
     TagComponent:
-      Tag: Entity1
+      Tag: Camera_Entity
     TransformComponent:
-      Translation: [0.703615129, 0, 0.00361489505]
-      Rotation: [0, 0.785398245, 0]
-      Scale: [0.999999881, 1, 0.999999881]
+      Translation: [0.186742619, 1.5, 1.94675982]
+      Rotation: [-0.4647533, -0.0575962029, -3.0260459e-08]
+      Scale: [0.999993443, 1.00000012, 1]
+    CameraComponent:
+      AspectRatio: 1.08518875
+      NearPlane: 0.00100000005
+      FarPlane: 100
+      Fov: 90
+      OrthographicSize: 1
+      ProjectionType: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [0.351020336, 0.499806851, -0.349474221]
+      Rotation: [1.57079613, 0.785398245, -4.21468513e-08]
+      Scale: [0.999999881, 0.999950647, 0.999983251]
     SpriteRendererComponent:
-      Color: [0.172995806, 0.172994077, 0.172994077, 1]
+      Color: [0.451476812, 0.451472282, 0.451472282, 1]
