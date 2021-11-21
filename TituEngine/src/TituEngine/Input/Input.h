@@ -13,6 +13,7 @@ namespace TituEngine
 		static bool IsKeyPressed(int keycode);
 		static bool IsButtonMousePressed(int keycode);
 		static bool IsAnyButtonPressed();
+		static bool IsAnyButtonPressed(int& mouse);
 
 		static float MouseDeltaX() { return m_MouseDeltaX; }
 		static float MouseDeltaY() { return m_MouseDeltaY; }

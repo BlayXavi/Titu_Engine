@@ -38,27 +38,71 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 	if (m_EditorCamera == nullptr)
 		return;
 
-	glm::vec3 pos = m_EditorCamera->GetPosition();
-	if (Input::IsAnyButtonPressed())
+	int mouseButton = -1;
+	if (Input::IsAnyButtonPressed(mouseButton))
 	{
+		glm::vec3 eye = m_EditorCamera->GetPosition();
+
+		glm::vec3 center = m_EditorCamera->GetCenter();
+		glm::vec3 dir = m_EditorCamera->GetDirection();
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 right = glm::normalize(glm::cross(up, dir));
+		up = glm::normalize(glm::cross(dir, right));
+
+		float speedDelta = m_CameraSpeed * ts;
+
+		if (Input::IsKeyPressed(TE_KEY_LEFT_SHIFT))
+			speedDelta *= 3.0f;
+
 		if (Input::IsKeyPressed(TE_KEY_W))
 		{
-			pos += (m_EditorCamera->GetDirection() * (float)ts);
+			eye += dir * speedDelta;
+			center += dir * speedDelta;
 		}
 		if (Input::IsKeyPressed(TE_KEY_S))
 		{
-			pos -= m_EditorCamera->GetDirection() * (float)ts;
+			eye -= dir * speedDelta;
+			center -= dir * speedDelta;
 		}
-	}
+		if (Input::IsKeyPressed(TE_KEY_A))
+		{
+			eye += right * speedDelta;
+			center += right * speedDelta;
+		}
+		if (Input::IsKeyPressed(TE_KEY_D))
+		{
+			eye -= right * speedDelta;
+			center -= right * speedDelta;
+		}
 
-	if (Input::IsButtonMousePressed(TE_MOUSE_BUTTON_3))
-	{
-		pos.x += Input::MouseDeltaX() * ts;
-		pos.y += Input::MouseDeltaY() * -ts;
-	}
-	
-	SetPosition(pos);
+		std::pair<float, float> mouseDelta = Input::GetMouseDeltaPosition();
+		if (mouseButton == 0)
+		{
+			center += right * mouseDelta.first * speedDelta;
+			center += up * mouseDelta.second * speedDelta;
+			m_EditorCamera->LookAt(eye, center);
+		}
+		else if (mouseButton == 1)
+		{
+			//orbit (like span), invert movement
+			eye -= right * mouseDelta.first * speedDelta;
+			eye -= up * mouseDelta.second * speedDelta;
+			m_EditorCamera->LookAt(eye, center);
+		}
+		else if (mouseButton == 2)
+		{
+			//span, invert movement
+			eye -= right * mouseDelta.first * speedDelta;
+			center -= right * mouseDelta.first * speedDelta;
 
+			eye -= up * mouseDelta.second * speedDelta;
+			center -= up * mouseDelta.second * speedDelta;
+
+			m_EditorCamera->LookAt(eye, center);
+		}
+		else
+			SetPosition(eye);
+	}
 }
 
 void EditorOrthographicCameraController::SetCamera(TransformedCamera* camera)

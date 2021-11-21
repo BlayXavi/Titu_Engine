@@ -120,10 +120,11 @@ namespace TituEngine
 			UpdateViewMatrix();
 		}
 
-		const glm::vec3& GetPosition() const { return m_Eye; }
-		const glm::vec3& GetDirection() const { return m_Direction; }
-		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
+		glm::vec3 GetPosition() const { return m_Eye; }
+		glm::vec3 GetCenter() const { return m_Center; }
+		glm::vec3 GetDirection() const { return m_Direction; }
+		glm::mat4 GetViewMatrix() const { return m_ViewMatrix; }
+		glm::mat4 GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
 
 		virtual void SetOrthographicProjection(float left, float right, float up, float down) override;

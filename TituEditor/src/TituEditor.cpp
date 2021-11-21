@@ -356,6 +356,7 @@ namespace TituEngine
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
 
 				//Viewport Guizmos
+				m_CursorOverGuizmo = ImGuizmo::IsOver();
 				Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 				if (selectedEntity)
 				{
@@ -368,6 +369,7 @@ namespace TituEngine
 					Camera::ActiveCameraData& cam = Camera::GetActiveCamera();
 					glm::mat4 view = cam.GetViewMatrix();
 					glm::mat4 projection = cam.GetProjectionMatrix();
+					
 					if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), (ImGuizmo::OPERATION)(m_SelectedTransformManipulation), (ImGuizmo::MODE)(m_SelectedCoordinateSystem), glm::value_ptr(tMatrix)))
 					{
 						glm::vec3 Translation, Rotation, Scale;
@@ -405,7 +407,7 @@ namespace TituEngine
 
 		currentTimeStep = ts;
 
-		if (m_ViewPortFocused)
+		if (m_ViewPortFocused && !m_CursorOverGuizmo)
 			m_CameraController->OnUpdate(ts);
 
 		m_Framebuffer->Bind();

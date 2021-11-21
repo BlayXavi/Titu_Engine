@@ -48,6 +48,26 @@ namespace TituEngine
 		return IsButtonMousePressed(0) || IsButtonMousePressed(1) || IsButtonMousePressed(2);
 	}
 
+	bool Input::IsAnyButtonPressed(int& mouse)
+	{
+		if (IsButtonMousePressed(0))
+		{
+			mouse = 0;
+			return true;
+		}
+		if (IsButtonMousePressed(1))
+		{
+			mouse = 1;
+			return true;
+		}
+		if (IsButtonMousePressed(2))
+		{
+			mouse = 2;
+			return true;
+		}
+		return false;
+	}
+
 	void Input::UpdateMouse()
 	{
 		if (m_MainWindow == nullptr)
