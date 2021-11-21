@@ -137,6 +137,7 @@ namespace TituEngine
 			static bool show_MouseStats = false;
 			static bool show_EditorCamera = true;
 			static bool show_ImGuiDemo = false;
+			static bool show_SnapValues = false;
 			//Dockspace Init
 			{
 				static bool dockspaceOpen = true;
@@ -218,6 +219,7 @@ namespace TituEngine
 					ImGui::MenuItem("Renderer stats", NULL, &show_rendererStats);
 					ImGui::MenuItem("Mouse stats", NULL, &show_MouseStats);
 					ImGui::MenuItem("Editor Camera Setigns", NULL, &show_EditorCamera);
+					ImGui::MenuItem("Transform Snap Values", NULL, &show_SnapValues);
 
 
 
@@ -329,6 +331,20 @@ namespace TituEngine
 					ComponentPanelDrawer::DrawVec3("Up: ", vec, glm::vec3(0.0f), 1.0f);
 					vec = m_EditorCamera->GetDirection();
 					ComponentPanelDrawer::DrawVec3("Forward: ", vec, glm::vec3(0.0f), 1.0f);
+
+					ImGui::End();
+				}
+			}
+
+			//Snap Values
+			{
+				if (show_SnapValues)
+				{
+					ImGui::Begin("Transform Snap Values", &show_SnapValues);
+
+					ImGui::DragFloat("Transform Snap: ", &m_SnapValues.TranslationSnap, 1.0f, 0.01f, 50.0f);
+					ImGui::DragFloat("Rotation Snap: ", &m_SnapValues.RotationSnap, 1.0f, 0.01f, 50.0f);
+					ImGui::DragFloat("Scale Snap: ", &m_SnapValues.ScaleSnap, 1.0f, 0.01f, 50.0f);
 
 					ImGui::End();
 				}
