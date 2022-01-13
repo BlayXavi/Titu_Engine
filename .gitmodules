@@ -17,9 +17,9 @@
 [submodule "TituEngine/vendor/yaml-cpp"]
 	path = TituEngine/vendor/yaml-cpp
 	url = https://github.com/TheCherno/yaml-cpp.git
-[submodule "TituEngine/vendor/imguizmo"]
-	path = TituEngine/vendor/imguizmo
-	url = https://github.com/TheCherno/ImGuizmo.git
 [submodule "TituEngine/vendor/titusignals"]
 	path = TituEngine/vendor/titusignals
 	url = https://github.com/BlayXavi/TituSignals.git
+[submodule "TituEngine/vendor/imguizmo"]
+	path = TituEngine/vendor/imguizmo
+	url = https://github.com/TheCherno/ImGuizmo.git
