@@ -524,7 +524,6 @@ namespace TituEngine
 
 	void TituEditorLayer::OpenScene()
 	{
-
 		std::string fName = FileDialogs::OpenFile("Titu Scene (*.tituscene)\0*.tituscene\0");
 		if (!fName.empty())
 		{

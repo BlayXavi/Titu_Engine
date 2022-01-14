@@ -83,8 +83,7 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 		else if (mouseButton == 1)
 		{
 			//orbit (like span), invert movement
-			eye -= right * mouseDelta.first * speedDelta;
-			eye -= up * mouseDelta.second * speedDelta;
+			
 		}
 		else if (mouseButton == 2)
 		{

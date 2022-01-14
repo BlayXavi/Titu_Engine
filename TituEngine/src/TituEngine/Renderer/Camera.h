@@ -105,7 +105,8 @@ namespace TituEngine
 
 		void SetPosition(const glm::vec3& position)
 		{
-			m_Eye = position; LookAt(m_Center);
+			m_Eye = position; 
+			LookAt(m_Center);
 		}
 
 		void LookAt(const glm::vec3& position, const glm::vec3& target)
