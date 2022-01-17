@@ -61,6 +61,7 @@ namespace TituEngine
 		fbSpecs.Width = 1280;
 		fbSpecs.Height = 720;
 		fbSpecs.Samples = 1;
+		fbSpecs.Attachments = { FramebufferTextureFormat::RBA8, FramebufferTextureFormat::DEPTH };
 		m_Framebuffer = Framebuffer::Create(fbSpecs);
 
 		m_EditorCamera = new TransformedCamera();

@@ -13,16 +13,20 @@ namespace TituEngine
 
 		virtual void Resize(uint32_t width, uint32_t height) override;
 
-		virtual const uint32_t GetColorAttachment() const override { return m_ColorAttachment; }
+		virtual const uint32_t GetColorAttachment(uint32_t index = 0) const override { return m_ColorAttachments[index]; }
 
 	private:
 		friend Framebuffer;
 		OpenGLFramebuffer(const FramebufferSpecs& framebufferSpecs);
 
-		uint32_t m_ColorAttachment;
-		uint32_t m_DepthStencilAtachment;
+		std::vector<FramebufferTextureFormat> m_ColorTextureFormats;
+		FramebufferTextureFormat m_DepthTextureFormat = FramebufferTextureFormat::NONE;
+
+		std::vector<uint32_t> m_ColorAttachments;
+		uint32_t m_DepthAttachment;
 
 	protected:
+		virtual void DeleteAttachments() override;
 		virtual void Rebuild() override;
 	};
 }
