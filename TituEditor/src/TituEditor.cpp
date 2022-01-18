@@ -135,7 +135,7 @@ namespace TituEngine
 
 		{
 			static bool show_rendererStats = true;
-			static bool show_MouseStats = false;
+			static bool show_MouseStats = true;
 			static bool show_EditorCamera = true;
 			static bool show_ImGuiDemo = false;
 			static bool show_SnapValues = false;
@@ -292,26 +292,6 @@ namespace TituEngine
 					ImGui::End(); //Render Stats
 				}
 
-				if (show_MouseStats)
-				{
-					ImGui::Begin("Mouse Stats", &show_MouseStats);
-
-					std::pair<float, float> mousePos = Input::GetMousePosition();
-					std::string xy = std::to_string((int)mousePos.first) + ", " + std::to_string((int)mousePos.second);
-					ImGui::LabelText(xy.c_str(), "MousePos: ", "");
-
-					std::pair<float, float> mousePosDelta = Input::GetMouseDeltaPosition();
-					xy = std::to_string((int)mousePosDelta.first) + ", " + std::to_string((int)mousePosDelta.second);
-					ImGui::LabelText(xy.c_str(), "MouseDelta: ", "");
-
-					glm::mat4 viewProjectionMatrix = Camera::GetActiveCamera().GetViewProjectionMatrix();
-					glm::vec2 mousePosWorld = Camera::GetActiveCamera().GetCamera()->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second, viewProjectionMatrix);
-					std::string xyWorld = std::to_string(mousePosWorld.x) + ", " + std::to_string(mousePosWorld.y);
-					ImGui::LabelText(xyWorld.c_str(), "MousePosWorld: ", "");
-
-					ImGui::End(); //Mouse Stats
-				}
-
 				if (show_EditorCamera)
 				{
 					ImGui::Begin("Editor Camera", &show_EditorCamera);
@@ -351,10 +331,23 @@ namespace TituEngine
 				}
 			}
 
+			std::pair<float, float> mousePos = Input::GetMousePosition();
 			//Viewport
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 				ImGui::Begin("Viewport");
+
+				ImVec2 imguiViewportSize = ImGui::GetWindowSize();
+				m_ViewportSize = glm::ivec2((int)imguiViewportSize.x, (int)imguiViewportSize.y);
+
+				ImVec2 viewportPos = ImGui::GetWindowPos();
+				ImVec2 cursorPoss = ImGui::GetCursorPos();
+
+				ImVec2 imguiMousePos = ImGui::GetMousePos();
+
+				m_AbsoluteViewportStartPos = glm::ivec2(viewportPos.x - cursorPoss.x, viewportPos.y - cursorPoss.y);
+
+				m_MouseViewportPos = glm::ivec2(imguiMousePos.x - m_AbsoluteViewportStartPos.x, imguiMousePos.y - m_AbsoluteViewportStartPos.y);
 
 				m_ViewPortFocused = ImGui::IsWindowFocused();
 				m_ViewPortHovered = ImGui::IsWindowHovered();
@@ -420,9 +413,36 @@ namespace TituEngine
 					}
 				}
 
-
 				ImGui::End(); //viewport
 				ImGui::PopStyleVar();
+			}
+
+			if (show_MouseStats)
+			{
+				ImGui::Begin("Mouse Stats", &show_MouseStats);
+
+				std::string xy = std::to_string((int)m_AbsoluteViewportStartPos.x) + ", " + std::to_string((int)m_AbsoluteViewportStartPos.y);
+				ImGui::LabelText(xy.c_str(), "m_AbsoluteViewportStartPos: ", "");
+
+				xy = std::to_string((int)m_MouseViewportPosInvertedY.x) + ", " + std::to_string((int)m_MouseViewportPosInvertedY.y);
+				ImGui::LabelText(xy.c_str(), "m_MouseViewportPosInvertedY: ", "");
+
+				xy = std::to_string((int)m_MouseViewportPos.x) + ", " + std::to_string((int)m_MouseViewportPos.y);
+				ImGui::LabelText(xy.c_str(), "m_MouseViewportPos: ", "");
+
+				xy = std::to_string((int)mousePos.first) + ", " + std::to_string((int)mousePos.second);
+				ImGui::LabelText(xy.c_str(), "MousePos: ", "");
+
+				std::pair<float, float> mousePosDelta = Input::GetMouseDeltaPosition();
+				xy = std::to_string((int)mousePosDelta.first) + ", " + std::to_string((int)mousePosDelta.second);
+				ImGui::LabelText(xy.c_str(), "MouseDelta: ", "");
+
+				glm::mat4 viewProjectionMatrix = Camera::GetActiveCamera().GetViewProjectionMatrix();
+				glm::vec2 mousePosWorld = Camera::GetActiveCamera().GetCamera()->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second, viewProjectionMatrix);
+				std::string xyWorld = std::to_string(mousePosWorld.x) + ", " + std::to_string(mousePosWorld.y);
+				ImGui::LabelText(xyWorld.c_str(), "MousePosWorld: ", "");
+
+				ImGui::End(); //Mouse Stats
 			}
 
 			if (show_ImGuiDemo)

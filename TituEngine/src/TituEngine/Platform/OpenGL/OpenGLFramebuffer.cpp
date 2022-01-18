@@ -179,7 +179,7 @@ namespace TituEngine
 			glDrawBuffer(GL_NONE); //depth pass only
 		}
 
-		TE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+		TE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete! ErrorCode {0}", glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
 		UnBind();
 	}

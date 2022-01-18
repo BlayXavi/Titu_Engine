@@ -68,6 +68,10 @@ namespace TituEngine
 		bool m_ViewPortFocused = false;
 		bool m_ViewPortHovered = false;
 
+		glm::ivec2 m_AbsoluteViewportStartPos;
+		glm::ivec2 m_ViewportSize;
+		glm::ivec2 m_MouseViewportPos;
+
 		bool m_UsingGuizmo = false;
 
 		EditorSnapValues m_SnapValues;
@@ -80,5 +84,6 @@ namespace TituEngine
 		void NewScene();
 		void OpenScene();
 		void SaveScene();
+
 	};
 }
