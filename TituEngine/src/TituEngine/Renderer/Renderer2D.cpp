@@ -66,8 +66,8 @@ namespace TituEngine
 
 		s_Data.QuadVertexBuffer = VertexBuffer::Create(nullptr, s_Data.MaxVerticesPerBatch * sizeof(QuadVertex), false);
 		s_Data.QuadVertexBuffer->SetLayout({
-			{ ShaderDataType::Float3,	false, "a_Position" },
 			{ ShaderDataType::Float4,	false, "a_Color" },
+			{ ShaderDataType::Float3,	false, "a_Position" },
 			{ ShaderDataType::Float2,	false, "a_TexCoord" },
 			{ ShaderDataType::Int,		false, "a_TexIndex"},
 			{ ShaderDataType::Float2,	false, "a_Tiling"},
