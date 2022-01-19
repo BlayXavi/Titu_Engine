@@ -71,6 +71,7 @@ namespace TituEngine
 		glm::ivec2 m_AbsoluteViewportStartPos;
 		glm::ivec2 m_ViewportSize;
 		glm::ivec2 m_MouseViewportPos;
+		int32_t m_LastPixelIDHovered;
 
 		bool m_UsingGuizmo = false;
 

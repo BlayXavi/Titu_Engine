@@ -14,6 +14,7 @@ namespace TituEngine
 		virtual void Resize(uint32_t width, uint32_t height) override;
 
 		virtual const uint32_t GetColorAttachment(uint32_t index = 0) const override { return m_ColorAttachments[index]; }
+		virtual const uint32_t GetPixel(uint32_t attachmentIndex, int x, int y) override;
 
 	private:
 		friend Framebuffer;

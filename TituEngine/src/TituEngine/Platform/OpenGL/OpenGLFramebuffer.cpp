@@ -8,9 +8,9 @@ namespace TituEngine
 		return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	}
 
-	static void CreateTextures(bool multisampled, uint32_t count, uint32_t* outID)
+	static void CreateTextures(bool multisampled, size_t count, uint32_t* outID)
 	{
-		glCreateTextures(TextureTarget(multisampled), count, outID);
+		glCreateTextures(TextureTarget(multisampled), (GLsizei)count, (GLuint*)outID);
 	}
 
 	static void BindTexture(bool multisampled, GLuint id)
@@ -18,18 +18,18 @@ namespace TituEngine
 		glBindTexture(TextureTarget(multisampled), id);
 	}
 
-	static void AttachColorTexture(GLuint id, int samples, GLenum format, uint32_t width, uint32_t height, int index)
+	static void AttachColorTexture(GLuint id, int samples, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index)
 	{
 		bool multisampled = samples > 1;
 
 		GLenum target = TextureTarget(multisampled);
 
 		if (multisampled)
-			glTexImage2DMultisample(target, samples, format, width, height, GL_FALSE);
+			glTexImage2DMultisample(target, samples, internalFormat, width, height, GL_FALSE);
 		else
 		{
 
-			glTexImage2D(target, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+			glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -119,12 +119,22 @@ namespace TituEngine
 		Rebuild();
 	}
 
+	const uint32_t OpenGLFramebuffer::GetPixel(uint32_t attachmentIndex, int x, int y)
+	{
+		TE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "[Framebuffer] Error, attachment index out of bounds.");
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+		int pixelData;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+		return pixelData;
+	}
+
 	void OpenGLFramebuffer::DeleteAttachments()
 	{
 		if (m_RendererID != 0)
 		{
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(m_ColorAttachments.size(), &m_ColorAttachments[0]);
+			glDeleteTextures((GLsizei)m_ColorAttachments.size(), (GLuint*)&m_ColorAttachments[0]);
 			glDeleteTextures(1, &m_DepthAttachment);
 			m_RendererID = 0;
 		}
@@ -148,8 +158,11 @@ namespace TituEngine
 				BindTexture(multisample, m_ColorAttachments[i]);
 				switch (m_ColorTextureFormats[i])
 				{
-				case FramebufferTextureFormat::RBA8:
-					AttachColorTexture(m_ColorAttachments[i], m_FramebufferSpecs.Samples, GL_RGBA8, m_FramebufferSpecs.Width, m_FramebufferSpecs.Height, i);
+				case FramebufferTextureFormat::RGBA8:
+					AttachColorTexture(m_ColorAttachments[i], m_FramebufferSpecs.Samples, GL_RGBA8, GL_RGBA, m_FramebufferSpecs.Width, m_FramebufferSpecs.Height, (uint32_t)i);
+					break;
+				case FramebufferTextureFormat::RED_INTEGER_32:
+					AttachColorTexture(m_ColorAttachments[i], m_FramebufferSpecs.Samples, GL_R32I, GL_RED_INTEGER, m_FramebufferSpecs.Width, m_FramebufferSpecs.Height, (uint32_t)i);
 					break;
 				}
 			}
@@ -172,7 +185,7 @@ namespace TituEngine
 		{
 			TE_ASSERT(m_ColorAttachments.size() <= 4, "Error, m_ColorAttachments must be <= 4.");
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-			glDrawBuffers(m_ColorAttachments.size(), buffers); //https://stackoverflow.com/questions/51030120/concept-what-is-the-use-of-gldrawbuffer-and-gldrawbuffers/5103034
+			glDrawBuffers((GLsizei)m_ColorAttachments.size(), buffers); //https://stackoverflow.com/questions/51030120/concept-what-is-the-use-of-gldrawbuffer-and-gldrawbuffers/5103034
 		}
 		else if (m_ColorAttachments.empty())
 		{

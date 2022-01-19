@@ -61,7 +61,7 @@ namespace TituEngine
 		fbSpecs.Width = 1280;
 		fbSpecs.Height = 720;
 		fbSpecs.Samples = 1;
-		fbSpecs.Attachments = { FramebufferTextureFormat::RBA8, FramebufferTextureFormat::DEPTH };
+		fbSpecs.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
 		m_Framebuffer = Framebuffer::Create(fbSpecs);
 
 		m_EditorCamera = new TransformedCamera();
@@ -421,14 +421,16 @@ namespace TituEngine
 			{
 				ImGui::Begin("Mouse Stats", &show_MouseStats);
 
+
 				std::string xy = std::to_string((int)m_AbsoluteViewportStartPos.x) + ", " + std::to_string((int)m_AbsoluteViewportStartPos.y);
 				ImGui::LabelText(xy.c_str(), "m_AbsoluteViewportStartPos: ", "");
 
-				xy = std::to_string((int)m_MouseViewportPosInvertedY.x) + ", " + std::to_string((int)m_MouseViewportPosInvertedY.y);
-				ImGui::LabelText(xy.c_str(), "m_MouseViewportPosInvertedY: ", "");
-
 				xy = std::to_string((int)m_MouseViewportPos.x) + ", " + std::to_string((int)m_MouseViewportPos.y);
 				ImGui::LabelText(xy.c_str(), "m_MouseViewportPos: ", "");
+
+				xy = std::to_string(m_LastPixelIDHovered);
+				ImGui::LabelText(xy.c_str(), "m_LastPixelIDHovered: ", "");
+				
 
 				xy = std::to_string((int)mousePos.first) + ", " + std::to_string((int)mousePos.second);
 				ImGui::LabelText(xy.c_str(), "MousePos: ", "");
@@ -483,6 +485,10 @@ namespace TituEngine
 		}
 
 		Renderer2D::EndScene();
+
+		if (m_MouseViewportPos.x >= 0 && m_MouseViewportPos.y >= 0 && m_MouseViewportPos.x < (int)m_ViewportSize.x && m_MouseViewportPos.y < (int)m_ViewportSize.y)
+			m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPos.x, m_MouseViewportPos.y);
+
 		m_Framebuffer->UnBind();
 	}
 
