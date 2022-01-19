@@ -165,6 +165,7 @@ namespace TituEngine
 				AttachDepthTexture(m_DepthAttachment, m_FramebufferSpecs.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_FramebufferSpecs.Width, m_FramebufferSpecs.Height);
 				break;
 			}
+
 		}
 
 		if (m_ColorAttachments.size() > 1)

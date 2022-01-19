@@ -424,6 +424,9 @@ namespace TituEngine
 				std::string xy = std::to_string((int)m_AbsoluteViewportStartPos.x) + ", " + std::to_string((int)m_AbsoluteViewportStartPos.y);
 				ImGui::LabelText(xy.c_str(), "m_AbsoluteViewportStartPos: ", "");
 
+				xy = std::to_string((int)m_MouseViewportPosInvertedY.x) + ", " + std::to_string((int)m_MouseViewportPosInvertedY.y);
+				ImGui::LabelText(xy.c_str(), "m_MouseViewportPosInvertedY: ", "");
+
 				xy = std::to_string((int)m_MouseViewportPos.x) + ", " + std::to_string((int)m_MouseViewportPos.y);
 				ImGui::LabelText(xy.c_str(), "m_MouseViewportPos: ", "");
 
