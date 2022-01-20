@@ -434,7 +434,6 @@ namespace TituEngine
 
 				xy = std::to_string(m_LastPixelIDHovered);
 				ImGui::LabelText(xy.c_str(), "m_LastPixelIDHovered: ", "");
-				
 
 				xy = std::to_string((int)mousePos.first) + ", " + std::to_string((int)mousePos.second);
 				ImGui::LabelText(xy.c_str(), "MousePos: ", "");

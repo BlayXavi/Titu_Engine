@@ -82,8 +82,8 @@ namespace TituEngine
 		m_MouseX = (float)xpos;
 		m_MouseY = (float)ypos;
 
-		m_MouseDeltaX = m_MouseXLastFrame - m_MouseX;
-		m_MouseDeltaY = m_MouseYLastFrame - m_MouseY;
+		m_MouseDeltaX = m_MouseX - m_MouseXLastFrame;
+		m_MouseDeltaY = m_MouseYLastFrame - m_MouseY; //inverted!
 	}
 
 	void Input::PostUpdateMouse()
