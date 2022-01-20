@@ -348,7 +348,8 @@ namespace TituEngine
 				m_AbsoluteViewportStartPos = glm::ivec2(viewportPos.x - cursorPoss.x, viewportPos.y - cursorPoss.y);
 
 				m_MouseViewportPos = glm::ivec2(imguiMousePos.x - m_AbsoluteViewportStartPos.x, imguiMousePos.y - m_AbsoluteViewportStartPos.y);
-
+				m_MouseViewportPosYInverted = m_MouseViewportPos;
+				m_MouseViewportPosYInverted.y = m_ViewportSize.y - m_MouseViewportPos.y;
 				m_ViewPortFocused = ImGui::IsWindowFocused();
 				m_ViewPortHovered = ImGui::IsWindowHovered();
 				Application::Instance().GetImGuiLayer()->SetBlockEvents(!m_ViewPortFocused && !m_ViewPortHovered);
@@ -363,7 +364,7 @@ namespace TituEngine
 					m_Scene->OnViewportResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
-				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment();
+				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment(0);
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
 
 				//Viewport Guizmos
@@ -428,6 +429,9 @@ namespace TituEngine
 				xy = std::to_string((int)m_MouseViewportPos.x) + ", " + std::to_string((int)m_MouseViewportPos.y);
 				ImGui::LabelText(xy.c_str(), "m_MouseViewportPos: ", "");
 
+				xy = std::to_string((int)m_MouseViewportPosYInverted.x) + ", " + std::to_string((int)m_MouseViewportPosYInverted.y);
+				ImGui::LabelText(xy.c_str(), "m_MouseViewportPosYInverted: ", "");
+
 				xy = std::to_string(m_LastPixelIDHovered);
 				ImGui::LabelText(xy.c_str(), "m_LastPixelIDHovered: ", "");
 				
@@ -486,8 +490,10 @@ namespace TituEngine
 
 		Renderer2D::EndScene();
 
-		if (m_MouseViewportPos.x >= 0 && m_MouseViewportPos.y >= 0 && m_MouseViewportPos.x < (int)m_ViewportSize.x && m_MouseViewportPos.y < (int)m_ViewportSize.y)
-			m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPos.x, m_MouseViewportPos.y);
+		
+		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ViewportSize.x && m_MouseViewportPosYInverted.y < (int)m_ViewportSize.y)
+			m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
+		
 
 		m_Framebuffer->UnBind();
 	}
