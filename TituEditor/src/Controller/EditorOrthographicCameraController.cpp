@@ -77,7 +77,7 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 		std::pair<float, float> mouseDelta = Input::GetMouseDeltaPosition();
 		if (mouseButton == 0)
 		{
-			center += right * mouseDelta.first * speedDelta;
+			center += right * mouseDelta.first * -speedDelta;
 			center += up * mouseDelta.second * speedDelta;
 		}
 		else if (mouseButton == 1)
@@ -88,8 +88,8 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 		else if (mouseButton == 2)
 		{
 			//span, invert movement
-			eye -= right * mouseDelta.first * speedDelta;
-			center -= right * mouseDelta.first * speedDelta;
+			eye -= right * mouseDelta.first * -speedDelta;
+			center -= right * mouseDelta.first * -speedDelta;
 
 			eye -= up * mouseDelta.second * speedDelta;
 			center -= up * mouseDelta.second * speedDelta;

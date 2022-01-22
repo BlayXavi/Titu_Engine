@@ -477,7 +477,7 @@ namespace TituEngine
 		m_Framebuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
-
+		m_Framebuffer->ClearAttachment(1, -1);
 		Camera::ActiveCameraData activeCamera = Camera::GetActiveCamera();
 		glm::mat4 viewProjectionMatrix = activeCamera.GetViewProjectionMatrix();
 
@@ -489,10 +489,13 @@ namespace TituEngine
 
 		Renderer2D::EndScene();
 
-		
+
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ViewportSize.x && m_MouseViewportPosYInverted.y < (int)m_ViewportSize.y)
-			m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
-		
+		{
+			if (Input::IsButtonMousePressed(0))
+				m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
+		}
+
 
 		m_Framebuffer->UnBind();
 	}

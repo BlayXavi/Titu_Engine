@@ -17,18 +17,18 @@ namespace TituEngine
 		static void EndScene();
 		static void Flush();
 
-		static void DrawQuad(const glm::mat4& model, const glm::vec4& color);
-		static void DrawQuad(const glm::mat4& model, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f });
+		static void DrawQuad(const glm::mat4& model, const glm::vec4& color, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::mat4& model, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
 
-		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
-		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
-		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color);
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const uint32_t& entityID = 0);
+		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, const uint32_t& entityID = -1);
 
-		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f });
-		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f });
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f });
-		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f });
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
 
 
 		struct RenderStats
@@ -52,7 +52,7 @@ namespace TituEngine
 		};
 
 	private:
-		static void AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, SubTexture2D* const tex, const glm::vec2& tiling);
-		static void AddVertices(const glm::mat4 transform, const glm::vec4& color, SubTexture2D* const tex, const glm::vec2& tiling);
+		static void AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, SubTexture2D* const tex, const glm::vec2& tiling, const int32_t& entityID = 0);
+		static void AddVertices(const glm::mat4 transform, const glm::vec4& color, SubTexture2D* const tex, const glm::vec2& tiling, const int32_t& entityID = 0);
 	};
 }

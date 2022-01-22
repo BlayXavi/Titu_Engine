@@ -44,8 +44,33 @@ namespace TituEngine
 		for (const BufferElement& element : layout)
 		{
 			glEnableVertexAttribArray(index + m_VertexBufferIndexOffset);
-			glVertexAttribPointer(index + m_VertexBufferIndexOffset, element.ElementCount, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(intptr_t)element.Offset);
-			index++;
+
+			switch (element.Type)
+			{
+			case ShaderDataType::Float:
+			case ShaderDataType::Float2:
+			case ShaderDataType::Float3:
+			case ShaderDataType::Float4:
+			case ShaderDataType::Mat3:
+			case ShaderDataType::Mat4:
+			{
+				glVertexAttribPointer(index + m_VertexBufferIndexOffset, element.ElementCount, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(intptr_t)element.Offset);
+				index++;
+				break;
+			}
+			case ShaderDataType::Int:
+			case ShaderDataType::Int2:
+			case ShaderDataType::Int3:
+			case ShaderDataType::Int4:
+			{
+				glVertexAttribIPointer(index + m_VertexBufferIndexOffset, element.ElementCount, GL_INT, layout.GetStride(), (const void*)(intptr_t)element.Offset);
+				index++;
+				break;
+			}
+
+			default:
+				break;
+			}
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);

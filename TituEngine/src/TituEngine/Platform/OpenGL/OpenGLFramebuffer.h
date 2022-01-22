@@ -16,6 +16,8 @@ namespace TituEngine
 		virtual const uint32_t GetColorAttachment(uint32_t index = 0) const override { return m_ColorAttachments[index]; }
 		virtual const uint32_t GetPixel(uint32_t attachmentIndex, int x, int y) override;
 
+		virtual const void ClearAttachment(uint32_t index, int value);
+
 	private:
 		friend Framebuffer;
 		OpenGLFramebuffer(const FramebufferSpecs& framebufferSpecs);

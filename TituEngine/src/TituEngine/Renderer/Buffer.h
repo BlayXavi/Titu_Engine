@@ -20,6 +20,7 @@ namespace TituEngine
 		Bool
 	};
 
+	//Return # of bytes of type
 	static uint32_t ShaderDataTypeSize(const ShaderDataType type)
 	{
 		switch (type)
