@@ -49,6 +49,11 @@ namespace TituEngine
 		}
 	}
 
+	void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
+	{
+		m_SelectedEntity = entity;
+	}
+
 	void SceneHierarchyPanel::DrawEntityNode(Entity& e)
 	{
 		TagComponent& tagC = e.GetComponent<TagComponent>();

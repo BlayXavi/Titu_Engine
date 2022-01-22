@@ -15,12 +15,12 @@ namespace TituEngine
 
 		void OnImGuiRender(Scene* const m_Context);
 
+		void SetSelectedEntity(Entity entity);
 		Entity GetSelectedEntity() const { return m_SelectedEntity; }
 
 	private:
 		int m_DeselectEntityHandler = -1;
 		void DeselectEntity() { m_SelectedEntity = m_EntityNull; }
-
 		void DrawEntityNode(Entity& e);
 		void DrawEntityPanel(Entity& e);
 

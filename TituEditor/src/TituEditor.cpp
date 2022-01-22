@@ -489,13 +489,10 @@ namespace TituEngine
 
 		Renderer2D::EndScene();
 
-
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ViewportSize.x && m_MouseViewportPosYInverted.y < (int)m_ViewportSize.y)
 		{
-			if (Input::IsButtonMousePressed(0))
-				m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
+			m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		}
-
 
 		m_Framebuffer->UnBind();
 	}
@@ -506,6 +503,7 @@ namespace TituEngine
 		m_CameraController->OnEvent(e);
 		EventDispatcher eDispatcher(e);
 		eDispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent kpe)->bool {return this->OnKeyPressed(kpe); });
+		eDispatcher.Dispatch<MouseButtonPressedEvent>([this](MouseButtonPressedEvent mbpe)->bool {return this->OnMousePressed(mbpe); });
 	}
 
 	bool TituEditorLayer::OnKeyPressed(KeyPressedEvent& e)
@@ -545,6 +543,16 @@ namespace TituEngine
 			if (Input::IsAnyButtonPressed() == false)
 				m_SelectedCoordinateSystem = (m_SelectedCoordinateSystem == COORDINATE_SYSTEM::LOCAL ? COORDINATE_SYSTEM::WORLD : COORDINATE_SYSTEM::LOCAL);
 			break;
+		}
+
+		return false;
+	}
+
+	bool TituEditorLayer::OnMousePressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == TE_MOUSE_BUTTON_1)
+		{
+			m_SceneHierarchyPanel.SetSelectedEntity(m_LastPixelIDHovered == 1 ? Entity() : Entity((entt::entity)m_LastPixelIDHovered, m_Scene));
 		}
 
 		return false;
