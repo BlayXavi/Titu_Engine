@@ -11,6 +11,8 @@ workspace "TituEngine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+VULKAN_SDK = os.getenv("VULKAN_SDK")
+
 IncludeDir = {}
 IncludeDir["GLFW"] = "TituEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "TituEngine/vendor/Glad/include"
@@ -21,6 +23,28 @@ IncludeDir["entt"] = "TituEngine/vendor/entt/include"
 IncludeDir["yaml"] = "TituEngine/vendor/yaml-cpp/include"
 IncludeDir["ImGuizmo"] = "TituEngine/vendor/imguizmo"
 IncludeDir["TituSignals"] = "TituEngine/vendor/titusignals/include"
+IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+
+
+LibraryDir = {}
+LibraryDir["VulkanSDK"]			 = "%{VULKAN_SDK}/Lib"
+LibraryDir["VulkanSDK_Debug"]	 = "vendor/VulkanSDK/Lib"
+LibraryDir["VulkanSDK_DebugDLL"] = "vendor/VulkanSDK/Bin"
+
+
+Library = {}
+Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
+Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
+
+Library["ShaderC_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/shaderc_sharedd.lib"
+Library["SPIRV_Cross_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/spirv-cross-cored.lib"
+Library["SPIRV_Cross_GLSL_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/spirv-cross-glsld.lib"
+Library["SPIRV_Tools_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/SPIRV-Toolsd.lib"
+
+Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
+Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
+Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
+
 
 --like c++ this will COPY the content of the path here
 group "Dependencies"
@@ -59,7 +83,8 @@ project "TituEngine"
 
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"GLFW_INCLUDE_NONE"
 	}
 	
 	includedirs
@@ -74,7 +99,8 @@ project "TituEngine"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yaml}",
 		"%{IncludeDir.ImGuizmo}",
-		"%{IncludeDir.TituSignals}"
+		"%{IncludeDir.TituSignals}",
+		"%{IncludeDir.VulkanSDK}"
 	}
 
 	links
@@ -83,19 +109,16 @@ project "TituEngine"
 		"Glad",
 		"ImGui",
 		"yaml-cpp",
-		"opengl32.lib"
 	}
 	
-	filter "files:ImGuizmo.cpp"
-		flags {"NoPCH"}
+	filter "files:TituEngine/vendor/imguizmo/**.cpp"
+	flags { "NoPCH" }
 
 	filter "system:windows"
 		systemversion "latest"
 
 		defines
 		{
-			"TE_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"
@@ -104,17 +127,33 @@ project "TituEngine"
 		defines "TE_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		
+		links
+		{
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+			
+		}
 
 	filter "configurations:Release"
 		defines "TE_RELEASE"
 		runtime "Release"
 		optimize "on"
 
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
+
 project "TituEditor"
 	location "TituEditor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
+	staticruntime "off"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -153,6 +192,7 @@ project "TituEditor"
 		defines "TE_ENABLE_ASSERTS"
 		runtime "Debug"
 		symbols "on"
+
 
 	filter "configurations:Release"
 		defines "TE_RELEASE"
