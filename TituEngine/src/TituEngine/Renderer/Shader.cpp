@@ -6,7 +6,7 @@
 
 namespace TituEngine
 {
-	Shader* Shader::Create(const std::string& vs, const std::string& ps)
+	/*Shader* Shader::Create(const std::string& vs, const std::string& ps)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
@@ -16,7 +16,7 @@ namespace TituEngine
 		}
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
-	}
+	}*/
 
 	Shader* Shader::Create(const std::string& path)
 	{

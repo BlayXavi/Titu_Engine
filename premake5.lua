@@ -28,8 +28,7 @@ IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 
 LibraryDir = {}
 LibraryDir["VulkanSDK"]			 = "%{VULKAN_SDK}/Lib"
-LibraryDir["VulkanSDK_Debug"]	 = "vendor/VulkanSDK/Lib"
-LibraryDir["VulkanSDK_DebugDLL"] = "vendor/VulkanSDK/Bin"
+LibraryDir["VulkanSDK_Debug"]	 = "%{wks.location}/TituEngine/vendor/VulkanSDK/Lib"
 
 
 Library = {}
@@ -133,7 +132,6 @@ project "TituEngine"
 			"%{Library.ShaderC_Debug}",
 			"%{Library.SPIRV_Cross_Debug}",
 			"%{Library.SPIRV_Cross_GLSL_Debug}"
-			
 		}
 
 	filter "configurations:Release"
