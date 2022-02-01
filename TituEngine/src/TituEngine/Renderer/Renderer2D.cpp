@@ -4,6 +4,8 @@
 #include "Shader.h"
 #include "VertexArray.h"
 
+#include "TituEngine/Renderer/UniformBuffer.h"
+
 namespace TituEngine
 {
 	struct QuadVertex
@@ -20,7 +22,6 @@ namespace TituEngine
 
 	struct Renderer2DData
 	{
-		glm::mat4 m_CameraViewProjectionMatrix;
 		VertexArray* QuadVertexArray = nullptr;
 
 		Shader* BatchRenderingShader = nullptr;
@@ -43,6 +44,13 @@ namespace TituEngine
 		int32_t currentTexSlots = -1;
 
 		Texture2D* texSlots[MaxTexSlotsPerBatch] = { nullptr };
+
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+		CameraData CameraBuffer;
+		UniformBuffer* CameraUniformBuffer;
 	};
 
 	static Renderer2DData s_Data;
@@ -100,20 +108,16 @@ namespace TituEngine
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
 
-		int* texSlots = new int[s_Data.MaxTexSlotsPerBatch];
-		for (uint32_t i = 0; i < s_Data.MaxTexSlotsPerBatch; i++)
-			texSlots[i] = i;
-
 		s_Data.BatchRenderingShader = Shader::Create("assets/shaders/testing/BatchRendering.glsl");
-		s_Data.BatchRenderingShader->Bind();
-		s_Data.BatchRenderingShader->SetIntArray("u_Textures", texSlots, s_Data.MaxTexSlotsPerBatch);
-		delete[] texSlots;
 
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t data = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&data, sizeof(uint32_t));
 
 		s_Data.whiteSubTexture2D = new SubTexture2D(s_Data.WhiteTexture, { 0.0f, 0.0f }, { 1.0f, 1.0f });
+
+		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
+
 
 		/*
 		s_Renderer2DData.QuadVertexArray = VertexArray::Create();
@@ -155,10 +159,9 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		camera = camera;
-		s_Data.m_CameraViewProjectionMatrix = view_Projection_matrix;
 
-		s_Data.BatchRenderingShader->Bind();
-		s_Data.BatchRenderingShader->SetMat4("u_ModelViewProjectionMatrix", s_Data.m_CameraViewProjectionMatrix);
+		s_Data.CameraBuffer.ViewProjection = view_Projection_matrix;
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer.ViewProjection, sizeof(Renderer2DData::CameraBuffer));
 
 		RenderStats::Reset();
 		ResetBatchingData();
@@ -183,6 +186,7 @@ namespace TituEngine
 			for (int32_t i = 0; i <= s_Data.currentTexSlots; i++)
 				s_Data.texSlots[i]->Bind(i);
 
+			s_Data.BatchRenderingShader->Bind();
 			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.FrameQuadCount * INDICES_PER_QUAD);
 			RenderStats::IncreaseDrawCalls();
 			ResetBatchingData();
@@ -268,10 +272,6 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		AddVertices(position, 0.0f, size, color, s_Data.whiteSubTexture2D, glm::vec2(1.0f), entityID);
-
-		/*glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
-		DrawQuad(modelMatrix, color);
-		*/
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, const uint32_t& entityID)
@@ -287,15 +287,6 @@ namespace TituEngine
 	void Renderer2D::DrawQuad(const glm::mat4& model, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize, const uint32_t& entityID)
 	{
 		AddVertices(model, color, texture, tileSize, entityID);
-
-		/*texture.Bind(0);
-		s_Data.TextureColorShader->Bind();
-		s_Data.TextureColorShader->SetFloat4("u_Color", color);
-		s_Data.TextureColorShader->SetMat4("u_ModelViewProjectionMatrix", *(s_SceneData->m_CameraViewProjectionMatrix) * model);
-		s_Data.TextureColorShader->SetFloat2("u_TileSize", tileSize);
-
-		s_Data.QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);*/
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const  glm::vec2& tileSize, const uint32_t& entityID)
@@ -315,9 +306,6 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		AddVertices(position, 0.0f, size, color, texture, tileSize, entityID);
-
-		/*glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 0.0f });
-		DrawQuad(modelMatrix, color, texture, tileSize);*/
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize, const uint32_t& entityID)
