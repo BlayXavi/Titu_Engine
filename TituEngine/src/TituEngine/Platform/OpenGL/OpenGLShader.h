@@ -22,23 +22,36 @@ namespace TituEngine
 
 		void SetIntArray(const std::string& name, const int* values, const uint32_t count) override;
 
+		static std::string GetCacheDirectory() { return s_CacheDirectory; }
+
 	private:
 		friend Shader;
 
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& path);
-		void Compile(std::unordered_map<uint32_t, std::string> shaderSources);
+		std::string ReadFile(const std::string& path);
+		std::unordered_map<uint32_t, std::string> SplitStages(const std::string& source);
 
+		bool CompileOrGetVulkanBinaries(const std::unordered_map<uint32_t, std::string>& shaderSources);
+		bool CompileOrGetOpenGLBinaries();
+		void CreateProgram();
+
+		void Reflect(uint32_t stage, const std::vector<uint32_t>& shaderData);
+
+		int GetUniformLocation(const std::string& name);
+		void ClearData();
+
+	private:
 		uint32_t m_RendererID;
 
 		std::unordered_map<std::string, int> m_UniformLocationCache;
-		int GetUniformLocation(const std::string& name);
-
-		std::vector<uint32_t>glShaderIDs;
-
-		void ClearData();
+		std::vector<uint32_t> glShaderIDs;
 
 		std::string m_Path;
+		std::string m_Name;
 
+		std::unordered_map<uint32_t, std::vector<uint32_t>> m_VulkanSPIRVStages;
+		std::unordered_map<uint32_t, std::vector<uint32_t>> m_OpenGLSPIRVStages;
+
+		static std::string s_CacheDirectory;
 	};
 }
