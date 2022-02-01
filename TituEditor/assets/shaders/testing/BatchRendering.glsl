@@ -1,6 +1,6 @@
 #type vertex
 //--------------------------------VERTEX---------------------
-#version 330 core
+#version 450 core
 			
 layout(location  = 0) in vec3 a_Position;
 layout(location  = 1) in vec4 a_Color;
@@ -9,39 +9,57 @@ layout(location  = 3) in int a_TexIndex;
 layout(location  = 4) in vec2 a_Tiling;
 layout(location  = 5) in int a_EntityID;
 
-out vec4 v_Color;
-out vec2 v_TexCoord;
-flat out int v_TexIndex;
-flat out int v_EntityID;
+layout(std140, binding = 0) uniform Camera
+{
+	mat4 u_ModelViewProjectionMatrix;
+};
 
-uniform mat4 u_ModelViewProjectionMatrix;
+struct VertexOutput
+{
+	vec4 Color;
+	vec2 TexCoord;
+	int TexIndex;
+	vec2 TilingFactor;
+};
+
+layout (location = 0) out VertexOutput v_Output;
+layout (location = 4) out flat int v_EntityID;
 
 void main()
 {
-	v_Color = a_Color;
-	v_TexCoord = a_TexCoord * a_Tiling;
-	v_TexIndex = a_TexIndex;
+	v_Output.Color = a_Color;
+	v_Output.TexCoord = a_TexCoord * a_Tiling;
+	v_Output.TexIndex = a_TexIndex;
+	v_Output.TilingFactor = a_Tiling;
+
 	v_EntityID = a_EntityID;
+
 	gl_Position = u_ModelViewProjectionMatrix * vec4(a_Position, 1.0);
 }
 
 #type fragment
 //--------------------------------FRAGMENT---------------------
-#version 330 core
+#version 450 core
 			
 layout(location = 0) out vec4 color;
 layout(location = 1) out int colorId;
 
-in vec4 v_Color;
-in vec2 v_TexCoord;
-flat in int v_TexIndex;
-flat in int v_EntityID;
+struct VertexOutput
+{
+	vec4 Color;
+	vec2 TexCoord;
+	int TexIndex;
+	vec2 TilingFactor;
+};
+
+layout (location = 0) in flat VertexOutput Input;
+layout (location = 4) in flat int v_EntityID;
 
 
-uniform sampler2D u_Textures[32];
+layout (binding = 0) uniform sampler2D u_Textures[32];
 
 void main()
 {
-	color = texture(u_Textures[v_TexIndex], v_TexCoord) * v_Color;
+	color = texture(u_Textures[Input.TexIndex], Input.TexCoord * Input.TilingFactor) * Input.Color;
 	colorId = v_EntityID;
 }
