@@ -21,6 +21,8 @@
 
 #include "Editor/Utils/TituEditorUtilities.h"
 
+#include <filesystem>
+
 #define FPS_DEBUG_COUNT 120
 
 namespace TituEngine
@@ -89,6 +91,7 @@ namespace TituEngine
 
 		void NewScene();
 		void OpenScene();
+		void OpenScene(std::filesystem::path path);
 		void SaveScene();
 
 	};
