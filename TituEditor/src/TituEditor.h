@@ -17,6 +17,7 @@
 
 #include "Editor/SceneHierarchyPanel.h"
 #include "Editor/ComponentPanelDrawer.h"
+#include "Editor/ContentBrowserPanel.h"
 
 #include "Editor/Utils/TituEditorUtilities.h"
 
@@ -40,6 +41,7 @@ namespace TituEngine
 	private:
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		ContentBrowserPanel m_ContentBrowserPanel;
 
 		Scene* m_Scene = nullptr;
 		SpriteRendererComponent* tempSpriteRendererComponent;
@@ -75,6 +77,7 @@ namespace TituEngine
 		int32_t m_LastPixelIDHovered;
 
 		bool m_UsingGuizmo = false;
+		bool m_HoveringGuizmo = false;
 
 		EditorSnapValues m_SnapValues;
 

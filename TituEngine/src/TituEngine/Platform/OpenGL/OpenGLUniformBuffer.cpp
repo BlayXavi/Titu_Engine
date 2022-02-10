@@ -8,7 +8,7 @@ namespace TituEngine
 	OpenGLUniformBuffer::OpenGLUniformBuffer(const uint32_t& size, const uint32_t& binding)
 	{
 		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW);
+		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW); //GL_DYNAMIC -> Data will be modified almost every frame (at least reset)
 		glBindBufferBase(GL_UNIFORM_BUFFER, binding, m_RendererID);
 	}
 
