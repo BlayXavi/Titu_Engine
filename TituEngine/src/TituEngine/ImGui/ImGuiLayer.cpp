@@ -83,7 +83,7 @@ namespace TituEngine
 		style.ItemInnerSpacing = ImVec2(4, 4);
 		style.TouchExtraPadding = ImVec2(0, 0);
 
-		style.IndentSpacing = 12;
+		style.IndentSpacing = 26;
 		style.ScrollbarSize = 14;
 
 		style.WindowBorderSize = 1;

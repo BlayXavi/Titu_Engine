@@ -139,6 +139,7 @@ namespace TituEngine
 			static bool show_EditorCamera = true;
 			static bool show_ImGuiDemo = false;
 			static bool show_SnapValues = false;
+			static bool show_ContentBrowser = true;
 			//Dockspace Init
 			{
 				static bool dockspaceOpen = true;
@@ -217,6 +218,7 @@ namespace TituEngine
 				if (ImGui::BeginMenu("TituEngine"))
 				{
 					ImGui::MenuItem("Scene Hierarchy", NULL, &SceneHierarchyPanel::m_OpenSceneHierarchy);
+					ImGui::MenuItem("Content Browser", NULL, &show_ContentBrowser);
 					ImGui::MenuItem("Renderer stats", NULL, &show_rendererStats);
 					ImGui::MenuItem("Mouse stats", NULL, &show_MouseStats);
 					ImGui::MenuItem("Editor Camera Setigns", NULL, &show_EditorCamera);
@@ -237,6 +239,9 @@ namespace TituEngine
 			}
 
 			m_SceneHierarchyPanel.OnImGuiRender(m_Scene);
+
+			if (show_ContentBrowser)
+				m_ContentBrowserPanel.OnImGuiRender(show_ContentBrowser);
 
 			//Sandbox Inspector
 			{
@@ -369,6 +374,8 @@ namespace TituEngine
 
 				//Viewport Guizmos
 				m_UsingGuizmo = ImGuizmo::IsUsing();
+				m_HoveringGuizmo = ImGuizmo::IsOver();
+
 				Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 				if (selectedEntity)
 				{
@@ -550,7 +557,7 @@ namespace TituEngine
 
 	bool TituEditorLayer::OnMousePressed(MouseButtonPressedEvent& e)
 	{
-		if (e.GetMouseButton() == TE_MOUSE_BUTTON_1)
+		if ((!m_UsingGuizmo && !m_HoveringGuizmo) && e.GetMouseButton() == TE_MOUSE_BUTTON_1)
 		{
 			m_SceneHierarchyPanel.SetSelectedEntity(m_LastPixelIDHovered == 1 ? Entity() : Entity((entt::entity)m_LastPixelIDHovered, m_Scene));
 		}
