@@ -375,8 +375,8 @@ namespace TituEngine
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_ITEM"))
 					{
-						const wchar_t* path = (const wchar_t*)payload->Data;
-						OpenScene(std::filesystem::path("assets") / path);
+						const char* path = (const char*)payload->Data;
+						OpenScene(std::filesystem::path(path));
 					}
 					ImGui::EndDragDropTarget();
 				}
