@@ -18,9 +18,6 @@ namespace TituEngine
 	private:
 		std::filesystem::path m_CurrentPath;
 
-		Texture2D* m_DirectoryIcon = nullptr;
-		Texture2D* m_FileIcon = nullptr;
-
 		float m_ThumbnailSize = 16.0f;
 	};
 }
