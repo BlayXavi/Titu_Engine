@@ -14,10 +14,5 @@ namespace TituEngine
 
 	private:
 		void DrawDirectoryTree(std::string directory);
-
-	private:
-		std::filesystem::path m_CurrentPath;
-
-		float m_ThumbnailSize = 16.0f;
 	};
 }
