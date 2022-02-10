@@ -10,8 +10,6 @@ namespace TituEngine
 	ContentBrowserPanel::ContentBrowserPanel()
 		: m_CurrentPath(s_DefaultAssetPath)
 	{
-		m_DirectoryIcon = Texture2D::Create("resources\\icons\\contentbrowser\\directory_icon.png");
-		m_FileIcon = Texture2D::Create("resources\\icons\\contentbrowser\\file_icon.png");
 	}
 
 	void ContentBrowserPanel::DrawDirectoryTree(std::string directory)
