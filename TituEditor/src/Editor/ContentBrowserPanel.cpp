@@ -44,10 +44,19 @@ namespace TituEngine
 			else
 			{
 				ImGui::TreeNodeEx(relativePathString.c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
+
+				if (ImGui::BeginDragDropSource())
+				{
+					const wchar_t* itemPath = relativePath.c_str();
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+					ImGui::EndDragDropSource();
+				}
+
 				ImGui::TableNextColumn();
 				ImGui::Text("%d", std::filesystem::file_size(directoryPath));
 				ImGui::TableNextColumn();
 				ImGui::TextUnformatted(directoryPath.filename().extension().string().c_str());
+
 			}
 
 			ImGui::PopID();
@@ -58,7 +67,7 @@ namespace TituEngine
 	{
 		ImGui::Begin("Content Browser", &showWindow);
 
-		static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
+		static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg;
 		if (ImGui::BeginTable("3ways", 3, flags))
 		{
 			// The first column will use the default _WidthStretch when ScrollX is Off and _WidthFixed when ScrollX is On
