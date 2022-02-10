@@ -19,6 +19,7 @@ namespace TituEngine
 			return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
 		}
 
+		virtual GLuint GetRendererID() const override { return m_RendererID; }
 
 	private:
 		friend Texture2D;
