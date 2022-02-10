@@ -371,6 +371,15 @@ namespace TituEngine
 
 				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment(0);
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						OpenScene(std::filesystem::path("assets") / path);
+					}
+					ImGui::EndDragDropTarget();
+				}
 
 				//Viewport Guizmos
 				m_UsingGuizmo = ImGuizmo::IsUsing();
@@ -580,6 +589,18 @@ namespace TituEngine
 			delete m_Scene;
 			m_Scene = new Scene();
 			SceneSerializer::DeserializeScene(m_Scene, fName);
+			OnSceneLoaded.Dispatch();
+		}
+	}
+
+	void TituEditorLayer::OpenScene(std::filesystem::path path)
+	{
+		if (!path.empty())
+		{
+			if (m_Scene != nullptr)
+				delete m_Scene;
+			m_Scene = new Scene();
+			SceneSerializer::DeserializeScene(m_Scene, path.string());
 			OnSceneLoaded.Dispatch();
 		}
 	}
