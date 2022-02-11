@@ -52,8 +52,8 @@ namespace TituEngine
 
 		EditorOrthographicCameraController* m_CameraController = nullptr;
 		TransformedCamera* m_EditorCamera = nullptr;
-		Texture2D* m_SpriteSheet = nullptr;
-		SubTexture2D* m_SubTextures2D[10];
+		//Texture2D* m_SpriteSheet = nullptr;
+		//SubTexture2D* m_SubTextures2D[10];
 
 		Camera* m_GameCamera = nullptr;
 		Entity m_GameCameraEntity;
