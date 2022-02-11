@@ -22,7 +22,6 @@ namespace TituEngine
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: Texture2D(path), m_DataFormat(0), m_InternalFormat(0)
 	{

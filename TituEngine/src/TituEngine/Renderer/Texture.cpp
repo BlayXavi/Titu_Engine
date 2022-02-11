@@ -8,6 +8,7 @@
 
 namespace TituEngine
 {
+	//----------------------------------------- Texture2D -----------------------------------------
 	Texture2D* Texture2D::Create(uint32_t width, uint32_t height)
 	{
 		TE_PROFILE_PROFILE_FUNC();
@@ -26,6 +27,21 @@ namespace TituEngine
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::OpenGL: return new OpenGLTexture2D(path);
+		}
+
+		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
+	}
+
+	Texture2D* Texture2D::Create(void* data, uint32_t size, uint32_t width, uint32_t height)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::OpenGL:
+			OpenGLTexture2D* texture = new OpenGLTexture2D(width, height);
+			texture->SetData(data, size, false);
+			return texture;
 		}
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
@@ -55,4 +71,36 @@ namespace TituEngine
 		m_TexCoords[2] = { max.x, max.y };
 		m_TexCoords[3] = { min.x, max.y };
 	}
+
+
+	//----------------------------------------- TextureUtilities -----------------------------------------
+
+	SubTexture2D* TextureUtilities::s_WhiteTexture = nullptr;
+	bool TextureUtilities::s_Initialized = false;
+
+	void TextureUtilities::Init()
+	{
+		if(s_Initialized)
+		{
+			TE_ASSERT(false, "Error, TextureUtilities initialized twice");
+			return;
+		}
+
+		s_Initialized = true;
+
+		if (s_WhiteTexture == nullptr)
+		{
+			uint32_t data = 0xffffffff;
+			s_WhiteTexture = new SubTexture2D(Texture2D::Create(&data, sizeof(uint32_t), 1, 1), { 0.0f, 0.0f }, { 1.0f, 1.0f });
+		}
+	}
+
+	void TextureUtilities::ReleaseMemory()
+	{
+		if (!s_Initialized)
+			return;
+
+		delete s_WhiteTexture;
+	}
+
 }

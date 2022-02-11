@@ -104,6 +104,7 @@ namespace TituEngine
 
 		m_VSync = Application::Instance().GetWindow().IsVsync();
 
+		/*
 		m_SpriteSheet = Texture2D::Create("assets/textures2D/base_Spritesheet.png");
 
 		m_SubTextures2D[0] = new SubTexture2D(m_SpriteSheet, { 0, 3 }, { 128, 128 }, { 1, 1 });
@@ -116,16 +117,19 @@ namespace TituEngine
 		m_SubTextures2D[7] = new SubTexture2D(m_SpriteSheet, { 1, 1 }, { 128, 128 }, { 1, 2 });
 		m_SubTextures2D[8] = new SubTexture2D(m_SpriteSheet, { 3, 1 }, { 128, 128 }, { 1, 2 });
 		m_SubTextures2D[9] = new SubTexture2D(m_SpriteSheet, { 4, 1 }, { 128, 128 }, { 1, 2 });
+		*/
 	}
 
 	TituEditorLayer::~TituEditorLayer()
 	{
 		delete m_CameraController;
 		delete m_EditorCamera;
-		delete m_SpriteSheet;
+		//delete m_SpriteSheet;
 		delete m_Framebuffer;
+		/*
 		for (size_t i = 0; i < 10; i++)
 			delete m_SubTextures2D[i];
+		*/
 		delete m_Scene;
 	}
 
@@ -476,14 +480,6 @@ namespace TituEngine
 	void TituEditorLayer::OnUpdate(Timestep ts)
 	{
 		TE_PROFILE_PROFILE_FUNC();
-
-		/*float ms = currentTimeStep.GetDeltaTimeMilliseconds();
-		float fps = 1000 / currentTimeStep.GetDeltaTimeMilliseconds();
-		std::cout << std::fixed;
-		std::cout << "Ms: ";
-		std::cout << std::setprecision(2);
-		std::cout << ms << " FPS ";
-		std::cout << (int)fps << std::endl;*/
 
 		currentTimeStep = ts;
 

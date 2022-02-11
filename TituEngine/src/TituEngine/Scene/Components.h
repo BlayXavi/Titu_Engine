@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "TituEngine/Math/Math.h"
+#include "TituEngine/Renderer/Texture.h"
 
 namespace TituEngine
 {
@@ -98,6 +99,8 @@ namespace TituEngine
 		const char* PrettyName = "Sprite Renderer Component";
 
 		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f }; //white color
+		SubTexture2D* Texture = nullptr;
+		glm::vec2 TileSize{ 1.0f, 1.0f };
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const Entity& e) : Component(e) { };

@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "Renderer.h"
 
+#include "TituEngine/Scene/Components.h"
+
 namespace TituEngine
 {
 	class Renderer2D
@@ -19,6 +21,7 @@ namespace TituEngine
 
 		static void DrawQuad(const glm::mat4& model, const glm::vec4& color, const uint32_t& entityID = -1);
 		static void DrawQuad(const glm::mat4& model, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::mat4& model, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID = -1);
 
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const uint32_t& entityID = -1);
 		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const glm::vec4& color, const uint32_t& entityID = -1);
@@ -30,6 +33,10 @@ namespace TituEngine
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
 		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const glm::vec2& tileSize = { 1.0f, 1.0f }, const uint32_t& entityID = -1);
 
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID = -1);
+		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID = -1);
 
 		struct RenderStats
 		{
