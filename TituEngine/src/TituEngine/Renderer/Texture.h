@@ -40,6 +40,7 @@ namespace TituEngine
 
 		static Texture2D* Create(uint32_t width, uint32_t height);
 		static Texture2D* Create(const std::string& path);
+		static Texture2D* Create(void* data, uint32_t size, uint32_t width, uint32_t height);
 
 		virtual void Bind(uint32_t slot = 0) const = 0;
 		virtual void SetData(void* data, uint32_t size, bool deleteData = false) = 0;
@@ -65,5 +66,16 @@ namespace TituEngine
 		Texture2D* m_Texture;
 		glm::vec2 m_TexCoords[4];
 		glm::vec2 m_SpriteSize;
+	};
+
+
+	struct TextureUtilities
+	{
+	public:
+		static SubTexture2D* s_WhiteTexture;
+		static void Init();
+		static void ReleaseMemory();
+	private:
+		static bool s_Initialized;
 	};
 }

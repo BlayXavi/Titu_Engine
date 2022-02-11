@@ -165,6 +165,21 @@ namespace TituEngine
 		glm::vec4& color = spriteRenderer.Color;
 
 		ImGui::ColorEdit4("Color", (float*)&color);
+
+		ImGui::Button("Drop Texture Here", ImVec2(100.0f, 0.0f));
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_PNG"))
+			{
+				const char* path = (const char*)payload->Data;
+				spriteRenderer.Texture = new SubTexture2D(Texture2D::Create(std::string(path)), { 0.0f, 0.0f }, { 1.0f, 1.0f });
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		ImGui::DragFloat2("Tiling Factor", &spriteRenderer.TileSize[0], 0.1f, 0.0f, 10.0f);
+
 	}
 
 	template<typename C>

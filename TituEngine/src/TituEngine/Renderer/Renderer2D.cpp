@@ -25,7 +25,6 @@ namespace TituEngine
 		VertexArray* QuadVertexArray = nullptr;
 
 		Shader* BatchRenderingShader = nullptr;
-		Texture2D* WhiteTexture = nullptr;
 		SubTexture2D* whiteSubTexture2D = nullptr;
 
 		//Static Batching Stuff
@@ -62,16 +61,7 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		//float squareVertices[4 * 3/*vertices*/ + 2 * 4/*textCoords*/] = {
-		//		-0.5f,  0.5f, 0.0f,  0.0f, 1.0f,// top left 
-		//		0.5f,   0.5f, 0.0f,  1.0f, 1.0f,// top right
-		//		0.5f,  -0.5f, 0.0f,  1.0f, 0.0f,// bottom right
-		//		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,// bottom left
-		//};
-
-		//uint32_t indices[3 * 2] = { 0, 1, 3,   // first triangle
-		//						1, 2, 3    // second triangle
-		//};
+		TextureUtilities::Init();
 
 		s_Data.QuadVertexArray = VertexArray::Create();
 
@@ -110,11 +100,7 @@ namespace TituEngine
 
 		s_Data.BatchRenderingShader = Shader::Create("assets/shaders/testing/BatchRendering.glsl");
 
-		s_Data.WhiteTexture = Texture2D::Create(1, 1);
-		uint32_t data = 0xffffffff;
-		s_Data.WhiteTexture->SetData(&data, sizeof(uint32_t));
-
-		s_Data.whiteSubTexture2D = new SubTexture2D(s_Data.WhiteTexture, { 0.0f, 0.0f }, { 1.0f, 1.0f });
+		s_Data.whiteSubTexture2D = TextureUtilities::s_WhiteTexture;
 
 		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 
@@ -134,8 +120,9 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
+		TextureUtilities::ReleaseMemory();
+
 		delete s_Data.BatchRenderingShader;
-		delete s_Data.WhiteTexture;
 
 		delete s_Data.QuadVertexArray;
 		s_Data.QuadVertexArray = nullptr;
@@ -200,20 +187,20 @@ namespace TituEngine
 
 		int32_t texIndex = -1;
 
-		for (int32_t i = 0; i < s_Data.currentTexSlots; i++)
+		for (int32_t i = 0; i <= s_Data.currentTexSlots; i++) //find texture index if it is already used 
 		{
 			if (*tex->GetTexture() == *s_Data.texSlots[i])
 				texIndex = i;
 		}
 
-		if (texIndex == -1)
+		if (texIndex == -1) //if texture index was not found
 		{
-			if (s_Data.currentTexSlots > s_Data.MaxTexSlotsPerBatch)
+			if (s_Data.currentTexSlots > s_Data.MaxTexSlotsPerBatch) //Flush! limit textures exceeded! need to Flush, release current textures used and restart the process
 				Flush();
 
 			s_Data.currentTexSlots++;
 			texIndex = s_Data.currentTexSlots;
-			s_Data.texSlots[s_Data.currentTexSlots] = tex->GetTexture();
+			s_Data.texSlots[s_Data.currentTexSlots] = tex->GetTexture(); //assign index texture
 		}
 
 		static const glm::vec4 vecPositions[VERTEX_PER_QUAD] =
@@ -239,7 +226,7 @@ namespace TituEngine
 		RenderStats::IncreaseQuads();
 	}
 
-	void Renderer2D::AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, SubTexture2D* tex, const glm::vec2& tiling, const int32_t& entityID )
+	void Renderer2D::AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, SubTexture2D* tex, const glm::vec2& tiling, const int32_t& entityID)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
@@ -289,6 +276,15 @@ namespace TituEngine
 		AddVertices(model, color, texture, tileSize, entityID);
 	}
 
+	void Renderer2D::DrawQuad(const glm::mat4& model, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID)
+	{
+		if (spriteRendererC.Texture != nullptr)
+			AddVertices(model, spriteRendererC.Color, spriteRendererC.Texture, spriteRendererC.TileSize, entityID);
+		else
+			AddVertices(model, spriteRendererC.Color, s_Data.whiteSubTexture2D, spriteRendererC.TileSize, entityID);
+
+	}
+
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, SubTexture2D* texture, const  glm::vec2& tileSize, const uint32_t& entityID)
 	{
 		TE_PROFILE_PROFILE_FUNC();
@@ -316,5 +312,29 @@ namespace TituEngine
 		modelMatrix = glm::rotate(modelMatrix, angle, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		DrawQuad(modelMatrix, color, texture, tileSize, entityID);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, spriteRendererC.Color, spriteRendererC.Texture, spriteRendererC.TileSize, entityID);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), angle, size, spriteRendererC.Color, spriteRendererC.Texture, spriteRendererC.TileSize, entityID);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+		DrawQuad(position, size, spriteRendererC.Color, spriteRendererC.Texture, spriteRendererC.TileSize, entityID);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID)
+	{
+		TE_PROFILE_PROFILE_FUNC();
+		DrawQuad(position, size, spriteRendererC.Color, spriteRendererC.Texture, spriteRendererC.TileSize, entityID);
 	}
 }
