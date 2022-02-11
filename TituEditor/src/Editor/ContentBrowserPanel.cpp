@@ -7,6 +7,7 @@ namespace TituEngine
 {
 	static const std::filesystem::path s_DefaultAssetPath = "assets";
 	static const std::string m_TituSceneExtension = ".tituscene";
+	static const std::string m_PNGExtension = ".png";
 
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
@@ -56,6 +57,14 @@ namespace TituEngine
 					if (ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_ITEM", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
+						ImGui::EndDragDropSource();
+					}
+				}
+				else if (extension.compare(m_PNGExtension) == 0)
+				{
+					if (ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_PNG", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
 						ImGui::EndDragDropSource();
 					}
 				}
