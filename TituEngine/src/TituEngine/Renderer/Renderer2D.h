@@ -1,13 +1,15 @@
 #pragma once
 
 #include "Camera.h"
-#include "Texture.h"
 #include "Renderer.h"
 
 #include "TituEngine/Scene/Components.h"
 
+
 namespace TituEngine
 {
+	class Texture2D;
+
 	class Renderer2D
 	{
 	public:
