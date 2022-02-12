@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Event.h"
+#include "TituEngine/Events/Event.h"
+#include "TituEngine/Core/Timestep.h"
 
 #define MouseCode int
 
@@ -66,8 +67,14 @@ namespace TituEngine {
 	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
+
+		static float s_LastPressedTime;
+
 		MouseButtonPressedEvent(const MouseCode button)
-			: MouseButtonEvent(button) {}
+			: MouseButtonEvent(button) 
+		{
+			s_LastPressedTime = TituEngine::Timestep::GetTime();
+		}
 
 		std::string ToString() const override
 		{
@@ -82,8 +89,14 @@ namespace TituEngine {
 	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
+
+		static float s_LastReleasedTime;
+
 		MouseButtonReleasedEvent(const MouseCode button)
-			: MouseButtonEvent(button) {}
+			: MouseButtonEvent(button) 
+		{
+			s_LastReleasedTime = TituEngine::Timestep::GetTime();
+		}
 
 		std::string ToString() const override
 		{

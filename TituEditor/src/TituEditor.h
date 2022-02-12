@@ -88,6 +88,7 @@ namespace TituEngine
 		COORDINATE_SYSTEM m_SelectedCoordinateSystem;
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMousePressed(MouseButtonPressedEvent& e);
+		bool OnMouseReleased(MouseButtonReleasedEvent& e);
 
 		void NewScene();
 		void OpenScene();

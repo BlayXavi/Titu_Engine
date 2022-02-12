@@ -15,7 +15,7 @@ namespace TituEngine
 		inline float GetDeltaTime() const { return m_Time; }
 		inline float GetDeltaTimeMilliseconds() const { return m_Time * 1000.0f; }
 
-		static float GetCurrentTime();
+		static float GetTime();
 
 	private:
 		float m_Time;
