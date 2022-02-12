@@ -24,5 +24,21 @@ namespace TituEngine
 		virtual void SetFloat4(const std::string& name, const glm::vec4& value) = 0;
 
 		virtual void SetIntArray(const std::string& name, const int* values, const uint32_t count) = 0;
+
+		bool CompilationSucceeded() { return m_CompilationSucceeded; }
+
+	protected:
+		bool m_CompilationSucceeded = false;
+	};
+
+
+	class ShaderUtilities
+	{
+	public:
+		static Shader* s_ShaderError;
+		static void Init();
+		static void ReleaseMemory();
+	private:
+		static bool s_Initialized;
 	};
 }
