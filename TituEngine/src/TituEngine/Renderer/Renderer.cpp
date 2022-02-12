@@ -1,4 +1,8 @@
 #include "tepch.h"
+
+#include "Texture.h"
+#include "Shader.h"
+
 #include "Renderer.h"
 #include "Renderer2D.h"
 
@@ -26,8 +30,11 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		Renderer2D::Init();
+		TextureUtilities::Init();
+		ShaderUtilities::Init();
+
 		RenderCommand::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::Shutdown()
