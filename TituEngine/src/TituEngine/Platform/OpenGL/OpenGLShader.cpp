@@ -141,10 +141,10 @@ namespace TituEngine
 		std::string source = ReadFile(m_Path);
 		std::unordered_map<GLenum, std::string> shaderStages = SplitStages(source);
 
-		if (CompileOrGetVulkanBinaries(shaderStages))
-			CompileOrGetOpenGLBinaries();
-
-		CreateProgram();
+		m_CompilationSucceeded= CompileOrGetVulkanBinaries(shaderStages);
+		m_CompilationSucceeded = m_CompilationSucceeded && CompileOrGetOpenGLBinaries();
+		if(m_CompilationSucceeded)
+			CreateProgram();
 	}
 
 	OpenGLShader::~OpenGLShader()
