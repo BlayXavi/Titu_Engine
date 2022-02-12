@@ -62,6 +62,7 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		TextureUtilities::Init();
+		ShaderUtilities::Init();
 
 		s_Data.QuadVertexArray = VertexArray::Create();
 

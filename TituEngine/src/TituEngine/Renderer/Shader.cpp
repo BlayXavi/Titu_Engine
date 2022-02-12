@@ -6,27 +6,48 @@
 
 namespace TituEngine
 {
-	/*Shader* Shader::Create(const std::string& vs, const std::string& ps)
-	{
-		TE_PROFILE_PROFILE_FUNC();
-
-		switch (Renderer::GetAPI())
-		{
-		case RendererAPI::API::OpenGL: return new OpenGLShader(vs, ps);
-		}
-
-		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
-	}*/
 
 	Shader* Shader::Create(const std::string& path)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
+		Shader* shader = nullptr;
+
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::OpenGL: return new OpenGLShader(path);
+		case RendererAPI::API::OpenGL:
+			shader = new OpenGLShader(path);
+			break;
+		default:
+			TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]");
+			break;
 		}
 
-		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
+		if (shader != nullptr)
+		{
+			if (shader->CompilationSucceeded())
+				return shader;
+			else
+				delete shader;
+		}
+
+		return ShaderUtilities::s_ShaderError;;
+	}
+
+
+	Shader* ShaderUtilities::s_ShaderError = nullptr;
+	bool ShaderUtilities::s_Initialized = false;
+
+	void ShaderUtilities::Init()
+	{
+		s_Initialized = true;
+		s_ShaderError = Shader::Create("assets/shaders/testing/ErrorShader.glsl");
+	}
+
+	void ShaderUtilities::ReleaseMemory()
+	{
+		if (!s_Initialized)
+			return;
+		delete s_ShaderError;
 	}
 }
