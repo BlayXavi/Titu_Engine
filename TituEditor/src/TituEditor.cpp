@@ -516,6 +516,7 @@ namespace TituEngine
 		EventDispatcher eDispatcher(e);
 		eDispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent kpe)->bool {return this->OnKeyPressed(kpe); });
 		eDispatcher.Dispatch<MouseButtonPressedEvent>([this](MouseButtonPressedEvent mbpe)->bool {return this->OnMousePressed(mbpe); });
+		eDispatcher.Dispatch<MouseButtonReleasedEvent>([this](MouseButtonReleasedEvent mbre)->bool {return this->OnMouseReleased(mbre); });
 	}
 
 	bool TituEditorLayer::OnKeyPressed(KeyPressedEvent& e)
@@ -562,7 +563,22 @@ namespace TituEngine
 
 	bool TituEditorLayer::OnMousePressed(MouseButtonPressedEvent& e)
 	{
-		if ((!m_UsingGuizmo && !m_HoveringGuizmo) && e.GetMouseButton() == TE_MOUSE_BUTTON_1)
+#if TE_DEBUG
+		TE_CLIENT_INFO("Mouse pressed on time {:.3f}", MouseButtonPressedEvent::s_LastPressedTime);
+#endif
+		return false;
+	}
+
+	bool TituEditorLayer::OnMouseReleased(MouseButtonReleasedEvent& e)
+	{
+		float pressedTimeDuration = MouseButtonReleasedEvent::s_LastReleasedTime - MouseButtonPressedEvent::s_LastPressedTime;
+
+#if TE_DEBUG
+		TE_CLIENT_INFO("Mouse released on time {:.3f}. Mouse press duration: {:.3f}", MouseButtonPressedEvent::s_LastPressedTime, pressedTimeDuration);
+#endif
+
+		bool shortPress = pressedTimeDuration < 0.2f;
+		if ((!m_UsingGuizmo && !m_HoveringGuizmo) && m_ViewPortFocused && shortPress && e.GetMouseButton() == TE_MOUSE_BUTTON_1)
 		{
 			m_SceneHierarchyPanel.SetSelectedEntity(m_LastPixelIDHovered == 1 ? Entity() : Entity((entt::entity)m_LastPixelIDHovered, m_Scene));
 		}

@@ -68,7 +68,7 @@ namespace TituEngine
 			if (m_Minimized == false)
 			{
 				TituEngine::Input::UpdateMouse();
-				float time = TituEngine::Timestep::GetCurrentTime();
+				float time = TituEngine::Timestep::GetTime();
 				Timestep ts = time - m_CurrentTime; //same as instancing a float!
 				m_CurrentTime = time;
 
