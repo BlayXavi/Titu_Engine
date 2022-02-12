@@ -1,6 +1,7 @@
 #include "tepch.h"
 #include "Renderer2D.h"
 
+#include "Texture.h"
 #include "Shader.h"
 #include "VertexArray.h"
 
@@ -60,9 +61,6 @@ namespace TituEngine
 	void Renderer2D::Init()
 	{
 		TE_PROFILE_PROFILE_FUNC();
-
-		TextureUtilities::Init();
-		ShaderUtilities::Init();
 
 		s_Data.QuadVertexArray = VertexArray::Create();
 
