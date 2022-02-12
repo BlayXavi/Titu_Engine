@@ -8,7 +8,7 @@
 namespace TituEngine
 {
 
-	float Timestep::GetCurrentTime()
+	float Timestep::GetTime()
 
 	{
 #ifdef TE_PLATFORM_WINDOWS
