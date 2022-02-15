@@ -41,9 +41,18 @@ namespace TituEngine
 		static Signal<> OnSceneLoaded;
 
 	private:
+		enum class EditorPlayState
+		{
+			Edit = 0,
+			Play = 1
+		};
+		EditorPlayState m_EditorPlayState = (EditorPlayState)-1;
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
+		Texture2D* m_PlayButtonState;
+		Texture2D* m_PlayButtonIcon;
+		Texture2D* m_StopButtonIcon;
 
 		Scene* m_Scene = nullptr;
 		SpriteRendererComponent* tempSpriteRendererComponent;
@@ -84,11 +93,15 @@ namespace TituEngine
 		EditorSnapValues m_SnapValues;
 
 	private:
+		void SetEditorPlayState(EditorPlayState newPlayState);
+
 		TRANSFORM_MANIPULATION_OPERATION m_SelectedTransformManipulation;
 		COORDINATE_SYSTEM m_SelectedCoordinateSystem;
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMousePressed(MouseButtonPressedEvent& e);
 		bool OnMouseReleased(MouseButtonReleasedEvent& e);
+
+		void Toolbar();
 
 		void NewScene();
 		void OpenScene();
