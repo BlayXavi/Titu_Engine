@@ -104,6 +104,10 @@ namespace TituEngine
 
 		m_VSync = Application::Instance().GetWindow().IsVsync();
 
+		m_PlayButtonIcon = Texture2D::Create("resources/icons/toolbar/playbutton.png");
+		m_StopButtonIcon = Texture2D::Create("resources/icons/toolbar/stopbutton.png");
+		SetEditorPlayState(EditorPlayState::Edit);
+
 		/*
 		m_SpriteSheet = Texture2D::Create("assets/textures2D/base_Spritesheet.png");
 
@@ -339,6 +343,8 @@ namespace TituEngine
 					ImGui::End();
 				}
 			}
+
+			Toolbar();
 
 			std::pair<float, float> mousePos = Input::GetMousePosition();
 			//Viewport
@@ -615,6 +621,43 @@ namespace TituEngine
 			SceneSerializer::DeserializeScene(m_Scene, path.string());
 			OnSceneLoaded.Dispatch();
 		}
+	}
+
+	void TituEditorLayer::Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+		if (ImGui::ImageButton((ImTextureID)m_PlayButtonState->GetRendererID(), ImVec2(size, size), ImVec2{ 0.0f,0.0f }, ImVec2{ 1.0f, 1.0f }, 0))
+		{
+			EditorPlayState newPlayState = m_EditorPlayState == EditorPlayState::Play ? EditorPlayState::Edit : EditorPlayState::Play;
+			SetEditorPlayState(newPlayState);
+		}
+
+		ImGui::PopStyleVar(2);
+
+		ImGui::End();
+	}
+
+	void TituEditorLayer::SetEditorPlayState(EditorPlayState newPlayState)
+	{
+		if (m_EditorPlayState == newPlayState)
+			return;
+		
+		switch (newPlayState)
+		{
+		case EditorPlayState::Edit:
+			m_PlayButtonState = m_PlayButtonIcon;
+			break;
+		case EditorPlayState::Play:
+			m_PlayButtonState = m_StopButtonIcon;
+			break;
+		}
+
+		m_EditorPlayState = newPlayState;
 	}
 
 	void TituEditorLayer::SaveScene()
