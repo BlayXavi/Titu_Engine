@@ -22,4 +22,20 @@ namespace TituEngine
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [Framebuffer]"); return nullptr;
 	}
+
+	void Framebuffer::SetDirty(const uint32_t& width, const uint32_t& height)
+	{
+		m_DirtySize[0] = width;
+		m_DirtySize[1] = height;
+		m_Dirty = true;
+	}
+
+	void Framebuffer::ProcessDirty()
+	{
+		if (m_Dirty)
+		{
+			m_Dirty = false;
+			Resize(m_DirtySize[0], m_DirtySize[1]);
+		}
+	}
 }
