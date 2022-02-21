@@ -95,7 +95,7 @@ namespace TituEngine
 		}
 	}
 
-	void TextureUtilities::ReleaseMemory()
+	void TextureUtilities::Shutdown()
 	{
 		if (!s_Initialized)
 			return;

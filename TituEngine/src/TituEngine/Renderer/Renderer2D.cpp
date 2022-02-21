@@ -49,7 +49,7 @@ namespace TituEngine
 		{
 			glm::mat4 ViewProjection;
 		};
-		CameraData CameraBuffer;
+		CameraData CameraBufferData;
 		UniformBuffer* CameraUniformBuffer;
 	};
 
@@ -119,8 +119,6 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		TextureUtilities::ReleaseMemory();
-
 		delete s_Data.BatchRenderingShader;
 
 		delete s_Data.QuadVertexArray;
@@ -146,8 +144,8 @@ namespace TituEngine
 
 		camera = camera;
 
-		s_Data.CameraBuffer.ViewProjection = view_Projection_matrix;
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer.ViewProjection, sizeof(Renderer2DData::CameraBuffer));
+		s_Data.CameraBufferData.ViewProjection = view_Projection_matrix;
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBufferData.ViewProjection, sizeof(Renderer2DData::CameraBufferData));
 
 		RenderStats::Reset();
 		ResetBatchingData();

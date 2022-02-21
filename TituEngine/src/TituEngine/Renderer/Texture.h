@@ -74,7 +74,7 @@ namespace TituEngine
 	public:
 		static SubTexture2D* s_WhiteTexture;
 		static void Init();
-		static void ReleaseMemory();
+		static void Shutdown();
 	private:
 		static bool s_Initialized;
 	};
