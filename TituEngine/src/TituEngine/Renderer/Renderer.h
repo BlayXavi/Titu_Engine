@@ -2,13 +2,17 @@
 
 #include <glm/glm.hpp>
 #include "VertexArray.h"
-
+#include "TituEngine/Core/Core.h"
 
 #define VERTEX_PER_QUAD 4
 #define INDICES_PER_QUAD 6
 
 namespace TituEngine
 {
+	class Camera;
+	class Framebuffer;
+	struct FramebufferSpecs;
+
 	class RendererAPI
 	{
 	public:
@@ -43,7 +47,22 @@ namespace TituEngine
 		static void Shutdown();
 		static void OnWindowResized(uint32_t width, uint32_t height);
 
+		static void BeginFrame();
+		static void BeginScene(const Camera* camera, const glm::mat4 viewProjectionMatrix);
+		static void EndScene();
+		static void EndFrame();
+
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
+
+		static FramebufferSpecs GetMainFramebufferSpecs();
+		static void ResizeMainFramebuffer(const uint32_t& width, const uint32_t& height);
+		static uint32_t GetMainFramebufferColorAttachment(const uint32_t& index);
+		static uint32_t GetMainFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y);
+		static Framebuffer* GetMainFramebuffer();
+
+	private:
+		static Framebuffer* m_MainFramebuffer;
+		static FramebufferSpecs m_MainFramebufferSpecs;
 	};
 
 	class RenderCommand

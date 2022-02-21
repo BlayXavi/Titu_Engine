@@ -44,7 +44,7 @@ namespace TituEngine
 		s_ShaderError = Shader::Create("assets/shaders/testing/ErrorShader.glsl");
 	}
 
-	void ShaderUtilities::ReleaseMemory()
+	void ShaderUtilities::Shutdown()
 	{
 		if (!s_Initialized)
 			return;
