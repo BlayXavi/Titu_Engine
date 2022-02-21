@@ -49,7 +49,6 @@ namespace TituEngine
 			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 			Renderer2D::DrawQuad(transform, sprite, (int32_t)entity);
-
 		}
 	}
 
