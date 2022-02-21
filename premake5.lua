@@ -24,12 +24,13 @@ IncludeDir["yaml"] = "TituEngine/vendor/yaml-cpp/include"
 IncludeDir["ImGuizmo"] = "TituEngine/vendor/imguizmo"
 IncludeDir["TituSignals"] = "TituEngine/vendor/titusignals/include"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+IncludeDir["assimp"] = "TituEngine/vendor/assimp/include"
 
 
 LibraryDir = {}
 LibraryDir["VulkanSDK"]			 = "%{VULKAN_SDK}/Lib"
 LibraryDir["VulkanSDK_Debug"]	 = "%{wks.location}/TituEngine/vendor/VulkanSDK/Lib"
-
+LibraryDir["assimp"]			 = "%{wks.location}/TituEngine/vendor/assimp/lib"
 
 Library = {}
 Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
@@ -44,6 +45,8 @@ Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
 Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
 Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
 
+Library["assimp_release"] = "%{LibraryDir.assimp}/Release/assimp-vc142-mt.lib"
+Library["assimp_debug"] = "%{LibraryDir.assimp}/Debug/assimp-vc142-mtd.lib"
 
 --like c++ this will COPY the content of the path here
 group "Dependencies"
@@ -99,7 +102,8 @@ project "TituEngine"
 		"%{IncludeDir.yaml}",
 		"%{IncludeDir.ImGuizmo}",
 		"%{IncludeDir.TituSignals}",
-		"%{IncludeDir.VulkanSDK}"
+		"%{IncludeDir.VulkanSDK}",
+		"%{IncludeDir.assimp}"
 	}
 
 	links
@@ -131,7 +135,8 @@ project "TituEngine"
 		{
 			"%{Library.ShaderC_Debug}",
 			"%{Library.SPIRV_Cross_Debug}",
-			"%{Library.SPIRV_Cross_GLSL_Debug}"
+			"%{Library.SPIRV_Cross_GLSL_Debug}",
+			"%{Library.assimp_debug}"
 		}
 
 	filter "configurations:Release"
@@ -143,7 +148,8 @@ project "TituEngine"
 		{
 			"%{Library.ShaderC_Release}",
 			"%{Library.SPIRV_Cross_Release}",
-			"%{Library.SPIRV_Cross_GLSL_Release}"
+			"%{Library.SPIRV_Cross_GLSL_Release}",
+			"%{Library.assimp_release}"
 		}
 
 project "TituEditor"
