@@ -3,6 +3,7 @@
 **/bin/
 bin-int/
 **/VulkanSDK/
+TituEngine/vendor/assimp/lib
 
 #files
 .user
