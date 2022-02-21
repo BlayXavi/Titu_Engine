@@ -72,7 +72,6 @@ namespace TituEngine
 		Camera* m_GameCamera = nullptr;
 		Entity m_GameCameraEntity;
 
-		Framebuffer* m_Framebuffer = nullptr;
 		glm::vec2 m_ViewPortPanelSize = { 0.0f, 0.0f };
 
 		int currentFPSDebugIndex = 0;

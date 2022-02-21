@@ -1,4 +1,5 @@
 #include "tepch.h"
+#include "TituEngine/Renderer/RendererUtilities.h"
 #include "OpenGLFramebuffer.h"
 #include "glad/glad.h"
 namespace TituEngine
@@ -237,5 +238,7 @@ namespace TituEngine
 		TE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete! ErrorCode {0}", glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
 		UnBind();
+
+		OnViewportResized.Dispatch(m_FramebufferSpecs.Width, m_FramebufferSpecs.Height);
 	}
 }

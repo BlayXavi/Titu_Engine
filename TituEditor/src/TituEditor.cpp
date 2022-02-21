@@ -61,17 +61,12 @@ namespace TituEngine
 	TituEditorLayer::TituEditorLayer()
 		: Layer("TituEditor Layer"), m_SelectedTransformManipulation(TRANSFORM_MANIPULATION_OPERATION::TRANSLATE)
 	{
-		FramebufferSpecs fbSpecs;
-		fbSpecs.Width = 1280;
-		fbSpecs.Height = 720;
-		fbSpecs.Samples = 1;
-		fbSpecs.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
-		m_Framebuffer = Framebuffer::Create(fbSpecs);
 
 		m_EditorCamera = new TransformedCamera();
 		m_EditorCamera->SetProjectionType(Camera::Projection::PERSPECTIVE);
 		m_EditorCamera->SetFOV(90.0f);
 		m_EditorCamera->SetOrthographicSize(5.0f);
+		FramebufferSpecs fbSpecs = Renderer::GetMainFramebufferSpecs();
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_EditorCamera->LookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f));
 		m_EditorCamera->SetNearPlane(0.001f);
@@ -133,7 +128,6 @@ namespace TituEngine
 		delete m_CameraController;
 		delete m_EditorCamera;
 		//delete m_SpriteSheet;
-		delete m_Framebuffer;
 		/*
 		for (size_t i = 0; i < 10; i++)
 			delete m_SubTextures2D[i];
@@ -374,13 +368,13 @@ namespace TituEngine
 				if (m_ViewPortPanelSize.x != m_ContentRegionAvail.x || m_ViewPortPanelSize.y != m_ContentRegionAvail.y)
 				{
 					m_ViewPortPanelSize = { m_ContentRegionAvail.x, m_ContentRegionAvail.y };
-					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					Renderer::ResizeMainFramebuffer((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
-					Camera::GetActiveCamera().GetCamera()->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					m_EditorCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 					m_Scene->OnViewportResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
-				uint64_t textureID = (uint64_t)m_Framebuffer->GetColorAttachment(0);
+				uint64_t textureID = (uint64_t)Renderer::GetMainFramebufferColorAttachment(0);
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
 				if (ImGui::BeginDragDropTarget())
 				{
@@ -497,27 +491,26 @@ namespace TituEngine
 		if (m_ViewPortFocused && !m_UsingGuizmo)
 			m_CameraController->OnUpdate(ts);
 
-		m_Framebuffer->Bind();
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		RenderCommand::Clear();
-		m_Framebuffer->ClearAttachment(1, -1);
+		Renderer::BeginFrame();
+
 		Camera::ActiveCameraData activeCamera = Camera::GetActiveCamera();
 		glm::mat4 viewProjectionMatrix = activeCamera.GetViewProjectionMatrix();
 
-		Renderer2D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
+
+		Renderer::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
 		{
 			TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
 			m_Scene->OnUpdate(ts);
 		}
 
-		Renderer2D::EndScene();
+		Renderer::EndScene();
 
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 		{
-			m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
+			m_LastPixelIDHovered = Renderer::GetMainFramebufferPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		}
 
-		m_Framebuffer->UnBind();
+		Renderer::EndFrame();
 	}
 
 	void TituEditorLayer::OnEvent(Event& e)

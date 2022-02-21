@@ -1,6 +1,8 @@
 #pragma once
 #include "TituEngine/Core/Core.h"
 
+#include "Signals.h"
+
 namespace TituEngine
 {
 	enum class FramebufferTextureFormat
@@ -47,7 +49,17 @@ namespace TituEngine
 		virtual const uint32_t GetColorAttachment(uint32_t index = 0) const = 0;
 		virtual const uint32_t GetPixel(uint32_t attachmentIndex, int x, int y) = 0;
 
+		void SetDirty(const uint32_t& width, const uint32_t& height);
+		void ProcessDirty();
+
+		bool GetDirty() const { return m_Dirty; }
+		
+		Signal<uint32_t, uint32_t> OnViewportResized;
+
 	protected:
+		bool m_Dirty = false;
+		uint32_t m_DirtySize[2];
+
 		uint32_t m_RendererID;
 		FramebufferSpecs m_FramebufferSpecs;
 
