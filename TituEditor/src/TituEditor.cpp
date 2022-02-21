@@ -15,6 +15,10 @@ namespace TituEngine
 
 	Signal<> TituEditorLayer::OnSceneLoaded;
 
+	TituEditorLayer::EditorPlayState TituEditorLayer::s_EditorPlayState = (EditorPlayState)-1;
+
+	TituEditorLayer::EditorPlayState TituEditorLayer::GetEditorPlayState() { return s_EditorPlayState; }
+
 	class CameraController : public NativeScript
 	{
 	public:
@@ -352,27 +356,24 @@ namespace TituEngine
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 				ImGui::Begin("Viewport");
 
-				ImVec2 imguiViewportSize = ImGui::GetWindowSize();
-				m_ViewportSize = glm::ivec2((int)imguiViewportSize.x, (int)imguiViewportSize.y);
+				ImVec2 contentRegionAvail = ImGui::GetContentRegionAvail();
+				m_ContentRegionAvail = { contentRegionAvail.x, contentRegionAvail.y };
 
 				ImVec2 viewportPos = ImGui::GetWindowPos();
 				ImVec2 cursorPoss = ImGui::GetCursorPos();
 
 				ImVec2 imguiMousePos = ImGui::GetMousePos();
-
-				m_AbsoluteViewportStartPos = glm::ivec2(viewportPos.x - cursorPoss.x, viewportPos.y - cursorPoss.y);
-
+				m_AbsoluteViewportStartPos = glm::ivec2(viewportPos.x - cursorPoss.x, viewportPos.y + cursorPoss.y);
 				m_MouseViewportPos = glm::ivec2(imguiMousePos.x - m_AbsoluteViewportStartPos.x, imguiMousePos.y - m_AbsoluteViewportStartPos.y);
 				m_MouseViewportPosYInverted = m_MouseViewportPos;
-				m_MouseViewportPosYInverted.y = m_ViewportSize.y - m_MouseViewportPos.y;
+				m_MouseViewportPosYInverted.y = m_ContentRegionAvail.y - m_MouseViewportPos.y;
 				m_ViewPortFocused = ImGui::IsWindowFocused();
 				m_ViewPortHovered = ImGui::IsWindowHovered();
 				Application::Instance().GetImGuiLayer()->SetBlockEvents(!m_ViewPortFocused && !m_ViewPortHovered);
 
-				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-				if (m_ViewPortPanelSize != *(glm::vec2*)&viewportPanelSize)
+				if (m_ViewPortPanelSize.x != m_ContentRegionAvail.x || m_ViewPortPanelSize.y != m_ContentRegionAvail.y)
 				{
-					m_ViewPortPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
+					m_ViewPortPanelSize = { m_ContentRegionAvail.x, m_ContentRegionAvail.y };
 					m_Framebuffer->Resize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
 					Camera::GetActiveCamera().GetCamera()->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
@@ -452,6 +453,9 @@ namespace TituEngine
 				std::string xy = std::to_string((int)m_AbsoluteViewportStartPos.x) + ", " + std::to_string((int)m_AbsoluteViewportStartPos.y);
 				ImGui::LabelText(xy.c_str(), "m_AbsoluteViewportStartPos: ", "");
 
+				xy = std::to_string((int)m_ContentRegionAvail.x) + ", " + std::to_string((int)m_ContentRegionAvail.y);
+				ImGui::LabelText(xy.c_str(), "m_ContentRegionAvail: ", "");
+
 				xy = std::to_string((int)m_MouseViewportPos.x) + ", " + std::to_string((int)m_MouseViewportPos.y);
 				ImGui::LabelText(xy.c_str(), "m_MouseViewportPos: ", "");
 
@@ -467,6 +471,7 @@ namespace TituEngine
 				std::pair<float, float> mousePosDelta = Input::GetMouseDeltaPosition();
 				xy = std::to_string((int)mousePosDelta.first) + ", " + std::to_string((int)mousePosDelta.second);
 				ImGui::LabelText(xy.c_str(), "MouseDelta: ", "");
+
 
 				glm::mat4 viewProjectionMatrix = Camera::GetActiveCamera().GetViewProjectionMatrix();
 				glm::vec2 mousePosWorld = Camera::GetActiveCamera().GetCamera()->ScreenSpacePosToWorldPos(mousePos.first, mousePos.second, viewProjectionMatrix);
@@ -507,7 +512,7 @@ namespace TituEngine
 
 		Renderer2D::EndScene();
 
-		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ViewportSize.x && m_MouseViewportPosYInverted.y < (int)m_ViewportSize.y)
+		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 		{
 			m_LastPixelIDHovered = m_Framebuffer->GetPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		}
@@ -633,7 +638,7 @@ namespace TituEngine
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 		if (ImGui::ImageButton((ImTextureID)m_PlayButtonState->GetRendererID(), ImVec2(size, size), ImVec2{ 0.0f,0.0f }, ImVec2{ 1.0f, 1.0f }, 0))
 		{
-			EditorPlayState newPlayState = m_EditorPlayState == EditorPlayState::Play ? EditorPlayState::Edit : EditorPlayState::Play;
+			EditorPlayState newPlayState = s_EditorPlayState == EditorPlayState::Play ? EditorPlayState::Edit : EditorPlayState::Play;
 			SetEditorPlayState(newPlayState);
 		}
 
@@ -644,9 +649,9 @@ namespace TituEngine
 
 	void TituEditorLayer::SetEditorPlayState(EditorPlayState newPlayState)
 	{
-		if (m_EditorPlayState == newPlayState)
+		if (s_EditorPlayState == newPlayState)
 			return;
-		
+
 		switch (newPlayState)
 		{
 		case EditorPlayState::Edit:
@@ -657,7 +662,7 @@ namespace TituEngine
 			break;
 		}
 
-		m_EditorPlayState = newPlayState;
+		s_EditorPlayState = newPlayState;
 	}
 
 	void TituEditorLayer::SaveScene()
