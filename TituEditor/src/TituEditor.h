@@ -29,7 +29,14 @@ namespace TituEngine
 {
 	class TituEditorLayer : public Layer
 	{
+
 	public:
+		enum class EditorPlayState
+		{
+			Edit = 0,
+			Play = 1
+		};
+
 		TituEditorLayer();
 		~TituEditorLayer();
 
@@ -37,16 +44,14 @@ namespace TituEngine
 
 		void OnUpdate(Timestep ts) override;
 		void OnEvent(Event& e) override;
+
+		static TituEditorLayer::EditorPlayState GetEditorPlayState();
+
 	public:
 		static Signal<> OnSceneLoaded;
 
 	private:
-		enum class EditorPlayState
-		{
-			Edit = 0,
-			Play = 1
-		};
-		EditorPlayState m_EditorPlayState = (EditorPlayState)-1;
+		static EditorPlayState s_EditorPlayState;
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
@@ -81,8 +86,9 @@ namespace TituEngine
 		bool m_ViewPortFocused = false;
 		bool m_ViewPortHovered = false;
 
-		glm::ivec2 m_AbsoluteViewportStartPos;
+		glm::ivec2 m_ContentRegionAvail;
 		glm::ivec2 m_ViewportSize;
+		glm::ivec2 m_AbsoluteViewportStartPos;
 		glm::ivec2 m_MouseViewportPos;
 		glm::ivec2 m_MouseViewportPosYInverted;
 		int32_t m_LastPixelIDHovered;
