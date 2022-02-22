@@ -52,8 +52,6 @@ namespace TituEngine
 		m_MainFramebufferSpecs.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
 		m_MainFramebuffer = Framebuffer::Create(m_MainFramebufferSpecs);
 
-		Mesh::Create("");
-
 	}
 
 	void Renderer::Shutdown()
