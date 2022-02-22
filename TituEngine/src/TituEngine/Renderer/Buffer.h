@@ -78,7 +78,7 @@ namespace TituEngine
 	{
 	public:
 		virtual ~VertexBuffer() = default;
-		static VertexBuffer* Create(float* vertices, uint32_t size, bool isStatic = true);
+		static VertexBuffer* Create(const float* vertices, uint32_t size, bool isStatic = true);
 		virtual void SetData(const void* data, uint32_t size) = 0;
 	};
 
@@ -86,7 +86,7 @@ namespace TituEngine
 	{
 	public:
 		virtual ~IndexBuffer() = default;
-		static IndexBuffer* Create(uint32_t* vertices, uint32_t count, bool isStatic = true);
+		static IndexBuffer* Create(const uint32_t* vertices, uint32_t count, bool isStatic = true);
 
 		virtual uint32_t GetCount() const = 0;
 	};

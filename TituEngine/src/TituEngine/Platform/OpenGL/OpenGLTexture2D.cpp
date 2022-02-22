@@ -34,37 +34,42 @@ namespace TituEngine
 			TE_PROFILE_PROFILE_SCOPE("stbi_load");
 			data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channels, 0);
 		}
-		TE_ASSERT(data, "Failed loading image! {0}", path.c_str());
-
-		if (m_Channels == 4)
+		if (!data)
 		{
-			m_InternalFormat = GL_RGBA8;
-			m_DataFormat = GL_RGBA;
+			TE_ASSERT(data, "Failed loading image! {0}", path.c_str());
 		}
-		else if (m_Channels == 3)
+		else
 		{
-			m_InternalFormat = GL_RGB8;
-			m_DataFormat = GL_RGB;
+			if (m_Channels == 4)
+			{
+				m_InternalFormat = GL_RGBA8;
+				m_DataFormat = GL_RGBA;
+			}
+			else if (m_Channels == 3)
+			{
+				m_InternalFormat = GL_RGB8;
+				m_DataFormat = GL_RGB;
+			}
+			else if (m_Channels == 2)
+			{
+				m_InternalFormat = GL_RG8;
+				m_DataFormat = GL_RG;
+			}
+
+			TE_ASSERT(m_InternalFormat, "Texture format not supported [{0}]", path);
+
+			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+			glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+
+			//see: https://learnopengl.com/Getting-started/Textures
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+			SetData(data, m_Width * m_Height * (m_DataFormat == GL_RGBA ? 4 : 3));
 		}
-		else if (m_Channels == 2)
-		{
-			m_InternalFormat = GL_RG8;
-			m_DataFormat = GL_RG;
-		}
-
-		TE_ASSERT(m_InternalFormat, "Texture format not supported [{0}]", path);
-
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
-
-		//see: https://learnopengl.com/Getting-started/Textures
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		SetData(data, m_Width * m_Height * (m_DataFormat == GL_RGBA ? 4 : 3));
 		stbi_image_free(data);
 	}
 

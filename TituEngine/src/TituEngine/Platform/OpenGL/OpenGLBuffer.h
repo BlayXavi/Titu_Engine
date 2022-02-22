@@ -15,7 +15,7 @@ namespace TituEngine
 
 	private:
 		friend VertexBuffer; //only vertex buffer can create an instance of OpenGLVertexBuffer
-		OpenGLVertexBuffer(float* vertices, uint32_t size, bool isStatic = true);
+		OpenGLVertexBuffer(const float* vertices, uint32_t size, bool isStatic = true);
 
 
 		uint32_t m_RendererID;
@@ -32,7 +32,7 @@ namespace TituEngine
 		virtual uint32_t GetCount() const { return m_Count; }
 	private:
 		friend IndexBuffer;//only vertex buffer can create an instance of OpenGLIndexBuffer
-		OpenGLIndexBuffer(uint32_t* indices, uint32_t count, bool isStatic = true);
+		OpenGLIndexBuffer(const uint32_t* indices, uint32_t count, bool isStatic = true);
 
 		uint32_t m_RendererID;
 		uint32_t m_Count;

@@ -8,7 +8,7 @@
 namespace TituEngine
 {
 
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size, bool isStatic)
+	VertexBuffer* VertexBuffer::Create(const float* vertices, uint32_t size, bool isStatic)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
@@ -20,7 +20,7 @@ namespace TituEngine
 		TE_ASSERT(false, "RendererAPI not supported. Context: [VertexBuffer]"); return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* vertices, uint32_t count, bool isStatic)
+	IndexBuffer* IndexBuffer::Create(const uint32_t* vertices, uint32_t count, bool isStatic)
 	{
 		TE_PROFILE_PROFILE_FUNC();
 

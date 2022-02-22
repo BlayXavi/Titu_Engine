@@ -5,7 +5,7 @@
 namespace TituEngine
 {
 	//------------------------------------VERTEX-----------------------------------------
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size, bool isStatic)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(const float* vertices, uint32_t size, bool isStatic)
 	{
 		glCreateBuffers(1, &m_RendererID); //also does binding
 		Bind();
@@ -34,7 +34,7 @@ namespace TituEngine
 	}
 
 	//------------------------------------INDEX-----------------------------------------
-	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count, bool isStatic)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(const uint32_t* indices, uint32_t count, bool isStatic)
 		:m_Count(count)
 	{
 		glCreateBuffers(1, &m_RendererID); //also does binding
