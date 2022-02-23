@@ -3,12 +3,10 @@
 
 #include "imgui/imgui.h"
 
+#include "TituEngine/Core/FilesystemUtilities.h"
+
 namespace TituEngine
 {
-	static const std::filesystem::path s_DefaultAssetPath = "assets";
-	static const std::string m_TituSceneExtension = ".tituscene";
-	static const std::string m_PNGExtension = ".png";
-
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
 	}

@@ -1,6 +1,12 @@
 #include "tepch.h"
 #include "Mesh.h"
 
+#include "TituEngine/Core/FilesystemUtilities.h"
+
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+
 #include <stb_image.h>
 
 #include "glm/glm.hpp"
@@ -32,7 +38,7 @@ namespace TituEngine
 	{
 		m_VertexArray->Bind();
 		for (size_t i = 0; i < m_Textures2D.size(); i++)
-			m_Textures2D[i]->Bind(i);
+			m_Textures2D[i]->Bind((uint32_t)i);
 		shader->Bind();
 		RenderCommand::DrawIndexed(m_VertexArray);
 	}
@@ -63,7 +69,8 @@ namespace TituEngine
 	Model::Model(const std::string& path)
 		: m_Path(path)
 	{
-		m_Directory = path.substr(0, path.find_last_of("\\"));
+		m_ModelName = path.substr(path.find_last_of("/"), path.length() - 1);
+		std::cout << "Loading: " << m_ModelName << std::endl;
 		LoadModel();
 	}
 	
@@ -166,7 +173,7 @@ namespace TituEngine
 			mat->GetTexture(type, i, &str);
 
 			std::string filename = std::string(str.C_Str());
-			filename = m_Directory + "/" + filename;
+			filename = s_DefaultAssetPath_Texture2D.string() + "/" + filename;
 
 			Texture2D* texture = Texture2D::Create(filename.c_str());
 			textures.push_back(texture);

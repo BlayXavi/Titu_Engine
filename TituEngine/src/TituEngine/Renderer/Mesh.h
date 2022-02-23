@@ -1,13 +1,15 @@
 #pragma once
 
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-
 #include "Buffer.h"
 #include "VertexArray.h"
 #include "Texture.h"
 #include "Shader.h"
+
+class aiScene;
+class aiNode;
+class aiMesh;
+class aiMaterial;
+enum aiTextureType;
 
 namespace TituEngine
 {
@@ -20,6 +22,7 @@ namespace TituEngine
 		//Editor
 		uint32_t EntityID;
 	};
+
 
 	class Mesh
 	{
@@ -51,7 +54,7 @@ namespace TituEngine
 	private:
 		std::vector<Mesh*> m_Meshes;
 		std::string m_Path;
-		std::string m_Directory;
+		std::string m_ModelName;
 
 		void LoadModel();
 		void ProcessNode(aiNode* node, const aiScene* scene);

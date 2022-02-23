@@ -1,7 +1,6 @@
 #pragma once
 
-#include <filesystem>
-#include "TituEngine/Renderer/Texture.h"
+	#include "TituEngine/Renderer/Texture.h"
 
 namespace TituEngine
 {

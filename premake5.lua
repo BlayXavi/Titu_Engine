@@ -45,7 +45,7 @@ Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
 Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
 Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
 
-Library["assimp_release"] = "%{LibraryDir.assimp}/Release/assimp-vc142-mt.lib"
+Library["assimp_release"] = "%{LibraryDir.assimp/Release/assimp-vc142-mt.lib"
 Library["assimp_debug"] = "%{LibraryDir.assimp}/Debug/assimp-vc142-mtd.lib"
 
 --like c++ this will COPY the content of the path here

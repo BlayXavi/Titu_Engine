@@ -8,6 +8,8 @@
 #include "imguizmo/ImGuizmo.h"
 #include <glm/glm/gtc/type_ptr.hpp>
 
+#include "TituEngine/Renderer/Mesh.h"
+
 #define QUADS_COUNT 50000
 
 namespace TituEngine
@@ -121,6 +123,9 @@ namespace TituEngine
 		m_SubTextures2D[8] = new SubTexture2D(m_SpriteSheet, { 3, 1 }, { 128, 128 }, { 1, 2 });
 		m_SubTextures2D[9] = new SubTexture2D(m_SpriteSheet, { 4, 1 }, { 128, 128 }, { 1, 2 });
 		*/
+
+
+		Model* model = new Model("Survival_BackPack_2.fbx");
 	}
 
 	TituEditorLayer::~TituEditorLayer()
