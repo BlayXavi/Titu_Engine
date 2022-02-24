@@ -125,7 +125,7 @@ namespace TituEngine
 		*/
 
 
-		Model* model = new Model("Survival_BackPack_2.fbx");
+		Model* model = new Model("backpack.obj");
 	}
 
 	TituEditorLayer::~TituEditorLayer()

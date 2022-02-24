@@ -5,10 +5,10 @@
 #include "Texture.h"
 #include "Shader.h"
 
-class aiScene;
-class aiNode;
-class aiMesh;
-class aiMaterial;
+struct aiScene;
+struct aiNode;
+struct aiMesh;
+struct aiMaterial;
 enum aiTextureType;
 
 namespace TituEngine
@@ -48,13 +48,14 @@ namespace TituEngine
 	class Model
 	{
 	public:
-		Model(const std::string& path);
+		Model(const std::string& modelName);
 		void Render(const Shader* shader);
 
 	private:
 		std::vector<Mesh*> m_Meshes;
-		std::string m_Path;
 		std::string m_ModelName;
+		std::string m_ModelNameNoExtension;
+
 
 		void LoadModel();
 		void ProcessNode(aiNode* node, const aiScene* scene);

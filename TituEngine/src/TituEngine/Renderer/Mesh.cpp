@@ -66,19 +66,19 @@ namespace TituEngine
 
 	//---------------- MODEL ----------------
 
-	Model::Model(const std::string& path)
-		: m_Path(path)
+	Model::Model(const std::string& modelName)
+		: m_ModelName(modelName)
 	{
-		m_ModelName = path.substr(path.find_last_of("/"), path.length() - 1);
+		m_ModelNameNoExtension = m_ModelName.substr(0, m_ModelName.find_last_of("."));
 		std::cout << "Loading: " << m_ModelName << std::endl;
 		LoadModel();
 	}
-	
+
 	void Model::LoadModel()
 	{
-
+		std::string modelPath = s_DefaultAssetPath_Mesh.string() + "\\" + m_ModelNameNoExtension + "\\" + m_ModelName;
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(m_Path, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		//Read  Load  Initialize
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -87,6 +87,7 @@ namespace TituEngine
 			TE_ASSERT(false, error);
 			return;
 		}
+
 		ProcessNode(scene->mRootNode, scene);
 	}
 
@@ -151,14 +152,11 @@ namespace TituEngine
 		// process material
 		if (mesh->mMaterialIndex >= 0)
 		{
-			if (mesh->mMaterialIndex >= 0)
-			{
-				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-				std::vector<Texture2D*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-				textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-				std::vector<Texture2D*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-				textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-			}
+			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+			std::vector<Texture2D*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+			std::vector<Texture2D*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
 		return Mesh::Create(vertices, indices, textures);
@@ -173,7 +171,7 @@ namespace TituEngine
 			mat->GetTexture(type, i, &str);
 
 			std::string filename = std::string(str.C_Str());
-			filename = s_DefaultAssetPath_Texture2D.string() + "/" + filename;
+			filename = s_DefaultAssetPath_Texture2D.string() + "\\" + m_ModelNameNoExtension + "\\" + filename;
 
 			Texture2D* texture = Texture2D::Create(filename.c_str());
 			textures.push_back(texture);
