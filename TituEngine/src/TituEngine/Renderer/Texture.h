@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_map>
 #include <string>
 #include "TituEngine/Core/Core.h"
 #include <glm/vec2.hpp>
@@ -48,6 +49,9 @@ namespace TituEngine
 	protected:
 		Texture2D(const std::string& path) : Texture(path) { }
 		Texture2D(uint32_t width, uint32_t height) : Texture(width, height) { }
+
+		static std::unordered_map<std::string, Texture2D*> m_LoadedTextures;
+
 	};
 
 

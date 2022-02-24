@@ -8,8 +8,6 @@
 #include "imguizmo/ImGuizmo.h"
 #include <glm/glm/gtc/type_ptr.hpp>
 
-#include "TituEngine/Renderer/Mesh.h"
-
 #define QUADS_COUNT 50000
 
 namespace TituEngine
@@ -78,27 +76,7 @@ namespace TituEngine
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
 
 		m_Scene = new Scene();
-		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
-
-#if 0 
-		Entity entity = m_Scene->CreateEntity("Entity1");
-		TransformComponent tc = entity.AddComponent<TransformComponent>();
-		tempSpriteRendererComponent = &entity.AddComponent<SpriteRendererComponent>();
-		Entity entity2 = m_Scene->CreateEntity("Entity2");
-		TransformComponent tc2 = entity2.AddComponent<TransformComponent>(glm::vec3(1.0f, 0.0f, 0.0f));
-		&entity2.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 0.2f, 1.0f));
-
-		m_GameCameraEntity = m_Scene->CreateEntity("Camera_Entity");
-		TransformComponent& t = m_GameCameraEntity.AddComponent<TransformComponent>();
-		t.SetTranslation(t.GetTranslation() + glm::vec3(0.0f, 0.0f, 3.0f));
-		m_GameCamera = &m_GameCameraEntity.AddComponent<CameraComponent>().Camera;
-
-
-		NativeScriptComponent& nsc = m_GameCameraEntity.AddComponent<NativeScriptComponent>();
-		nsc.Bind<CameraController>();
-		nsc.Instance = nsc.InstantiateScript();
-		nsc.Instance->m_Entity = m_GameCameraEntity;
-#endif
+		//SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -124,8 +102,30 @@ namespace TituEngine
 		m_SubTextures2D[9] = new SubTexture2D(m_SpriteSheet, { 4, 1 }, { 128, 128 }, { 1, 2 });
 		*/
 
+		//model = new Model("cube.obj");
 
-		Model* model = new Model("backpack.obj");
+		std::vector<Vertex> vertices;
+		vertices.resize(4);
+		vertices[0].Position = glm::vec3(-0.5f, -0.5f, 0.0f);
+		vertices[1].Position = glm::vec3(0.5f, -0.5f, 0.0f);
+		vertices[2].Position = glm::vec3(0.5f, 0.5f, 0.0f);
+		vertices[3].Position = glm::vec3(-0.5f, 0.5f, 0.0f);
+
+		std::vector<uint32_t>quadIndices;
+		quadIndices.resize(6);
+		quadIndices[0] = 0;
+		quadIndices[1] = 1;
+		quadIndices[2] = 2;
+
+		quadIndices[3] = 2;
+		quadIndices[4] = 3;
+		quadIndices[5] = 0;
+
+		std::vector<Texture2D*> textures;
+
+		//mesh = Mesh::Create(vertices, quadIndices, textures);
+		model = new Model("backpack.obj");
+		modelShader = Shader::Create("assets/shaders/testing/SimpleMeshRender.glsl");
 	}
 
 	TituEditorLayer::~TituEditorLayer()
@@ -502,13 +502,18 @@ namespace TituEngine
 		glm::mat4 viewProjectionMatrix = activeCamera.GetViewProjectionMatrix();
 
 
-		Renderer::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
+		Renderer2D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
 		{
 			TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
 			m_Scene->OnUpdate(ts);
 		}
+		Renderer2D::EndScene();
 
-		Renderer::EndScene();
+		Renderer3D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
+		model->Render(modelShader);
+		Renderer3D::EndScene();
+
+
 
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 		{

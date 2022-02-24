@@ -81,18 +81,6 @@ namespace TituEngine
 		m_MainFramebuffer->ClearAttachment(1, -1);
 	}
 
-	void Renderer::BeginScene(const Camera* camera, const glm::mat4 viewProjectionMatrix)
-	{
-		Renderer2D::BeginScene(camera, viewProjectionMatrix);
-		Renderer3D::BeginScene(camera, viewProjectionMatrix);
-	}
-
-	void Renderer::EndScene()
-	{
-		Renderer2D::EndScene();
-		Renderer3D::EndScene();
-	}
-
 	void Renderer::EndFrame()
 	{
 		m_MainFramebuffer->UnBind();

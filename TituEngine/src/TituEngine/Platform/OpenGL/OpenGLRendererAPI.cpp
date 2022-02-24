@@ -26,7 +26,8 @@ namespace TituEngine
 
 	void OpenGLRendererAPI::DrawIndexed(const VertexArray* vertexArray, const uint32_t count)
 	{
-		glDrawElements(GL_TRIANGLES, count == -1 ? vertexArray->GetIndexBuffer()->GetCount() : count, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, count == 0 ? vertexArray->GetIndexBuffer()->GetCount() : count, GL_UNSIGNED_INT, nullptr);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

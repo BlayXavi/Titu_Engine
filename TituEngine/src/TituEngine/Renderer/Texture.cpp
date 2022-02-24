@@ -9,6 +9,8 @@
 namespace TituEngine
 {
 	//----------------------------------------- Texture2D -----------------------------------------
+	std::unordered_map<std::string, Texture2D*> Texture2D::m_LoadedTextures;
+
 	Texture2D* Texture2D::Create(uint32_t width, uint32_t height)
 	{
 		TE_PROFILE_PROFILE_FUNC();
@@ -24,9 +26,17 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
+		auto loadedTexture = m_LoadedTextures.find(path);
+		if (loadedTexture != m_LoadedTextures.end())
+			return loadedTexture->second;
+
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::OpenGL: return new OpenGLTexture2D(path);
+		case RendererAPI::API::OpenGL:
+			Texture2D* tex = new OpenGLTexture2D(path);
+			if (tex != nullptr)
+				m_LoadedTextures.insert(std::make_pair(path, tex));
+			return tex;
 		}
 
 		TE_ASSERT(false, "RendererAPI not supported. Context: [Texture2D]"); return nullptr;
@@ -80,7 +90,7 @@ namespace TituEngine
 
 	void TextureUtilities::Init()
 	{
-		if(s_Initialized)
+		if (s_Initialized)
 		{
 			TE_ASSERT(false, "Error, TextureUtilities initialized twice");
 			return;

@@ -41,23 +41,24 @@ namespace TituEngine
 			m_Textures2D[i]->Bind((uint32_t)i);
 		shader->Bind();
 		RenderCommand::DrawIndexed(m_VertexArray);
+		shader->Unbind();
 	}
 
 	void Mesh::Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const std::vector<Texture2D*>& textures)
 	{
 		m_Textures2D = textures;
 
-		m_VertexBuffer = VertexBuffer::Create(nullptr, (uint32_t)vertices.size(), true);
+		m_VertexArray = VertexArray::Create();
+		m_VertexBuffer = VertexBuffer::Create(nullptr, sizeof(Vertex) * (uint32_t)vertices.size(), true);
 		m_VertexBuffer->SetLayout(
 			{
 				{ShaderDataType::Float3,	false, "a_Position"},
-				{ShaderDataType::Float2,	false, "a_TextCoord" },
-				{ShaderDataType::Int,		false, "a_TexIndex"},
-				{ShaderDataType::Int,		false, "a_EntityID"}
+				{ShaderDataType::Float3,	false, "a_Normal"},
+				{ShaderDataType::Float2,	false, "a_TextCoord" }
 
 			});
-		m_VertexBuffer->SetData(vertices.data(), (uint32_t)vertices.size());
-		m_VertexArray = VertexArray::Create();
+
+		m_VertexBuffer->SetData(vertices.data(), sizeof(Vertex) * vertices.size());
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
 		m_IndexBuffer = IndexBuffer::Create(indices.data(), (uint32_t)indices.size(), true);
@@ -72,6 +73,12 @@ namespace TituEngine
 		m_ModelNameNoExtension = m_ModelName.substr(0, m_ModelName.find_last_of("."));
 		std::cout << "Loading: " << m_ModelName << std::endl;
 		LoadModel();
+	}
+
+	void Model::Render(const Shader* shader) const
+	{
+		for (size_t i = 0; i < m_Meshes.size(); i++)
+			m_Meshes[i]->Render(shader);
 	}
 
 	void Model::LoadModel()
@@ -139,8 +146,9 @@ namespace TituEngine
 			else
 				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 
-			vertices.push_back(vertex);
+			vertices.push_back(vertex); 
 		}
+
 		// process indices
 		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 		{

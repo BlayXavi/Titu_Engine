@@ -18,10 +18,12 @@
 
 #include "TituEngine/Renderer/Renderer.h"
 #include "TituEngine/Renderer/Renderer2D.h"
+#include "TituEngine/Renderer/Renderer3D.h"
 #include "TItuEngine/Renderer/Framebuffer.h"
 #include "TituEngine/Renderer/VertexArray.h"
 #include "TituEngine/Renderer/Texture.h"
 #include "TituEngine/Renderer/Shader.h"
+#include "TituEngine/Renderer/Mesh.h"
 
 #include "TituEngine/Renderer/Camera.h"
 

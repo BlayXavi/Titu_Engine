@@ -48,8 +48,6 @@ namespace TituEngine
 		static void OnWindowResized(uint32_t width, uint32_t height);
 
 		static void BeginFrame();
-		static void BeginScene(const Camera* camera, const glm::mat4 viewProjectionMatrix);
-		static void EndScene();
 		static void EndFrame();
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
@@ -75,7 +73,7 @@ namespace TituEngine
 		inline static void Clear() { s_RendererAPI->Clear(); }
 		inline static void EnableDepthTest(bool enable) { s_RendererAPI->EnableDepthTest(enable); }
 
-		void static DrawIndexed(const VertexArray* vertexArray, const uint32_t count = -1)
+		void static DrawIndexed(const VertexArray* vertexArray, const uint32_t count = 0)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray, count);
 		}

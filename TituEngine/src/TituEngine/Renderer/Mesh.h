@@ -20,7 +20,7 @@ namespace TituEngine
 		glm::vec2 TexCoords;
 
 		//Editor
-		uint32_t EntityID;
+		//uint32_t EntityID;
 	};
 
 
@@ -49,7 +49,7 @@ namespace TituEngine
 	{
 	public:
 		Model(const std::string& modelName);
-		void Render(const Shader* shader);
+		void Render(const Shader* shader) const;
 
 	private:
 		std::vector<Mesh*> m_Meshes;
