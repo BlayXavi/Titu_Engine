@@ -6,11 +6,13 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-#include "TituEngine/Renderer/Camera.h"
 #include "Scene.h"
 #include "Entity.h"
 #include "TituEngine/Math/Math.h"
+
+#include "TituEngine/Renderer/Camera.h"
 #include "TituEngine/Renderer/Texture.h"
+#include "TituEngine/Renderer/Mesh.h"
 
 namespace TituEngine
 {
@@ -53,12 +55,12 @@ namespace TituEngine
 		glm::mat4& GetTransform() { return Transform; }
 
 		void SetTranslationAndRotation(glm::vec3& translation, glm::vec3& rotation) { Translation = translation; Rotation = rotation; UpdateTransform(); }
-		void SetTranslationAndRotationAndScale(glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale) 
+		void SetTranslationAndRotationAndScale(glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale)
 		{
-			Translation = translation; 
-			Rotation = rotation; 
-			Scale = scale; 
-			UpdateTransform(); 
+			Translation = translation;
+			Rotation = rotation;
+			Scale = scale;
+			UpdateTransform();
 		}
 
 		void UpdateMatrix(const glm::mat4& transform)
@@ -131,6 +133,34 @@ namespace TituEngine
 		operator const TituEngine::Camera& () { return Camera; }
 
 	private:
+	};
+
+	struct ModelRendererComponent : public Component 
+	{
+		const char* PrettyName = "m_Model Renderer Components";
+
+		ModelRendererComponent() = default;
+		ModelRendererComponent(const Entity& e) : Component(e), m_Model(nullptr) { }
+		ModelRendererComponent(const Entity& e, TituEngine::Model* model) : Component(e) { SetModel(model); };
+
+		void SetModel(Model* model)
+		{
+			m_Materials.clear();
+
+			m_Model = model;
+			m_Materials.clear();
+			m_Materials.resize(m_Model->GetMeshesCount());
+			for (size_t i = 0; i < m_Materials.size(); i++)
+				m_Materials[i] = MaterialUtilities::s_DefaultMaterial;
+		}
+
+		Model* GetModel() const { return m_Model; }
+		std::vector<Material*> GetMaterials() const { return m_Materials; }
+
+	private:
+
+		TituEngine::Model* m_Model;
+		std::vector<TituEngine::Material*> m_Materials;
 	};
 
 	class TituEditorLayer; //temp

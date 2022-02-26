@@ -50,7 +50,7 @@ namespace TituEngine
 
 				ImGui::TreeNodeEx(relativePathString.c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
 
-				if (extension.compare(m_TituSceneExtension) == 0)
+				if (extension.compare(s_TituSceneExtension) == 0)
 				{
 					if (ImGui::BeginDragDropSource())
 					{
@@ -58,11 +58,19 @@ namespace TituEngine
 						ImGui::EndDragDropSource();
 					}
 				}
-				else if (extension.compare(m_PNGExtension) == 0)
+				else if (extension.compare(s_PNGExtension) == 0)
 				{
 					if (ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_PNG", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
+						ImGui::EndDragDropSource();
+					}
+				}
+				else if (extension.compare(s_ObjExtension) || extension.compare(s_FBXExtension))
+				{
+					if (ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_MODEL", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
 						ImGui::EndDragDropSource();
 					}
 				}

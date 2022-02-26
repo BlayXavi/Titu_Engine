@@ -119,11 +119,17 @@ namespace TituEngine
 					m_SelectedEntity.AddComponent<CameraComponent>();
 					ImGui::CloseCurrentPopup();
 				}
-				if (ImGui::MenuItem("SpriteRenderer Component"))
+				else if (ImGui::MenuItem("SpriteRenderer Component"))
 				{
 					m_SelectedEntity.AddComponent<SpriteRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
+				else if (ImGui::MenuItem("ModelRenderer Component"))
+				{
+					m_SelectedEntity.AddComponent<ModelRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
 				ImGui::EndPopup();
 			}
 
@@ -143,6 +149,12 @@ namespace TituEngine
 			{
 				SpriteRendererComponent& srC = e.GetComponent<SpriteRendererComponent>();
 				ComponentPanelDrawer::DrawComponent(e, srC);
+			}
+
+			if (e.HasComponent<ModelRendererComponent>())
+			{
+				ModelRendererComponent& mrC = e.GetComponent<ModelRendererComponent>();
+				ComponentPanelDrawer::DrawComponent(e, mrC);
 			}
 
 		}

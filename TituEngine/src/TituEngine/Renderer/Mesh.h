@@ -1,9 +1,11 @@
 #pragma once
 
+#include "TituEngine/Core/FilesystemUtilities.h"
+
 #include "Buffer.h"
 #include "VertexArray.h"
 #include "Texture.h"
-#include "Shader.h"
+#include "Material.h"
 
 struct aiScene;
 struct aiNode;
@@ -20,7 +22,7 @@ namespace TituEngine
 		glm::vec2 TexCoords;
 
 		//Editor
-		//uint32_t EntityID;
+		uint32_t EntityID;
 	};
 
 
@@ -31,36 +33,35 @@ namespace TituEngine
 		Mesh();
 		virtual ~Mesh();
 
-		void Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const std::vector<Texture2D*>& textures);
+		void Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 
 	private:
 		VertexBuffer* m_VertexBuffer = nullptr;
 		VertexArray* m_VertexArray = nullptr;
 		IndexBuffer* m_IndexBuffer = nullptr;
 
-		std::vector<Texture2D*> m_Textures2D;
-
 	public:
-		static Mesh* Create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const std::vector<Texture2D*>& textures);
-		void Render(const Shader* shader) const;
+		static Mesh* Create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+		void Render(const glm::mat4& modelMatrix, const Material* shader) const;
 	};
 
 	class Model
 	{
 	public:
-		Model(const std::string& modelName);
-		void Render(const Shader* shader) const;
-
+		Model() = default;
+		static Model* Create(const std::string& modelName);
+		void Render(const glm::mat4& modelMatrix, const std::vector<Material*>& mats) const;
+		uint32_t GetMeshesCount() const { return (uint32_t) m_Meshes.size(); }
 	private:
-		std::vector<Mesh*> m_Meshes;
-		std::string m_ModelName;
-		std::string m_ModelNameNoExtension;
+		Model(const std::string& path);
 
+		std::vector<Mesh*> m_Meshes;
+
+		std::filesystem::path m_Path;
+		std::string m_Extension;
 
 		void LoadModel();
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
-
-		std::vector<Texture2D*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 	};
 }

@@ -16,10 +16,10 @@
 namespace TituEngine
 {
 
-	Mesh* Mesh::Create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const std::vector<Texture2D*>& textures)
+	Mesh* Mesh::Create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 	{
 		Mesh* mesh = new Mesh();
-		mesh->Initialize(vertices, indices, textures);
+		mesh->Initialize(vertices, indices);
 		return mesh;
 	}
 
@@ -34,27 +34,23 @@ namespace TituEngine
 		delete m_IndexBuffer;
 	}
 
-	void Mesh::Render(const Shader* shader) const
+	void Mesh::Render(const glm::mat4& modelMatrix, const Material* material) const
 	{
 		m_VertexArray->Bind();
-		for (size_t i = 0; i < m_Textures2D.size(); i++)
-			m_Textures2D[i]->Bind((uint32_t)i);
-		shader->Bind();
+		material->Bind();
 		RenderCommand::DrawIndexed(m_VertexArray);
-		shader->Unbind();
 	}
 
-	void Mesh::Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const std::vector<Texture2D*>& textures)
+	void Mesh::Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 	{
-		m_Textures2D = textures;
-
 		m_VertexArray = VertexArray::Create();
 		m_VertexBuffer = VertexBuffer::Create(nullptr, sizeof(Vertex) * (uint32_t)vertices.size(), true);
 		m_VertexBuffer->SetLayout(
 			{
 				{ShaderDataType::Float3,	false, "a_Position"},
 				{ShaderDataType::Float3,	false, "a_Normal"},
-				{ShaderDataType::Float2,	false, "a_TextCoord" }
+				{ShaderDataType::Float2,	false, "a_TextCoord" },
+				{ShaderDataType::Int,		false, "a_EntityID" }
 
 			});
 
@@ -67,25 +63,30 @@ namespace TituEngine
 
 	//---------------- MODEL ----------------
 
-	Model::Model(const std::string& modelName)
-		: m_ModelName(modelName)
+	Model::Model(const std::string& path)
 	{
-		m_ModelNameNoExtension = m_ModelName.substr(0, m_ModelName.find_last_of("."));
-		std::cout << "Loading: " << m_ModelName << std::endl;
+		m_Path = std::filesystem::path(path);
+		std::cout << "Loading: " << path << std::endl;
 		LoadModel();
 	}
 
-	void Model::Render(const Shader* shader) const
+	Model* Model::Create(const std::string& modelName)
 	{
+		return new Model(modelName);
+	}
+
+	void Model::Render(const glm::mat4& modelMatrix, const std::vector<Material*>& mats) const
+	{
+		TE_ASSERT(m_Meshes.size() == mats.size(), "[Model.Render] Meshes vector has not the same size as Materials vector.");
+
 		for (size_t i = 0; i < m_Meshes.size(); i++)
-			m_Meshes[i]->Render(shader);
+			m_Meshes[i]->Render(modelMatrix, mats[i]);
 	}
 
 	void Model::LoadModel()
 	{
-		std::string modelPath = s_DefaultAssetPath_Mesh.string() + "\\" + m_ModelNameNoExtension + "\\" + m_ModelName;
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = importer.ReadFile(m_Path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		//Read  Load  Initialize
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -146,7 +147,7 @@ namespace TituEngine
 			else
 				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 
-			vertices.push_back(vertex); 
+			vertices.push_back(vertex);
 		}
 
 		// process indices
@@ -157,33 +158,37 @@ namespace TituEngine
 				indices.push_back(face.mIndices[j]);
 		}
 
-		// process material
-		if (mesh->mMaterialIndex >= 0)
-		{
-			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-			std::vector<Texture2D*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-			std::vector<Texture2D*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		}
+		//// process material
+		//if (mesh->mMaterialIndex >= 0)
+		//{
 
-		return Mesh::Create(vertices, indices, textures);
+		//	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		//	std::cout << scene->mNumMaterials << "  " << mesh->mMaterialIndex << std::endl;
+		//	
+		//	std::vector<Texture2D*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		//	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		//	std::vector<Texture2D*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+		//	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+		//	
+		//}
+
+		return Mesh::Create(vertices, indices);
 	}
 
-	std::vector<Texture2D*> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
-	{
-		std::vector<Texture2D*> textures;
-		for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-		{
-			aiString str;
-			mat->GetTexture(type, i, &str);
+	//std::vector<Texture2D*> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+	//{
+	//	std::vector<Texture2D*> textures;
+	//	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	//	{
+	//		aiString str;
+	//		mat->GetTexture(type, i, &str);
 
-			std::string filename = std::string(str.C_Str());
-			filename = s_DefaultAssetPath_Texture2D.string() + "\\" + m_ModelNameNoExtension + "\\" + filename;
+	//		std::string filename = std::string(str.C_Str());
+	//		//filename = s_DefaultAssetPath_Texture2D.string() + "\\" + m_ModelNameNoExtension + "\\" + filename;
 
-			Texture2D* texture = Texture2D::Create(filename.c_str());
-			textures.push_back(texture);
-		}
-		return textures;
-	}
+	//		//Texture2D* texture = Texture2D::Create(filename.c_str());
+	//		//textures.push_back(texture);
+	//	}
+	//	return textures;
+	//}
 }

@@ -151,7 +151,6 @@ namespace TituEngine
 	template<>
 	void ComponentPanelDrawer::DrawComponentInternal<CameraComponent>(Entity& e, CameraComponent& cameraComponent)
 	{
-		static bool removed = false;
 		Camera& c = cameraComponent.Camera;
 		DrawCamera(c);
 		if (ImGui::Button("Set as ActiveCamera"))
@@ -161,12 +160,11 @@ namespace TituEngine
 	template<>
 	void ComponentPanelDrawer::DrawComponentInternal<SpriteRendererComponent>(Entity& e, SpriteRendererComponent& spriteRenderer)
 	{
-		static bool removed = false;
 		glm::vec4& color = spriteRenderer.Color;
 
 		ImGui::ColorEdit4("Color", (float*)&color);
 
-		ImGui::Button("Drop Texture Here", ImVec2(100.0f, 0.0f));
+		ImGui::Button("Drop Texture Here", ImVec2(160.0f, 0.0f));
 
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -179,6 +177,26 @@ namespace TituEngine
 		}
 
 		ImGui::DragFloat2("Tiling Factor", &spriteRenderer.TileSize[0], 0.1f, 0.0f, 10.0f);
+
+	}
+
+	template<>
+	void ComponentPanelDrawer::DrawComponentInternal<ModelRendererComponent>(Entity& e, ModelRendererComponent& modelRenderer)
+	{
+		Model* model = modelRenderer.GetModel();
+		//uint32_t textures = mesh->GetTexturesCount();
+
+		ImGui::Button("Drop Model here", ImVec2(160.0f, 0.0f));
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_MODEL"))
+			{
+				const char* path = (const char*)payload->Data;
+				Model* model = Model::Create(path);
+				if (model != nullptr)
+					modelRenderer.SetModel(model);
+			}
+		}
 
 	}
 

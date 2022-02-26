@@ -4,8 +4,13 @@
 #include <string>
 #include <unordered_map>
 
+#include <shaderc/shaderc.hpp>
+#include <spirv_cross/spirv_cross.hpp>
+#include <spirv_cross/spirv_glsl.hpp>
+
 namespace TituEngine
 {
+
 	class OpenGLShader : public Shader
 	{
 	public:
@@ -23,6 +28,10 @@ namespace TituEngine
 		void SetIntArray(const std::string& name, const int* values, const uint32_t count) override;
 
 		static std::string GetCacheDirectory() { return s_CacheDirectory; }
+
+		const spirv_cross::ShaderResources* GetShaderResources() const { return &m_ShaderResources; }
+
+		uint32_t GetTextureResourcesCount() { return (uint32_t)m_ShaderResources.sampled_images.size(); };
 
 	private:
 		friend Shader;
@@ -53,5 +62,7 @@ namespace TituEngine
 		std::unordered_map<uint32_t, std::vector<uint32_t>> m_OpenGLSPIRVStages;
 
 		static std::string s_CacheDirectory;
+
+		spirv_cross::ShaderResources m_ShaderResources;
 	};
 }

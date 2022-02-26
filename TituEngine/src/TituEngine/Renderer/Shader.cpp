@@ -31,23 +31,30 @@ namespace TituEngine
 				delete shader;
 		}
 
-		return ShaderUtilities::s_ShaderError;;
+		return ShaderUtilities::s_ErrorShader;;
 	}
 
 
-	Shader* ShaderUtilities::s_ShaderError = nullptr;
+	Shader* ShaderUtilities::s_ErrorShader = nullptr;
+	Shader* ShaderUtilities::s_DefaultShader = nullptr;
+
 	bool ShaderUtilities::s_Initialized = false;
 
 	void ShaderUtilities::Init()
 	{
+		if (s_Initialized)
+			return;
+
 		s_Initialized = true;
-		s_ShaderError = Shader::Create("assets/shaders/testing/ErrorShader.glsl");
+		s_ErrorShader = Shader::Create("assets/shaders/testing/ErrorShader.glsl");
+		s_DefaultShader = Shader::Create("assets/shaders/testing/DefaultShader.glsl");
 	}
 
 	void ShaderUtilities::Shutdown()
 	{
 		if (!s_Initialized)
 			return;
-		delete s_ShaderError;
+
+		delete s_ErrorShader;
 	}
 }

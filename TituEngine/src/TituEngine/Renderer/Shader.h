@@ -27,6 +27,8 @@ namespace TituEngine
 
 		bool CompilationSucceeded() { return m_CompilationSucceeded; }
 
+		virtual uint32_t GetTextureResourcesCount() = 0;
+
 	protected:
 		bool m_CompilationSucceeded = false;
 	};
@@ -35,7 +37,8 @@ namespace TituEngine
 	class ShaderUtilities
 	{
 	public:
-		static Shader* s_ShaderError;
+		static Shader* s_ErrorShader;
+		static Shader* s_DefaultShader;
 		static void Init();
 		static void Shutdown();
 	private:

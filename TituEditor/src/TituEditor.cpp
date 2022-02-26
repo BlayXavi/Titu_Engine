@@ -76,7 +76,7 @@ namespace TituEngine
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
 
 		m_Scene = new Scene();
-		//SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
+		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -124,8 +124,8 @@ namespace TituEngine
 		std::vector<Texture2D*> textures;
 
 		//mesh = Mesh::Create(vertices, quadIndices, textures);
-		model = new Model("backpack.obj");
-		modelShader = Shader::Create("assets/shaders/testing/SimpleMeshRender.glsl");
+		model = Model::Create("assets\\meshes\\backpack\\backpack.obj");
+		modelShader = Shader::Create("assets\\shaders\\testing\\SimpleMeshRender.glsl");
 	}
 
 	TituEditorLayer::~TituEditorLayer()
@@ -498,22 +498,9 @@ namespace TituEngine
 
 		Renderer::BeginFrame();
 
-		Camera::ActiveCameraData activeCamera = Camera::GetActiveCamera();
-		glm::mat4 viewProjectionMatrix = activeCamera.GetViewProjectionMatrix();
 
-
-		Renderer2D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
-		{
-			TE_PROFILE_PROFILE_SCOPE("Sandbox2DLayer::BeginDraw");
-			m_Scene->OnUpdate(ts);
-		}
-		Renderer2D::EndScene();
-
-		Renderer3D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
-		model->Render(modelShader);
-		Renderer3D::EndScene();
-
-
+		m_Scene->OnUpdate(ts);
+		
 
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 		{

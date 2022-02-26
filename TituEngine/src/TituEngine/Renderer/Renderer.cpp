@@ -41,6 +41,7 @@ namespace TituEngine
 
 		TextureUtilities::Init();
 		ShaderUtilities::Init();
+		MaterialUtilities::Init();
 
 		RenderCommand::Init();
 		Renderer2D::Init();

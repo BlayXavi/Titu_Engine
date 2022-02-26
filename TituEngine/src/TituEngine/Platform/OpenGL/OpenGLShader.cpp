@@ -5,10 +5,6 @@
 #include <fstream>
 #include <glad/glad.h>
 
-#include <shaderc/shaderc.hpp>
-#include <spirv_cross/spirv_cross.hpp>
-#include <spirv_cross/spirv_glsl.hpp>
-
 #include <filesystem>
 
 namespace TituEngine
@@ -156,26 +152,28 @@ namespace TituEngine
 	void OpenGLShader::Reflect(uint32_t stage, const std::vector<uint32_t>& shaderData)
 	{
 		spirv_cross::Compiler compiler(shaderData);
-		spirv_cross::ShaderResources resources = compiler.get_shader_resources();
+		m_ShaderResources = compiler.get_shader_resources();
 
 		TE_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", GLShaderStageToString(stage), m_Path);
-		TE_CORE_TRACE("\t {0} uniform buffers", resources.uniform_buffers.size());
-		TE_CORE_TRACE("\t {0} resources", resources.sampled_images.size());
+		TE_CORE_TRACE("\t {0} uniform buffers", m_ShaderResources.uniform_buffers.size());
+		TE_CORE_TRACE("\t {0} resources", m_ShaderResources.sampled_images.size());
 
-		TE_CORE_TRACE("Uniform buffers:");
-		for (const auto& resource : resources.uniform_buffers)
+		if (m_ShaderResources.uniform_buffers.size() > 0)
 		{
-			const auto& bufferType = compiler.get_type(resource.base_type_id);
-			size_t bufferSize = compiler.get_declared_struct_size(bufferType);
-			size_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
-			size_t memberCount = bufferType.member_types.size();
+			TE_CORE_TRACE("Uniform buffers:");
+			for (const auto& resource : m_ShaderResources.uniform_buffers)
+			{
+				const auto& bufferType = compiler.get_type(resource.base_type_id);
+				size_t bufferSize = compiler.get_declared_struct_size(bufferType);
+				size_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
+				size_t memberCount = bufferType.member_types.size();
 
-			TE_CORE_TRACE("\t {0}", resource.name);
-			TE_CORE_TRACE("\t\t Size = {0}", bufferSize);
-			TE_CORE_TRACE("\t\t Binding = {0}", binding);
-			TE_CORE_TRACE("\t\t Members = {0}", memberCount);
+				TE_CORE_TRACE("\t {0}", resource.name);
+				TE_CORE_TRACE("\t\t Size = {0}", bufferSize);
+				TE_CORE_TRACE("\t\t Binding = {0}", binding);
+				TE_CORE_TRACE("\t\t Members = {0}", memberCount);
+			}
 		}
-
 	}
 
 	bool OpenGLShader::CompileOrGetVulkanBinaries(const std::unordered_map<uint32_t, std::string>& shaderSources)
