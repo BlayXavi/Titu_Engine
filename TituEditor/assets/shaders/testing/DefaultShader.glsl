@@ -10,16 +10,16 @@ layout (location = 0) out flat int v_EntityID;
 layout(std140, binding = 0) uniform Camera
 {
 	mat4 u_ModelViewProjectionMatrix;
-};
+} camera;
 
 layout(std140, binding = 1) uniform ModelMatrix
 {
 	mat4 u_ModelMatrix;
-};
+} modelmatrix;
 
 void main()
 {
-	gl_Position = u_ModelViewProjectionMatrix * u_ModelMatrix *  vec4(a_Position, 1.0);
+	gl_Position = camera.u_ModelViewProjectionMatrix * modelmatrix.u_ModelMatrix *  vec4(a_Position, 1.0);
 
 	v_EntityID = a_EntityID;
 }

@@ -58,19 +58,27 @@ namespace TituEngine
 						ImGui::EndDragDropSource();
 					}
 				}
-				else if (extension.compare(s_PNGExtension) == 0)
+				else if (extension.compare(s_PNGExtension) == 0 || extension.compare(s_JPGExtension) == 0)
 				{
 					if (ImGui::BeginDragDropSource())
 					{
-						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_PNG", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
+						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_SPRITE", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
 						ImGui::EndDragDropSource();
 					}
 				}
-				else if (extension.compare(s_ObjExtension) || extension.compare(s_FBXExtension))
+				else if (extension.compare(s_ObjExtension) == 0 || extension.compare(s_FBXExtension) == 0)
 				{
 					if (ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_MODEL", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
+						ImGui::EndDragDropSource();
+					}
+				}
+				else if (extension.compare(s_ShaderExtension) == 0)
+				{
+					if (ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("CONTENT_BROWSER_SCENE_SHADER", directoryPathString.c_str(), (directoryPathString.size() + 1) * sizeof(const char));
 						ImGui::EndDragDropSource();
 					}
 				}

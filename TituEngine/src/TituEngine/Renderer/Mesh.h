@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "TituEngine/Core/FilesystemUtilities.h"
 
 #include "Buffer.h"
@@ -63,5 +65,7 @@ namespace TituEngine
 		void LoadModel();
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+
+		static std::unordered_map<std::string, Model*> s_LoadedModels;
 	};
 }

@@ -55,9 +55,6 @@ namespace TituEngine
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 		std::vector<uint32_t> glShaderIDs;
 
-		std::string m_Path;
-		std::string m_Name;
-
 		std::unordered_map<uint32_t, std::vector<uint32_t>> m_VulkanSPIRVStages;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> m_OpenGLSPIRVStages;
 

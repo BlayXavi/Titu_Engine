@@ -29,8 +29,15 @@ namespace TituEngine
 
 		virtual uint32_t GetTextureResourcesCount() = 0;
 
+		std::string GetName() const { return m_Name; }
+
 	protected:
 		bool m_CompilationSucceeded = false;
+
+		std::string m_Path;
+		std::string m_Name;
+
+		static std::unordered_map<std::string, Shader*> m_LoadedShaders;
 	};
 
 

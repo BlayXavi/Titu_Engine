@@ -63,6 +63,8 @@ namespace TituEngine
 
 	//---------------- MODEL ----------------
 
+	std::unordered_map<std::string, Model*> Model::s_LoadedModels;
+
 	Model::Model(const std::string& path)
 	{
 		m_Path = std::filesystem::path(path);
@@ -72,7 +74,15 @@ namespace TituEngine
 
 	Model* Model::Create(const std::string& modelName)
 	{
-		return new Model(modelName);
+		auto loadedModel = s_LoadedModels.find(modelName);
+		if (loadedModel != s_LoadedModels.end())
+			return loadedModel->second;
+
+		Model* newModel = new Model(modelName);
+		if (newModel != nullptr)
+			s_LoadedModels.insert(std::make_pair(modelName, newModel));
+
+		return newModel;
 	}
 
 	void Model::Render(const glm::mat4& modelMatrix, const std::vector<Material*>& mats) const

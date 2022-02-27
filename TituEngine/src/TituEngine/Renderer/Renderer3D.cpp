@@ -44,13 +44,13 @@ namespace TituEngine
 		mesh->Render(modelMatrix, material);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, const std::vector<Material*>& materials)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials)
 	{
 		UpdateModelMatrix(modelMatrix);
 		model->Render(modelMatrix, materials);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const ModelRendererComponent& modelRendererC)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC)
 	{
 		if (modelRendererC.GetModel() != nullptr)
 			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials());

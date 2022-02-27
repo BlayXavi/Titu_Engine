@@ -196,8 +196,47 @@ namespace TituEngine
 				if (model != nullptr)
 					modelRenderer.SetModel(model);
 			}
+			ImGui::EndDragDropTarget();
 		}
 
+		std::vector<Material*>& materials = modelRenderer.GetMaterials();
+		for (size_t i = 0; i < materials.size(); i++)
+		{
+			Material* mat = materials[i];
+
+			ImGui::Button(mat->GetShader()->GetName().c_str(), ImVec2(160.0f, 0.0f));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_SHADER"))
+				{
+					const char* path = (const char*)payload->Data;
+					Shader* shader = Shader::Create(path);
+					if (shader != nullptr)
+					{
+						materials[i] = Material::Create(shader);
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			std::vector<Texture2D*>& textures = mat->GetTextures();
+			for (size_t j = 0; j < textures.size(); j++)
+			{
+				Texture2D* tex = textures[j];
+				ImGui::ImageButton((ImTextureID)tex->GetRendererID(), ImVec2(160.0f, 160.0f));
+				{
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_SPRITE"))
+						{
+							const char* path = (const char*)payload->Data;
+							textures[j] = Texture2D::Create(path);
+						}
+						ImGui::EndDragDropTarget();
+					}
+				}
+			}
+		}
 	}
 
 	template<typename C>

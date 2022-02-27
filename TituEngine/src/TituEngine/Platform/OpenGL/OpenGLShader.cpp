@@ -128,9 +128,11 @@ namespace TituEngine
 
 
 	OpenGLShader::OpenGLShader(const std::string& path)
-		: m_Path(path)
 	{
 		TE_PROFILE_PROFILE_FUNC();
+
+		m_Path = path;
+		m_Name = path.substr(path.find_first_of("\\"), path.find_last_of("."));
 
 		CreateCacheDirectoryIfNeeded();
 
@@ -161,7 +163,9 @@ namespace TituEngine
 		if (m_ShaderResources.uniform_buffers.size() > 0)
 		{
 			TE_CORE_TRACE("Uniform buffers:");
-			for (const auto& resource : m_ShaderResources.uniform_buffers)
+			int index = 0;
+			spirv_cross::ShaderResources res = compiler.get_shader_resources();
+			for (const auto& resource : res.uniform_buffers)
 			{
 				const auto& bufferType = compiler.get_type(resource.base_type_id);
 				size_t bufferSize = compiler.get_declared_struct_size(bufferType);
@@ -169,6 +173,27 @@ namespace TituEngine
 				size_t memberCount = bufferType.member_types.size();
 
 				TE_CORE_TRACE("\t {0}", resource.name);
+				TE_CORE_TRACE("\t\t Size = {0}", bufferSize);
+				TE_CORE_TRACE("\t\t Binding = {0}", binding);
+				TE_CORE_TRACE("\t\t Members = {0}", memberCount);
+				index++;
+			}
+		}
+
+		if (m_ShaderResources.storage_buffers.size() > 0)
+		{
+			TE_CORE_TRACE("Storage buffers:");
+			spirv_cross::ShaderResources res = compiler.get_shader_resources();
+			for (const auto& resource : res.storage_buffers)
+			{
+				const auto& bufferType = compiler.get_type(resource.base_type_id);
+				size_t bufferSize = compiler.get_declared_struct_size(bufferType);
+				size_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
+				size_t memberCount = bufferType.member_types.size();
+				std::string name = compiler.get_name(resource.base_type_id);
+
+				TE_CORE_TRACE("\t {0}", resource.name);
+				TE_CORE_TRACE("\t {0}", name);
 				TE_CORE_TRACE("\t\t Size = {0}", bufferSize);
 				TE_CORE_TRACE("\t\t Binding = {0}", binding);
 				TE_CORE_TRACE("\t\t Members = {0}", memberCount);

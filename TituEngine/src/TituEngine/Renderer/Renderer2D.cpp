@@ -97,7 +97,7 @@ namespace TituEngine
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
 
-		s_Data.BatchRenderingShader = Shader::Create("assets/shaders/testing/BatchRendering.glsl");
+		s_Data.BatchRenderingShader = Shader::Create("assets\\shaders\\testing\\BatchRendering.glsl");
 
 		s_Data.whiteSubTexture2D = TextureUtilities::s_WhiteTexture;
 

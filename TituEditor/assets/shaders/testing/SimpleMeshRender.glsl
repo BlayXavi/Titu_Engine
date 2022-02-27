@@ -41,11 +41,9 @@ layout (location = 1) in vec3 v_Normal;
 layout (location = 2) in flat int v_EntityID;
 
 layout (binding = 0) uniform sampler2D u_Texture;
-layout (binding = 1) uniform sampler2D u_Texture2;
-layout (binding = 2) uniform sampler2D u_Texture3;
 
 void main()
 {
-	color = texture(u_Texture, v_TexCoord) * texture(u_Texture2, v_TexCoord) * texture(u_Texture3, v_TexCoord);
+	color = texture(u_Texture, v_TexCoord);
 	colorId = v_EntityID;
 }

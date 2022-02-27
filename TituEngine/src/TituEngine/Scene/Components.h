@@ -137,7 +137,7 @@ namespace TituEngine
 
 	struct ModelRendererComponent : public Component 
 	{
-		const char* PrettyName = "m_Model Renderer Components";
+		const char* PrettyName = "Model Renderer Components";
 
 		ModelRendererComponent() = default;
 		ModelRendererComponent(const Entity& e) : Component(e), m_Model(nullptr) { }
@@ -155,7 +155,7 @@ namespace TituEngine
 		}
 
 		Model* GetModel() const { return m_Model; }
-		std::vector<Material*> GetMaterials() const { return m_Materials; }
+		std::vector<Material*>& GetMaterials() { return m_Materials; }
 
 	private:
 
