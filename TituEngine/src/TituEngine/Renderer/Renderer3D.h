@@ -24,6 +24,8 @@ namespace TituEngine
 
 		static void UpdateModelMatrix(const glm::mat4& modelMatrix);
 
+		static void SetLightPosition(const glm::vec3& pos);
+
 		static void EndScene();
 	};
 }

@@ -77,6 +77,8 @@ namespace TituEngine
 
 		m_Scene = new Scene();
 		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\backpack.tituscene");
+		light = m_Scene->CreateEntity("Light");
+		light.AddComponent<TransformComponent>();
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -486,6 +488,8 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		currentTimeStep = ts;
+
+		Renderer3D::SetLightPosition(light.GetComponent<TransformComponent>().GetTranslation());
 
 		Renderer::BeginFrame();
 		m_Scene->OnUpdate(ts);

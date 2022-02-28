@@ -97,6 +97,8 @@ namespace TituEngine
 
 		EditorSnapValues m_SnapValues;
 
+		Entity light;
+
 	private:
 		void SetEditorPlayState(EditorPlayState newPlayState);
 
