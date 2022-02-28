@@ -490,9 +490,7 @@ namespace TituEngine
 		Renderer::BeginFrame();
 		m_Scene->OnUpdate(ts);
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
-		{
 			m_LastPixelIDHovered = Renderer::GetMainFramebufferPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
-		}
 		Renderer::EndFrame();
 
 		if (m_ViewPortFocused && !m_UsingGuizmo)

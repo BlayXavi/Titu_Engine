@@ -370,6 +370,9 @@ namespace TituEngine
 
 		m_VulkanSPIRVStages.clear();
 		m_OpenGLSPIRVStages.clear();
+
+		uint32_t cosa = glGetUniformBlockIndex(m_RendererID, "LightingData");
+		std::cout << "COSAA" << cosa << std::endl;
 	}
 
 	void OpenGLShader::ClearData()

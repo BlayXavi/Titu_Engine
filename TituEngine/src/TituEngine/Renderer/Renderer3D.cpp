@@ -8,19 +8,16 @@
 namespace TituEngine
 {
 
-	//struct Renderer3DData
-	//{
-	//	struct CameraData
-	//	{
-	//		glm::mat4 ViewProjection;
-	//	};
-	//	CameraData CameraBufferData;
-	//	UniformBuffer* CameraUniformBuffer;
-	//};
+	struct LightingData
+	{
+		glm::vec4 AmbientLightColor = glm::vec4(0.9f, 0.2f, 0.3f, 1.0f);
+		float AmbientLightIntensity = 1.0f;
+	};
 
-	//static Renderer3DData s_Data;
+	static LightingData s_LightingData;
 
-	UniformBuffer* ModelMatrix;
+	UniformBuffer* ModelMatrixBuffer;
+	UniformBuffer* LightingDataBuffer;
 
 	void Renderer3D::Shutdown()
 	{
@@ -28,37 +25,36 @@ namespace TituEngine
 
 	void Renderer3D::Init()
 	{
-		//s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer3DData::CameraData), 0);
-		ModelMatrix = UniformBuffer::Create(sizeof(glm::mat4), 1);
+		ModelMatrixBuffer = UniformBuffer::Create(sizeof(glm::mat4), 1);
+		LightingDataBuffer = UniformBuffer::Create(sizeof(s_LightingData), 2);
 	}
 
 	void Renderer3D::BeginScene(const Camera* cam, const glm::mat4& view_Projection_matrix)
 	{
-		/*s_Data.CameraBufferData.ViewProjection = view_Projection_matrix;
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBufferData.ViewProjection, sizeof(Renderer3DData::CameraBufferData));*/
+		LightingDataBuffer->SetData(&s_LightingData, sizeof(s_LightingData));
 	}
 
-	void Renderer3D::DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material)
+	void Renderer3D::DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const uint32_t& entityID)
 	{
 		UpdateModelMatrix(modelMatrix);
 		mesh->Render(modelMatrix, material);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const uint32_t& entityID)
 	{
 		UpdateModelMatrix(modelMatrix);
 		model->Render(modelMatrix, materials);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC, const uint32_t& entityID)
 	{
 		if (modelRendererC.GetModel() != nullptr)
-			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials());
+			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials(), entityID);
 	}
 
 	void Renderer3D::UpdateModelMatrix(const glm::mat4& modelMatrix)
 	{
-		ModelMatrix->SetData(&modelMatrix, sizeof(glm::mat4));
+		ModelMatrixBuffer->SetData(&modelMatrix, sizeof(glm::mat4));
 	}
 
 	void Renderer3D::EndScene()

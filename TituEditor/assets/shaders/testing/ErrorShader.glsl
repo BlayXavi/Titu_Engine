@@ -12,11 +12,17 @@ layout(std140, binding = 0) uniform Camera
 	mat4 u_ModelViewProjectionMatrix;
 };
 
+layout(std140, binding = 1) uniform ModelMatrix
+{
+	mat4 u_ModelMatrix;
+};
+
+
 void main()
 {
-	gl_Position = u_ModelViewProjectionMatrix * vec4(a_Position, 1.0);
-
 	v_EntityID = a_EntityID;
+
+	gl_Position = u_ModelViewProjectionMatrix * u_ModelMatrix * vec4(a_Position, 1.0);
 }
 
 #type fragment
