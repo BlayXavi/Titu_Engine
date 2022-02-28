@@ -199,7 +199,7 @@ namespace TituEngine
 			ImGui::EndDragDropTarget();
 		}
 
-		std::vector<Material*>& materials = modelRenderer.GetMaterials();
+		std::vector<Material*>& materials = modelRenderer.GetMaterials(); //unique site where material should be modificable?
 		for (size_t i = 0; i < materials.size(); i++)
 		{
 			Material* mat = materials[i];
@@ -219,18 +219,18 @@ namespace TituEngine
 				ImGui::EndDragDropTarget();
 			}
 
-			std::vector<Texture2D*>& textures = mat->GetTextures();
+			std::vector<Texture2D*>& textures = const_cast<std::vector<Texture2D*>&>(mat->GetTextures()); 
 			for (size_t j = 0; j < textures.size(); j++)
 			{
-				Texture2D* tex = textures[j];
-				ImGui::ImageButton((ImTextureID)tex->GetRendererID(), ImVec2(160.0f, 160.0f));
+				Texture2D** tex = &textures[j];
+				ImGui::ImageButton((ImTextureID)(*tex)->GetRendererID(), ImVec2(160.0f, 160.0f));
 				{
 					if (ImGui::BeginDragDropTarget())
 					{
 						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_SPRITE"))
 						{
 							const char* path = (const char*)payload->Data;
-							textures[j] = Texture2D::Create(path);
+							*tex = Texture2D::Create(path);
 						}
 						ImGui::EndDragDropTarget();
 					}

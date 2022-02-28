@@ -38,6 +38,12 @@ namespace TituEngine
 			SpriteRendererComponent spriteRenderer = e.GetComponent<SpriteRendererComponent>();
 			out << spriteRenderer;
 		}
+		if (e.HasComponent<ModelRendererComponent>())
+		{
+			ModelRendererComponent modelRenderer = e.GetComponent<ModelRendererComponent>();
+			out << modelRenderer;
+		}
+
 		out << YAML::EndMap;
 	}
 
@@ -112,6 +118,10 @@ namespace TituEngine
 				YAML::Node srCNode = entity["SpriteRendererComponent"];
 				if (srCNode)
 					SpriteRendererComponent& spriteRendererComponent = deserializedEntt.AddComponent<SpriteRendererComponent>(srCNode.as<SpriteRendererComponent>());
+
+				YAML::Node mrCNode = entity["ModelRendererComponent"];
+				if (mrCNode)
+					ModelRendererComponent& modelRendererComponent = deserializedEntt.AddComponent<ModelRendererComponent>(mrCNode.as<ModelRendererComponent>());
 
 			}
 

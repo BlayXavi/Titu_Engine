@@ -141,7 +141,21 @@ namespace TituEngine
 
 		ModelRendererComponent() = default;
 		ModelRendererComponent(const Entity& e) : Component(e), m_Model(nullptr) { }
-		ModelRendererComponent(const Entity& e, TituEngine::Model* model) : Component(e) { SetModel(model); };
+		ModelRendererComponent(const Entity& e, std::string& model) : Component(e) { SetModel(model); };
+		ModelRendererComponent(const Entity& e, Model* model) : Component(e) { SetModel(model); };
+		ModelRendererComponent(const Entity& e, ModelRendererComponent& model) : Component(e) 
+		{
+			m_Model = model.GetModel();
+			std::vector<TituEngine::Material*>& mats = model.GetMaterials();
+			m_Materials.resize(mats.size());
+			for (size_t i = 0; i < mats.size(); i++)
+				m_Materials[i] = mats[i];
+		};
+
+		void SetModel(std::string& path)
+		{
+			SetModel(Model::Create(path));
+		}
 
 		void SetModel(Model* model)
 		{

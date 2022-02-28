@@ -53,7 +53,10 @@ namespace TituEngine
 		Model() = default;
 		static Model* Create(const std::string& modelName);
 		void Render(const glm::mat4& modelMatrix, const std::vector<Material*>& mats) const;
-		uint32_t GetMeshesCount() const { return (uint32_t) m_Meshes.size(); }
+		uint32_t GetMeshesCount() const { return (uint32_t)m_Meshes.size(); }
+
+		std::filesystem::path GetAssetPath() { return m_Path; }
+
 	private:
 		Model(const std::string& path);
 

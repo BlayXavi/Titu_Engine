@@ -12,7 +12,8 @@ namespace TituEngine
 		void Bind() const;
 		void UnBind() const;
 		Shader* GetShader() const { return m_Shader; }
-		std::vector<Texture2D*>& GetTextures() { return m_Textures; }
+
+		const std::vector<Texture2D*>& GetTextures() const { return m_Textures; }
 
 	private:
 		Material(Shader* shader);

@@ -97,10 +97,6 @@ namespace TituEngine
 
 		EditorSnapValues m_SnapValues;
 
-		Model* model = nullptr;
-		Mesh* mesh = nullptr;
-		Shader * modelShader = nullptr;
-
 	private:
 		void SetEditorPlayState(EditorPlayState newPlayState);
 

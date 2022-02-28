@@ -30,6 +30,7 @@ namespace TituEngine
 		virtual uint32_t GetTextureResourcesCount() = 0;
 
 		std::string GetName() const { return m_Name; }
+		std::string GetPath() const { return m_Path; }
 
 	protected:
 		bool m_CompilationSucceeded = false;

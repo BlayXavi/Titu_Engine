@@ -76,7 +76,7 @@ namespace TituEngine
 		m_CameraController = new EditorOrthographicCameraController(m_EditorCamera);
 
 		m_Scene = new Scene();
-		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\basic_Scene.tituscene");
+		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\backpack.tituscene");
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -120,12 +120,6 @@ namespace TituEngine
 		quadIndices[3] = 2;
 		quadIndices[4] = 3;
 		quadIndices[5] = 0;
-
-		std::vector<Texture2D*> textures;
-
-		//mesh = Mesh::Create(vertices, quadIndices, textures);
-		model = Model::Create("assets\\meshes\\backpack\\backpack.obj");
-		modelShader = Shader::Create("assets\\shaders\\testing\\SimpleMeshRender.glsl");
 	}
 
 	TituEditorLayer::~TituEditorLayer()
@@ -493,21 +487,16 @@ namespace TituEngine
 
 		currentTimeStep = ts;
 
-		if (m_ViewPortFocused && !m_UsingGuizmo)
-			m_CameraController->OnUpdate(ts);
-
 		Renderer::BeginFrame();
-
-
 		m_Scene->OnUpdate(ts);
-		
-
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 		{
 			m_LastPixelIDHovered = Renderer::GetMainFramebufferPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		}
-
 		Renderer::EndFrame();
+
+		if (m_ViewPortFocused && !m_UsingGuizmo)
+			m_CameraController->OnUpdate(ts);
 	}
 
 	void TituEditorLayer::OnEvent(Event& e)

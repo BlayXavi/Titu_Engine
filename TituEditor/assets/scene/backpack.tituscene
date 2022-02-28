@@ -1,0 +1,15 @@
+Scene: Scene Name
+Entities:
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\backpack\backpack.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender.glsl
+          Textures:
+            - assets\textures2D\backpack\diffuse.jpg
