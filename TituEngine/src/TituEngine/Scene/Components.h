@@ -91,6 +91,8 @@ namespace TituEngine
 			Transform = glm::translate(glm::mat4(1.0f), Translation)
 				* rotation
 				* glm::scale(glm::mat4(1.0f), Scale);
+
+			std::cout << Transform[3].x << " " << Transform[3].y << " " << Transform[3].z << std::endl;
 		}
 
 		glm::mat4 Transform{ 1.0f };

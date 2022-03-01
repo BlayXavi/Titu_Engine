@@ -28,7 +28,7 @@ layout(std140, binding = 2) uniform LightingData
 
 layout (location = 0) out vec2 v_TexCoord;
 layout (location = 1) out vec3 v_Normal;
-layout (location = 2) out vec3 v_VPos;
+layout (location = 2) out vec3 v_VWPos;
 layout (location = 3) out flat int v_EntityID;
 
 void main()
@@ -42,7 +42,7 @@ void main()
 
 	gl_Position = u_ModelViewProjectionMatrix * vPos;
 
-	v_VPos = vPos.xyz;
+	v_VWPos = vPos.xyz;
 }
 
 #type fragment
@@ -54,7 +54,7 @@ layout(location = 1) out int colorId;
 
 layout (location = 0) in vec2 v_TexCoord;
 layout (location = 1) in vec3 v_Normal;
-layout (location = 2) in vec3 v_VPos;
+layout (location = 2) in vec3 v_VWPos;
 layout (location = 3) in flat int v_EntityID;
 
 layout (binding = 0) uniform sampler2D u_ColorTexture;
@@ -71,26 +71,24 @@ layout(std140, binding = 2) uniform LightingData
 	float AmbientLightIntensity;
 	vec4 AmbientLightColor;
 	vec3 LightPosition;
+	vec4 LightColor;
 };
 
 void main()
 {
 
-	vec3 normal = normalize(v_Normal);
+	vec4 texColor = texture(u_ColorTexture, v_TexCoord);
 
-	vec3 lightDir = normalize(LightPosition - vec3(v_VPos));
+	vec3 N = normalize(v_Normal);
+	vec3 V = normalize(u_CameraPosition - v_VWPos);
+	vec3 L = normalize(LightPosition - v_VWPos);
+	vec3 R = normalize(reflect(-L, N));
 
-	vec3 viewDir = normalize(u_CameraPosition - vec3(v_VPos));
-	vec3 reflDir = normalize(reflect(-lightDir, normal)); 
+	float NDotL = max(dot(N, L), 0.0f);
 
-	float diff = max(dot(normal, lightDir), 0.0);
-	vec4 diffuse = vec4(diff, diff, diff, 1.0f);
+	float VDotR = max(dot(V, R), 0.0f);
+	float spec = pow(VDotR, 32);
 
-	float spec = pow(max(dot(viewDir, reflDir), 0.0), 32);
-	vec4 specular = texture(u_SpecularTexture, v_TexCoord) * spec;
-
-	vec4 light = diffuse + specular;// + (AmbientLightColor * AmbientLightIntensity);
-
-	color = vec4(texture(u_ColorTexture, v_TexCoord).xyz * light.xyz, 1.0f);
+	color =  vec4(texColor.xyz * (spec + NDotL), 1.0f);
 	colorId = 1;
 }

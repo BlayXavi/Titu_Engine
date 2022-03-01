@@ -55,13 +55,13 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 
 		if (Input::IsKeyPressed(TE_KEY_W))
 		{
-			eye += dir * speedDelta;
-			center += dir * speedDelta;
+			eye -= dir * speedDelta;
+			center -= dir * speedDelta;
 		}
 		if (Input::IsKeyPressed(TE_KEY_S))
 		{
-			eye -= dir * speedDelta;
-			center -= dir * speedDelta;
+			eye += dir * speedDelta;
+			center += dir * speedDelta;
 		}
 		if (Input::IsKeyPressed(TE_KEY_A))
 		{

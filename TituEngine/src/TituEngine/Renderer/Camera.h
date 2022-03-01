@@ -22,13 +22,12 @@ namespace TituEngine
 			Camera* GetCamera() const { return camera; }
 
 			//returns the inversed of the related mat4
-			glm::mat4 GetViewMatrix() { return invertViewMatrix ? glm::inverse(*viewMatrix) : *viewMatrix; }
+			glm::mat4 GetViewMatrix() const { return invertViewMatrix ? glm::inverse(*viewMatrix) : *viewMatrix; }
 			glm::mat4 GetProjectionMatrix() { return camera->GetProjectionMatrix(); }
 			glm::mat4 GetViewProjectionMatrix() { return camera->GetProjectionMatrix() * GetViewMatrix(); }
 			glm::vec3 GetPosition() const
 			{
-				glm::mat4 vm = (*viewMatrix);
-				return glm::vec3(vm[3][0], vm[3][1], vm[3][2]);
+				return glm::inverse(GetViewMatrix())[3];
 			}
 
 		private:

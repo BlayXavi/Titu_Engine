@@ -79,8 +79,24 @@ namespace TituEngine
 
 	void TransformedCamera::UpdateViewMatrix()
 	{
-		m_Direction = glm::normalize(m_Center - m_Eye);
-		m_ViewMatrix = glm::lookAt(m_Eye, m_Center, glm::vec3(0.0f, 1.0f, 0.0f));
+		m_Direction = -glm::normalize(m_Center - m_Eye);
+		glm::vec3 right = glm::cross(m_Direction, glm::vec3(0.0f, 1.0f, 0.0f));
+		right = glm::normalize(right);
+		glm::vec3 up = glm::cross(right, m_Direction);
+		up = glm::normalize(up);
+		glm::mat4 r(1.0f);
+		r[0][0] = right.x;
+		r[1][0] = right.y;
+		r[2][0] = right.z;
+		r[0][1] = up.x;
+		r[1][1] = up.y;
+		r[2][1] = up.z;
+		r[0][2] = m_Direction.x;
+		r[1][2] = m_Direction.y;
+		r[2][2] = m_Direction.z;
+		glm::mat4 t = glm::translate(glm::mat4(1.0f), -m_Eye);
+
+		m_ViewMatrix = r * t;
 		RecalculateViewProjectionMatrix();
 	}
 }
