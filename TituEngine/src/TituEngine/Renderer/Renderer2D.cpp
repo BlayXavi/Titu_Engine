@@ -44,13 +44,6 @@ namespace TituEngine
 		int32_t currentTexSlots = -1;
 
 		Texture2D* texSlots[MaxTexSlotsPerBatch] = { nullptr };
-
-		struct CameraData
-		{
-			glm::mat4 ViewProjection;
-		};
-		CameraData CameraBufferData;
-		UniformBuffer* CameraUniformBuffer;
 	};
 
 	static Renderer2DData s_Data;
@@ -100,19 +93,6 @@ namespace TituEngine
 		s_Data.BatchRenderingShader = Shader::Create("assets\\shaders\\testing\\BatchRendering.glsl");
 
 		s_Data.whiteSubTexture2D = TextureUtilities::s_WhiteTexture;
-
-		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
-
-
-		/*
-		s_Renderer2DData.QuadVertexArray = VertexArray::Create();
-		s_Renderer2DData.QuadVertexArray->AddVertexBuffer(squareVB);
-		s_Renderer2DData.QuadVertexArray->SetIndexBuffer(indexBuffer);
-
-		s_Renderer2DData.TextureColorShader = Shader::Create("assets/shaders/testing/Blending.glsl");
-		s_Renderer2DData.TextureColorShader->Bind();
-		s_Renderer2DData.TextureColorShader->SetInt("u_Texture", 0);
-		*/
 	}
 
 	void Renderer2D::Shutdown()
@@ -138,14 +118,9 @@ namespace TituEngine
 		s_Data.currentTexSlots = -1;
 	}
 
-	void Renderer2D::BeginScene(const Camera* camera, const glm::mat4& view_Projection_matrix)
+	void Renderer2D::BeginScene()
 	{
 		TE_PROFILE_PROFILE_FUNC();
-
-		camera = camera;
-
-		s_Data.CameraBufferData.ViewProjection = view_Projection_matrix;
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBufferData.ViewProjection, sizeof(Renderer2DData::CameraBufferData));
 
 		RenderStats::Reset();
 		ResetBatchingData();

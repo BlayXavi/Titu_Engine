@@ -26,11 +26,11 @@ namespace TituEngine
 
 	void Renderer3D::Init()
 	{
-		ModelMatrixBuffer = UniformBuffer::Create(sizeof(glm::mat4), 1);
+		ModelMatrixBuffer = UniformBuffer::Create(sizeof(glm::mat4) + 16, 1);
 		LightingDataBuffer = UniformBuffer::Create(sizeof(glm::vec4) * 2 + 12, 2);
 	}
 
-	void Renderer3D::BeginScene(const Camera* cam, const glm::mat4& view_Projection_matrix)
+	void Renderer3D::BeginScene()
 	{
 		//LightingDataBuffer->SetData(&s_LightingData.AmbientLightColor, sizeof(LightingData)); -> Oh god. 2 Hours to see the f****g alingment
 		LightingDataBuffer->SetData(&s_LightingData.AmbientLightIntensity, 4, 0); 

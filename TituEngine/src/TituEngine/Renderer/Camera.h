@@ -25,6 +25,11 @@ namespace TituEngine
 			glm::mat4 GetViewMatrix() { return invertViewMatrix ? glm::inverse(*viewMatrix) : *viewMatrix; }
 			glm::mat4 GetProjectionMatrix() { return camera->GetProjectionMatrix(); }
 			glm::mat4 GetViewProjectionMatrix() { return camera->GetProjectionMatrix() * GetViewMatrix(); }
+			glm::vec3 GetPosition() const
+			{
+				glm::mat4 vm = (*viewMatrix);
+				return glm::vec3(vm[3][0], vm[3][1], vm[3][2]);
+			}
 
 		private:
 			Camera* camera;
@@ -105,7 +110,7 @@ namespace TituEngine
 
 		void SetPosition(const glm::vec3& position)
 		{
-			m_Eye = position; 
+			m_Eye = position;
 			LookAt(m_Center);
 		}
 

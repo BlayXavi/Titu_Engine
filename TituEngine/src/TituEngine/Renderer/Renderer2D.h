@@ -17,7 +17,7 @@ namespace TituEngine
 		static void Shutdown();
 
 		static void ResetBatchingData();
-		static void BeginScene(const Camera* camera, const glm::mat4& view_projection_matrix);
+		static void BeginScene();
 		static void EndScene();
 		static void Flush();
 

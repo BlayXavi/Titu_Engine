@@ -12,7 +12,7 @@ namespace TituEngine
 	{
 		m_Shader->Bind();
 		for (size_t i = 0; i < m_Textures.size(); i++)
-			m_Textures[i]->Bind();
+			m_Textures[i]->Bind(i);
 	}
 
 	void Material::UnBind() const

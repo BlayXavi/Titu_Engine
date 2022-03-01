@@ -12,6 +12,7 @@ namespace TituEngine
 	class Camera;
 	class Framebuffer;
 	struct FramebufferSpecs;
+	class UniformBuffer;
 
 	class RendererAPI
 	{
@@ -48,6 +49,7 @@ namespace TituEngine
 		static void OnWindowResized(uint32_t width, uint32_t height);
 
 		static void BeginFrame();
+		static void UploadCameraDataToGPU();
 		static void EndFrame();
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
@@ -61,6 +63,8 @@ namespace TituEngine
 	private:
 		static Framebuffer* m_MainFramebuffer;
 		static FramebufferSpecs m_MainFramebufferSpecs;
+
+		static UniformBuffer* m_CameraDataUnifformBuffer;
 	};
 
 	class RenderCommand

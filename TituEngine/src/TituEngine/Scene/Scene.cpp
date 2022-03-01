@@ -43,10 +43,9 @@ namespace TituEngine
 				nsc.Instance->OnUpdate(ts);
 			});
 
-		Camera::ActiveCameraData activeCamera = Camera::GetActiveCamera();
-		glm::mat4 viewProjectionMatrix = activeCamera.GetViewProjectionMatrix();
+		Renderer::UploadCameraDataToGPU();
 
-		Renderer2D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
+		Renderer2D::BeginScene();
 		{
 			TE_PROFILE_PROFILE_SCOPE("Render2D::BeginDraw");
 			auto group = m_Registry.view<TransformComponent, SpriteRendererComponent>();
@@ -59,7 +58,7 @@ namespace TituEngine
 		}
 		Renderer2D::EndScene();
 
-		Renderer3D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
+		Renderer3D::BeginScene();
 		{
 			TE_PROFILE_PROFILE_SCOPE("Render3D::BeginDraw");
 			//Render

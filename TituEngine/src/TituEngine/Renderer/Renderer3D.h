@@ -15,7 +15,7 @@ namespace TituEngine
 		static void Shutdown();
 		static void Init();
 
-		static void BeginScene(const Camera* cam, const glm::mat4& view_Projection_matrix);
+		static void BeginScene();
 
 		static void DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const uint32_t& entityID = -1);
 		static void DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const uint32_t& entityID = -1);

@@ -11,6 +11,7 @@ layout(location  = 5) in int a_EntityID;
 
 layout(std140, binding = 0) uniform Camera
 {
+	vec3 u_CameraPosition;
 	mat4 u_ModelViewProjectionMatrix;
 };
 

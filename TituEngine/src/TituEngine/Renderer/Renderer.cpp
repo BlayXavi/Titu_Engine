@@ -4,6 +4,8 @@
 #include "Shader.h"
 #include "Mesh.h"
 
+#include "UniformBuffer.h"
+
 #include "Camera.h"
 
 #include "Renderer.h"
@@ -16,6 +18,7 @@
 
 namespace TituEngine
 {
+
 	//---------------------------------RENDERER API---------------------------------
 	RendererAPI::API RendererAPI::s_RendererAPIID = API::OpenGL;
 	
@@ -34,6 +37,7 @@ namespace TituEngine
 	//---------------------------------  RENDERER  ---------------------------------
 	Framebuffer* Renderer::m_MainFramebuffer = nullptr;
 	FramebufferSpecs Renderer::m_MainFramebufferSpecs = FramebufferSpecs();
+	UniformBuffer* Renderer::m_CameraDataUnifformBuffer = nullptr;
 	
 	void Renderer::Init()
 	{
@@ -53,6 +57,7 @@ namespace TituEngine
 		m_MainFramebufferSpecs.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
 		m_MainFramebuffer = Framebuffer::Create(m_MainFramebufferSpecs);
 
+		m_CameraDataUnifformBuffer = UniformBuffer::Create(16 + 16 * 4, 0);
 	}
 
 	void Renderer::Shutdown()
@@ -80,6 +85,15 @@ namespace TituEngine
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 		m_MainFramebuffer->ClearAttachment(1, -1);
+	}
+
+	void Renderer::UploadCameraDataToGPU()
+	{
+		Camera::ActiveCameraData activeCamData = Camera::GetActiveCamera();
+		glm::vec3 camPos = activeCamData.GetPosition();
+		m_CameraDataUnifformBuffer->SetData(&camPos, 16, 0);
+		glm::mat4 viewProjectionMatrix = activeCamData.GetViewProjectionMatrix();
+		m_CameraDataUnifformBuffer->SetData(&viewProjectionMatrix, 16 * 4, 16);
 	}
 
 	void Renderer::EndFrame()

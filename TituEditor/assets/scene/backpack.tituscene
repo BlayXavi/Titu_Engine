@@ -4,14 +4,14 @@ Entities:
     TagComponent:
       Tag: Light
     TransformComponent:
-      Translation: [0, -5.96046448e-08, 0]
+      Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
   - Entity: 123
     TagComponent:
       Tag: Backpack
     TransformComponent:
-      Translation: [0, 0, -1]
+      Translation: [-0.967060924, 0.0527919084, -1.43078613]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelRendererComponent:
@@ -20,3 +20,11 @@ Entities:
         - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong.glsl
           Textures:
             - assets\textures2D\backpack\diffuse.jpg
+            - assets\textures2D\backpack\specular.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Translation: [0.651160002, 0.0418480337, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]

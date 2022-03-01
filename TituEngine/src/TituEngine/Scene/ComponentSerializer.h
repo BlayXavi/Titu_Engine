@@ -109,7 +109,7 @@ namespace YAML
 					const Node& textsNode = matNode["Textures"][j];
 					std::string texPath = textsNode.as<std::string>();
 					if (texPath.empty() == false)
-						textures[i] = TituEngine::Texture2D::Create(texPath);
+						textures[j] = TituEngine::Texture2D::Create(texPath);
 				}
 			}
 			return true;
