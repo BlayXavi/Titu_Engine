@@ -24,6 +24,7 @@ layout(std140, binding = 2) uniform LightingData
 	float AmbientLightIntensity;
 	vec4 AmbientLightColor;
 	vec3 LightPosition;
+	vec4 LightColor;
 };
 
 layout (location = 0) out vec2 v_TexCoord;
@@ -78,6 +79,8 @@ void main()
 {
 
 	vec4 texColor = texture(u_ColorTexture, v_TexCoord);
+	vec4 specularIntensity = texture(u_SpecularTexture, v_TexCoord);
+	vec4 ambientColor = AmbientLightColor * AmbientLightIntensity;
 
 	vec3 N = normalize(v_Normal);
 	vec3 V = normalize(u_CameraPosition - v_VWPos);
@@ -85,10 +88,12 @@ void main()
 	vec3 R = normalize(reflect(-L, N));
 
 	float NDotL = max(dot(N, L), 0.0f);
+	vec4 diffColor = LightColor * NDotL;
 
 	float VDotR = max(dot(V, R), 0.0f);
 	float spec = pow(VDotR, 32);
+	vec4 specColor = LightColor * (specularIntensity * spec);
 
-	color =  vec4(texColor.xyz * (spec + NDotL), 1.0f);
+	color =  vec4(texColor.xyz * vec3((specColor + diffColor + ambientColor)), texColor.a);
 	colorId = 1;
 }
