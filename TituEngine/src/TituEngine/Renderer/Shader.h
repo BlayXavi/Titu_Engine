@@ -4,6 +4,8 @@
 
 #include <unordered_map>
 
+#include "Signals.h"
+
 namespace TituEngine
 {
 	class Shader
@@ -16,6 +18,7 @@ namespace TituEngine
 
 		//static Shader* Create(const std::string& vs, const std::string& ps);
 		static Shader* Create(const std::string& path);
+		virtual bool Recompile() = 0;
 
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) = 0;
 		virtual void SetInt(const std::string& name, const int& value) = 0;
@@ -25,14 +28,19 @@ namespace TituEngine
 
 		virtual void SetIntArray(const std::string& name, const int* values, const uint32_t count) = 0;
 
-		bool CompilationSucceeded() { return m_CompilationSucceeded; }
+		bool CompilationSucceeded() const { return m_CompilationSucceeded; }
 
 		virtual uint32_t GetTextureResourcesCount() = 0;
 
 		std::string GetName() const { return m_Name; }
 		std::string GetPath() const { return m_Path; }
 
+		Signal<> ShaderRecompiled;
+
 	protected:
+
+		virtual bool Compile(bool useCache = true) = 0;
+
 		bool m_CompilationSucceeded = false;
 
 		std::string m_Path;

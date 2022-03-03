@@ -218,6 +218,15 @@ namespace TituEngine
 				}
 				ImGui::EndDragDropTarget();
 			}
+			
+			if (mat->GetShader() != nullptr)
+			{
+				ImGui::SameLine();
+				if (ImGui::Button("Recompile"))
+				{
+					mat->GetShader()->Recompile();
+				}
+			}
 
 			std::vector<Texture2D*>& textures = const_cast<std::vector<Texture2D*>&>(mat->GetTextures()); 
 			for (size_t j = 0; j < textures.size(); j++)

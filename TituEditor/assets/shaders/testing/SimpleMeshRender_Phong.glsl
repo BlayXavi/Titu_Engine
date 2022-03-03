@@ -30,14 +30,16 @@ layout(std140, binding = 2) uniform LightingData
 layout (location = 0) out vec2 v_TexCoord;
 layout (location = 1) out vec3 v_Normal;
 layout (location = 2) out vec3 v_VWPos;
-layout (location = 3) out flat int v_EntityID;
+layout (location = 3) out flat mat4 v_NormalMatrix;
+layout (location = 7) out flat int v_EntityID; 
 
 void main()
 {
 	v_EntityID = a_EntityID;
 	v_TexCoord = a_TexCoord;
 
-	v_Normal =  normalize(mat3(transpose(inverse(u_ModelMatrix))) * a_Normal);
+	v_NormalMatrix = transpose(inverse(u_ModelMatrix));
+	v_Normal =  normalize(mat3(v_NormalMatrix) * a_Normal);
 
 	vec4 vPos = u_ModelMatrix * vec4(a_Position, 1.0f);
 
@@ -56,10 +58,12 @@ layout(location = 1) out int colorId;
 layout (location = 0) in vec2 v_TexCoord;
 layout (location = 1) in vec3 v_Normal;
 layout (location = 2) in vec3 v_VWPos;
-layout (location = 3) in flat int v_EntityID;
+layout (location = 3) in flat mat4 v_NormalMatrix;
+layout (location = 7) in flat int v_EntityID;
 
 layout (binding = 0) uniform sampler2D u_ColorTexture;
 layout (binding = 1) uniform sampler2D u_SpecularTexture;
+layout (binding = 2) uniform sampler2D u_NormalTexture;
 
 layout(std140, binding = 0) uniform Camera
 {
@@ -77,10 +81,15 @@ layout(std140, binding = 2) uniform LightingData
 
 void main()
 {
-
 	vec4 texColor = texture(u_ColorTexture, v_TexCoord);
 	vec4 specularIntensity = texture(u_SpecularTexture, v_TexCoord);
 	vec4 ambientColor = AmbientLightColor * AmbientLightIntensity;
+
+	vec3 texNormal = texture(u_NormalTexture, v_TexCoord).xyz;
+	texNormal *= 2.0f;
+	texNormal -= 1.0f;
+
+	//vec3 N = normalize(mat3(v_NormalMatrix) * normalize(texNormal));
 
 	vec3 N = normalize(v_Normal);
 	vec3 V = normalize(u_CameraPosition - v_VWPos);

@@ -28,21 +28,9 @@ namespace TituEngine
 			break;
 		}
 
-		if (shader != nullptr)
-		{
-			if (shader->CompilationSucceeded() == false)
-			{
-				delete shader;
-				shader = ShaderUtilities::s_ErrorShader;
-			}
-		}
-		else
-			shader = ShaderUtilities::s_ErrorShader;
-
 		m_LoadedShaders.insert(std::make_pair(path, shader));
 		return shader;
 	}
-
 
 	Shader* ShaderUtilities::s_ErrorShader = nullptr;
 	Shader* ShaderUtilities::s_DefaultShader = nullptr;

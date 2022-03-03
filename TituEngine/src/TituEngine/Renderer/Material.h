@@ -8,6 +8,8 @@ namespace TituEngine
 	class Material
 	{
 	public:
+		virtual ~Material();
+
 		static Material* Create(Shader* shader);
 		void Bind() const;
 		void UnBind() const;
@@ -17,10 +19,14 @@ namespace TituEngine
 
 	private:
 		Material(Shader* shader);
+		void OnShaderRecompiled();
+
+		void RefreshTextureReferences();
 
 	private:
 		Shader* m_Shader = nullptr;
 		std::vector<Texture2D*> m_Textures;
+		uint32_t m_OnShaderRecompiledHandler;
 	};
 
 	class MaterialUtilities

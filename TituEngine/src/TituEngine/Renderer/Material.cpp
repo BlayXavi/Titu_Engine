@@ -3,6 +3,12 @@
 
 namespace TituEngine
 {
+	Material::~Material()
+	{
+		if (m_Shader != nullptr)
+			m_Shader->ShaderRecompiled.RemoveListener(m_OnShaderRecompiledHandler);
+	}
+
 	Material* Material::Create(Shader* shader)
 	{
 		return new Material(shader);;
@@ -22,10 +28,29 @@ namespace TituEngine
 
 	Material::Material(Shader* shader)
 	{
+		if (m_Shader != nullptr)
+			m_Shader->ShaderRecompiled.RemoveListener(m_OnShaderRecompiledHandler);
+
 		m_Shader = shader;
+		m_OnShaderRecompiledHandler = m_Shader->ShaderRecompiled.AddListener(this, &Material::OnShaderRecompiled);
+
+		RefreshTextureReferences();
+	}
+
+	void Material::OnShaderRecompiled()
+	{
+		RefreshTextureReferences();
+	}
+
+	void Material::RefreshTextureReferences()
+	{
+		int currentTexturesCount = m_Textures.size();
+
 		m_Textures.resize(m_Shader->GetTextureResourcesCount());
-		for (size_t i = 0; i < m_Textures.size(); i++)
+
+		for (size_t i = currentTexturesCount; i < m_Textures.size(); i++)
 			m_Textures[i] = TextureUtilities::s_WhiteTexture->GetTexture();
+
 	}
 
 	// ----------------- MATERIAL UTILITIES ----------------

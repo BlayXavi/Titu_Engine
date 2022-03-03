@@ -39,6 +39,7 @@ namespace TituEngine
 		m_VertexArray->Bind();
 		material->Bind();
 		RenderCommand::DrawIndexed(m_VertexArray);
+		material->UnBind();
 	}
 
 	void Mesh::Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)

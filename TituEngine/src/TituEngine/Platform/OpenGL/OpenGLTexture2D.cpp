@@ -55,6 +55,10 @@ namespace TituEngine
 				m_InternalFormat = GL_RG8;
 				m_DataFormat = GL_RG;
 			}
+			else if (m_Channels == 1)
+			{
+				m_InternalFormat = GL_R;
+			}
 
 			TE_ASSERT(m_InternalFormat, "Texture format not supported [{0}]", path);
 

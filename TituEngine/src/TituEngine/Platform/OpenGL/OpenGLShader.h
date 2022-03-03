@@ -15,6 +15,7 @@ namespace TituEngine
 	{
 	public:
 		~OpenGLShader();
+		bool Recompile() override;
 
 		void Bind() const override;
 		void Unbind() const override;
@@ -25,6 +26,7 @@ namespace TituEngine
 		void SetFloat3(const std::string& name, const glm::vec3& value) override;
 		void SetFloat4(const std::string& name, const glm::vec4& value) override;
 
+
 		void SetIntArray(const std::string& name, const int* values, const uint32_t count) override;
 
 		static std::string GetCacheDirectory() { return s_CacheDirectory; }
@@ -33,6 +35,7 @@ namespace TituEngine
 
 		uint32_t GetTextureResourcesCount() { return (uint32_t)m_ShaderResources.sampled_images.size(); };
 
+
 	private:
 		friend Shader;
 
@@ -40,17 +43,20 @@ namespace TituEngine
 		std::string ReadFile(const std::string& path);
 		std::unordered_map<uint32_t, std::string> SplitStages(const std::string& source);
 
-		bool CompileOrGetVulkanBinaries(const std::unordered_map<uint32_t, std::string>& shaderSources);
-		bool CompileOrGetOpenGLBinaries();
+		bool CompileOrGetVulkanBinaries(const std::unordered_map<uint32_t, std::string>& shaderSources, bool useCache = true);
+		bool CompileOrGetOpenGLBinaries(bool useCache = true);
 		void CreateProgram();
+
+		bool Compile(bool useCache = true) override;
 
 		void Reflect(uint32_t stage, const std::vector<uint32_t>& shaderData);
 
 		int GetUniformLocation(const std::string& name);
 		void ClearData();
 
+
 	private:
-		uint32_t m_RendererID;
+		uint32_t m_RendererID = 0;
 
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 		std::vector<uint32_t> glShaderIDs;

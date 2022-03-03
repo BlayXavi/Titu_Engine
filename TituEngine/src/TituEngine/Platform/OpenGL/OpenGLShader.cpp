@@ -132,23 +132,47 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		m_Path = path;
-		m_Name = path.substr(path.find_first_of("\\"), path.find_last_of("."));
+		m_Name = path.substr(path.find_last_of("\\"), path.find_last_of("."));
 
 		CreateCacheDirectoryIfNeeded();
-
-		std::string source = ReadFile(m_Path);
-		std::unordered_map<GLenum, std::string> shaderStages = SplitStages(source);
-
-		m_CompilationSucceeded= CompileOrGetVulkanBinaries(shaderStages);
-		m_CompilationSucceeded = m_CompilationSucceeded && CompileOrGetOpenGLBinaries();
-		if(m_CompilationSucceeded)
-			CreateProgram();
+		Compile();
 	}
 
 	OpenGLShader::~OpenGLShader()
 	{
 		// We don't need the program anymore.
 		ClearData();
+	}
+
+	bool OpenGLShader::Compile(bool useCache)
+	{
+		std::string source = ReadFile(m_Path);
+		std::unordered_map<GLenum, std::string> shaderStages = SplitStages(source);
+
+		m_CompilationSucceeded = CompileOrGetVulkanBinaries(shaderStages, useCache);
+		m_CompilationSucceeded = m_CompilationSucceeded && CompileOrGetOpenGLBinaries(useCache);
+		if (m_CompilationSucceeded)
+			CreateProgram();
+		return m_CompilationSucceeded;
+	}
+
+	bool OpenGLShader::Recompile()
+	{
+		if (m_RendererID > 0)
+		{
+			std::string cacheDir = GetCacheDirectory();
+
+			TE_CORE_WARN("Recompiling Shader %s. CLEARING DATA and REMOVING last CACHE FILES.", m_Path);
+
+			ClearData();
+		}
+		else
+			TE_CORE_WARN("Trying to recompile Shader %s without m_RendererID.", m_Path);
+
+
+		bool success = Compile(false);
+		ShaderRecompiled.Dispatch();
+		return success;
 	}
 
 	void OpenGLShader::Reflect(uint32_t stage, const std::vector<uint32_t>& shaderData)
@@ -201,7 +225,7 @@ namespace TituEngine
 		}
 	}
 
-	bool OpenGLShader::CompileOrGetVulkanBinaries(const std::unordered_map<uint32_t, std::string>& shaderSources)
+	bool OpenGLShader::CompileOrGetVulkanBinaries(const std::unordered_map<uint32_t, std::string>& shaderSources, bool useCache)
 	{
 		shaderc::Compiler shaderCompiler;
 		shaderc::CompileOptions shaderCompilerOptions;
@@ -211,8 +235,6 @@ namespace TituEngine
 		if (optimize)
 			shaderCompilerOptions.SetOptimizationLevel(shaderc_optimization_level_performance);
 
-		m_VulkanSPIRVStages.clear();
-
 		std::string cacheDir = GetCacheDirectory();
 
 		for (auto&& [stage, source] : shaderSources)
@@ -220,6 +242,13 @@ namespace TituEngine
 			std::filesystem::path shaderFilePath = m_Path;
 			std::filesystem::path cachedPath = cacheDir + "\\" + (shaderFilePath.filename().string() + GLShaderStageCachedVulkanFileExtension(stage));
 
+			if (!useCache && std::filesystem::exists(cachedPath))
+			{
+				std::error_code errorCode;
+				bool deletedCache = std::filesystem::remove(cachedPath, errorCode);
+				TE_ASSERT(deletedCache, errorCode.message());
+			}
+			
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
 			if (in.is_open()) //if Vulkan stages are compiled and saved on disk load it
 			{
@@ -263,7 +292,7 @@ namespace TituEngine
 
 	}
 
-	bool OpenGLShader::CompileOrGetOpenGLBinaries()
+	bool OpenGLShader::CompileOrGetOpenGLBinaries(bool useCache)
 	{
 		shaderc::Compiler shaderCompiler;
 		shaderc::CompileOptions shaderCompilerOptions;
@@ -281,6 +310,13 @@ namespace TituEngine
 		{
 			std::filesystem::path shaderFilePath = m_Path;
 			std::filesystem::path cachedPath = cacheDir + "\\" + (shaderFilePath.filename().string() + GLShaderStageCachedOpenGLFileExtension(stage));
+
+			if (!useCache && std::filesystem::exists(cachedPath))
+			{
+				std::error_code errorCode;
+				bool deletedCache = std::filesystem::remove(cachedPath, errorCode);
+				TE_ASSERT(deletedCache, errorCode.message());
+			}
 
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
 			if (in.is_open()) //get cached binnaries
@@ -330,10 +366,9 @@ namespace TituEngine
 	{
 		GLuint program = glCreateProgram();
 
-		std::vector<GLuint> shaderIDs;
 		for (auto&& [stage, spirv] : m_OpenGLSPIRVStages)
 		{
-			GLuint shaderID = shaderIDs.emplace_back(glCreateShader(stage));
+			GLuint shaderID = glShaderIDs.emplace_back(glCreateShader(stage));
 			glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), (GLsizei)spirv.size() * sizeof(uint32_t));
 			glSpecializeShader(shaderID, "main", 0, nullptr, nullptr);
 			glAttachShader(program, shaderID);
@@ -353,26 +388,23 @@ namespace TituEngine
 
 			glDeleteProgram(program);
 
-			for (GLuint shaderID : shaderIDs)
+			for (GLuint shaderID : glShaderIDs)
 				glDeleteShader(shaderID);
-
 		}
 		else
 		{
-			for (GLuint id : shaderIDs)
+			for (GLuint id : glShaderIDs)
 			{
 				glDetachShader(program, id);
 				glDeleteShader(id);
 			}
+			glShaderIDs.clear();
 
 			m_RendererID = program;
 		}
 
 		m_VulkanSPIRVStages.clear();
 		m_OpenGLSPIRVStages.clear();
-
-		uint32_t cosa = glGetUniformBlockIndex(m_RendererID, "LightingData");
-		std::cout << "COSAA" << cosa << std::endl;
 	}
 
 	void OpenGLShader::ClearData()
@@ -409,7 +441,10 @@ namespace TituEngine
 
 	void OpenGLShader::Bind() const
 	{
-		glUseProgram(m_RendererID);
+		if(CompilationSucceeded())
+			glUseProgram(m_RendererID);
+		else
+			ShaderUtilities::s_ErrorShader->Bind();
 	}
 
 	void OpenGLShader::Unbind() const
