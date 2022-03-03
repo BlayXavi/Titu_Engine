@@ -58,7 +58,7 @@ namespace TituEngine
 						ImGui::EndDragDropSource();
 					}
 				}
-				else if (extension.compare(s_PNGExtension) == 0 || extension.compare(s_JPGExtension) == 0)
+				else if (extension.compare(s_PNGExtension) == 0 || extension.compare(s_JPGExtension) == 0 || extension.compare(s_TGAExtension) == 0)
 				{
 					if (ImGui::BeginDragDropSource())
 					{

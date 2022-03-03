@@ -583,6 +583,9 @@ namespace TituEngine
 		delete m_Scene;
 		m_Scene = new Scene();
 		OnSceneLoaded.Dispatch();
+
+		light = m_Scene->CreateEntity("Light");
+		light.AddComponent<TransformComponent>();
 	}
 
 	void TituEditorLayer::OpenScene()
@@ -594,7 +597,11 @@ namespace TituEngine
 			m_Scene = new Scene();
 			SceneSerializer::DeserializeScene(m_Scene, fName);
 			OnSceneLoaded.Dispatch();
+
+			light = m_Scene->CreateEntity("Light");
+			light.AddComponent<TransformComponent>();
 		}
+
 	}
 
 	void TituEditorLayer::OpenScene(std::filesystem::path path)
@@ -606,7 +613,11 @@ namespace TituEngine
 			m_Scene = new Scene();
 			SceneSerializer::DeserializeScene(m_Scene, path.string());
 			OnSceneLoaded.Dispatch();
+
+			light = m_Scene->CreateEntity("Light");
+			light.AddComponent<TransformComponent>();
 		}
+
 	}
 
 	void TituEditorLayer::Toolbar()

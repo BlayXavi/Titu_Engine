@@ -1,0 +1,23 @@
+Scene: Scene Name
+Entities:
+  - Entity: 123
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Translation: [-0.450852096, -0.442452103, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+  - Entity: 123
+    TagComponent:
+      Tag: Lee
+    TransformComponent:
+      Translation: [0.689744592, -3.84365106, -2.4348917]
+      Rotation: [0, 0, 0]
+      Scale: [0.280000031, 0.280000031, 0.280000031]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\lee\lee.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_ColorSpecular_Normal.glsl
+          Textures:
+            - assets\textures2D\lee\lee_color_specular.tga
+            - assets\textures2D\lee\lee_normal.tga

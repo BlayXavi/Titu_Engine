@@ -8,6 +8,7 @@ namespace TituEngine
 	static const std::string s_TituSceneExtension = ".tituscene";
 	static const std::string s_PNGExtension = ".png";
 	static const std::string s_JPGExtension = ".jpg";
+	static const std::string s_TGAExtension = ".tga";
 	static const std::string s_ObjExtension = ".obj";
 	static const std::string s_FBXExtension = ".fbx";
 	static const std::string s_ShaderExtension = ".glsl";

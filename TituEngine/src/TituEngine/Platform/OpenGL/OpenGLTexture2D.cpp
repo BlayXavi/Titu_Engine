@@ -3,6 +3,8 @@
 
 #include "stb_image.h"
 
+#include <filesystem>
+
 namespace TituEngine
 {
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
@@ -27,7 +29,13 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		stbi_set_flip_vertically_on_load(1);
+		std::filesystem::path pathfile(path);
+		std::string extension = pathfile.extension().string();
+		if (extension.compare(".tga") != 0)
+			stbi_set_flip_vertically_on_load(1);
+		else
+			stbi_set_flip_vertically_on_load(0);
+
 
 		stbi_uc* data = nullptr;
 		{
