@@ -3,9 +3,7 @@
 #version 450 core
 
 layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec3 a_Normal;
-layout(location = 2) in vec2 a_TexCoord;
-layout(location = 3) in int a_EntityID;
+layout(location = 3) in vec2 a_TexCoord;
 
 layout(std140, binding = 0) uniform Camera
 {
@@ -19,14 +17,10 @@ layout(std140, binding = 1) uniform ModelMatrix
 };
 
 layout (location = 0) out vec2 v_TexCoord;
-layout (location = 1) out vec3 v_Normal;
-layout (location = 2) out flat int v_EntityID;
 
 void main()
 {
-	v_EntityID = a_EntityID;
 	v_TexCoord = a_TexCoord;
-	v_Normal = a_Normal;
 	gl_Position = u_ModelViewProjectionMatrix * u_ModelMatrix * vec4(a_Position, 1.0f);
 }
 
@@ -38,8 +32,6 @@ layout(location = 0) out vec4 color;
 layout(location = 1) out int colorId;
 
 layout (location = 0) in vec2 v_TexCoord;
-layout (location = 1) in vec3 v_Normal;
-layout (location = 2) in flat int v_EntityID;
 
 layout (binding = 0) uniform sampler2D u_Texture;
 

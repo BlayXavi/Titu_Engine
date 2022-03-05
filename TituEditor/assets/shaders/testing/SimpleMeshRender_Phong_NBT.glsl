@@ -4,8 +4,9 @@
 
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
-layout(location = 2) in vec2 a_TexCoord;
-layout(location = 3) in int a_EntityID;
+layout(location = 2) in vec3 a_Tangent;
+layout(location = 3) in vec2 a_TexCoord;
+layout(location = 4) in int a_EntityID;
 
 layout(std140, binding = 0) uniform Camera
 {
@@ -33,6 +34,12 @@ layout (location = 2) out vec3 v_VWPos;
 layout (location = 3) out flat mat4 v_NormalMatrix;
 layout (location = 7) out flat int v_EntityID; 
 
+layout (location = 8) out VS_OUT
+{
+	mat3 TBN;
+
+} vs_out;
+
 void main()
 {
 	v_EntityID = a_EntityID;
@@ -40,6 +47,11 @@ void main()
 
 	v_NormalMatrix = transpose(inverse(u_ModelMatrix));
 	v_Normal =  normalize(mat3(v_NormalMatrix) * a_Normal);
+
+	vec3 v_Tangent = normalize(a_Tangent);
+	vec3 v_Bitangent = cross(v_Normal, v_Tangent);
+
+	vs_out.TBN = mat3(v_Tangent, v_Bitangent, v_Normal);
 
 	vec4 vPos = u_ModelMatrix * vec4(a_Position, 1.0f);
 
@@ -60,6 +72,9 @@ layout (location = 1) in vec3 v_Normal;
 layout (location = 2) in vec3 v_VWPos;
 layout (location = 3) in flat mat4 v_NormalMatrix;
 layout (location = 7) in flat int v_EntityID;
+layout (location = 8) in VS_OUT {
+    mat3 TBN;
+} fs_in;  
 
 layout (binding = 0) uniform sampler2D u_ColorTexture;
 layout (binding = 1) uniform sampler2D u_SpecularTexture;
@@ -79,6 +94,7 @@ layout(std140, binding = 2) uniform LightingData
 	vec4 LightColor;
 };
 
+
 void main()
 {
 	vec4 texColor = texture(u_ColorTexture, v_TexCoord);
@@ -86,12 +102,12 @@ void main()
 	vec4 ambientColor = AmbientLightColor * AmbientLightIntensity;
 
 	vec3 texNormal = texture(u_NormalTexture, v_TexCoord).xyz;
-	texNormal *= 2.0f;
-	texNormal -= 1.0f;
+	texNormal = texNormal* 2.0f -1.0f;
+	texNormal = fs_in.TBN * texNormal;
 
 	//vec3 N = normalize(mat3(v_NormalMatrix) * normalize(texNormal));
 
-	vec3 N = normalize(v_Normal);
+	vec3 N = normalize(texNormal);
 	vec3 V = normalize(u_CameraPosition - v_VWPos);
 	vec3 L = normalize(LightPosition - v_VWPos);
 	vec3 R = normalize(reflect(-L, N));

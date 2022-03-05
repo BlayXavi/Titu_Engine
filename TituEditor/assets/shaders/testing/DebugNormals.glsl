@@ -4,7 +4,7 @@
 			
 layout(location  = 0) in vec3 a_Position;
 layout(location  = 1) in vec3 a_Normal;
-layout(location  = 3) in int a_EntityID;
+layout(location  = 4) in int a_EntityID;
 
 layout (location = 0) out vec3 v_Normal;
 layout (location = 1) out flat int v_EntityID;

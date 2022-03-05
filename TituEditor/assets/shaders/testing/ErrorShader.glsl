@@ -2,8 +2,8 @@
 //--------------------------------VERTEX---------------------
 #version 450 core
 			
-layout(location  = 0) in vec3 a_Position;
-layout(location  = 5) in int a_EntityID;
+layout(location = 0) in vec3 a_Position;
+layout(location = 4) in int a_EntityID;
 
 layout (location = 0) out flat int v_EntityID;
 

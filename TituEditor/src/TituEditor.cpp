@@ -104,8 +104,6 @@ namespace TituEngine
 		m_SubTextures2D[9] = new SubTexture2D(m_SpriteSheet, { 4, 1 }, { 128, 128 }, { 1, 2 });
 		*/
 
-		//model = new Model("cube.obj");
-
 		std::vector<Vertex> vertices;
 		vertices.resize(4);
 		vertices[0].Position = glm::vec3(-0.5f, -0.5f, 0.0f);

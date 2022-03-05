@@ -50,6 +50,7 @@ namespace TituEngine
 			{
 				{ShaderDataType::Float3,	false, "a_Position"},
 				{ShaderDataType::Float3,	false, "a_Normal"},
+				{ShaderDataType::Float3,	false, "a_Tangent"},
 				{ShaderDataType::Float2,	false, "a_TextCoord" },
 				{ShaderDataType::Int,		false, "a_EntityID" }
 
@@ -97,7 +98,7 @@ namespace TituEngine
 	void Model::LoadModel()
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(m_Path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
+		const aiScene* scene = importer.ReadFile(m_Path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph | aiProcess_CalcTangentSpace);
 
 		//Read  Load  Initialize
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -147,6 +148,11 @@ namespace TituEngine
 			vector.y = mesh->mNormals[i].y;
 			vector.z = mesh->mNormals[i].z;
 			vertex.Normal = vector;
+
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
 
 			if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 			{
