@@ -2,15 +2,23 @@ Scene: Scene Name
 Entities:
   - Entity: 123
     TagComponent:
+      Tag: Light
+    TransformComponent:
+      Translation: [0.314527392, 0.536629617, 0.785139322]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+  - Entity: 123
+    TagComponent:
       Tag: Backpack
     TransformComponent:
-      Translation: [-0.967060924, 0.0527919084, -1.43078613]
+      Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelRendererComponent:
       AssetPath: assets\meshes\backpack\backpack.obj
       Materials:
-        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong.glsl
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
           Textures:
             - assets\textures2D\backpack\diffuse.jpg
             - assets\textures2D\backpack\specular.jpg
+            - assets\textures2D\backpack\normal.png
