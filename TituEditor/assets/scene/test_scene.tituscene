@@ -1,0 +1,53 @@
+Scene: Scene Name
+Entities:
+  - Entity: 123
+    TagComponent:
+      Tag: Wall_1
+    TransformComponent:
+      Translation: [3.01448011, 0, -5.58675718]
+      Rotation: [1.57079637, 0, 1.57079637]
+      Scale: [11.2059994, 11.2059984, 11.2059984]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Translation: [6.49223423, 0.73544848, 2.70214844]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+  - Entity: 123
+    TagComponent:
+      Tag: Backpack
+    TransformComponent:
+      Translation: [7.60135269, 0.994623125, -1.39999998]
+      Rotation: [0, 0, 0]
+      Scale: [2.31999993, 2.31999993, 2.31999993]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\backpack\backpack.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\backpack\diffuse.jpg
+            - assets\textures2D\backpack\specular.jpg
+            - assets\textures2D\backpack\normal.png
+  - Entity: 123
+    TagComponent:
+      Tag: Lee
+    TransformComponent:
+      Translation: [0.501808405, -1.70696127, 0.348082662]
+      Rotation: [0, 0, 0]
+      Scale: [0.315200031, 0.315200031, 0.315200031]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\lee\lee.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_ColorSpecular_Normal.glsl
+          Textures:
+            - assets\textures2D\lee\lee_color_specular.tga
+            - assets\textures2D\lee\lee_normal.tga

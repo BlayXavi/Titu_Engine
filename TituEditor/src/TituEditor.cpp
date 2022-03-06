@@ -77,8 +77,6 @@ namespace TituEngine
 
 		m_Scene = new Scene();
 		SceneSerializer::DeserializeScene(m_Scene, "assets\\scene\\backpack.tituscene");
-		light = m_Scene->CreateEntity("Light");
-		light.AddComponent<TransformComponent>();
 
 		memset(debugFPS, 0, FPS_DEBUG_COUNT * sizeof(float));
 		memset(debugMS, 0, FPS_DEBUG_COUNT * sizeof(float));
@@ -487,8 +485,6 @@ namespace TituEngine
 
 		currentTimeStep = ts;
 
-		Renderer3D::SetLightPosition(light.GetComponent<TransformComponent>().GetTranslation());
-
 		Renderer::BeginFrame();
 		m_Scene->OnUpdate(ts);
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
@@ -581,9 +577,6 @@ namespace TituEngine
 		delete m_Scene;
 		m_Scene = new Scene();
 		OnSceneLoaded.Dispatch();
-
-		light = m_Scene->CreateEntity("Light");
-		light.AddComponent<TransformComponent>();
 	}
 
 	void TituEditorLayer::OpenScene()
@@ -595,9 +588,6 @@ namespace TituEngine
 			m_Scene = new Scene();
 			SceneSerializer::DeserializeScene(m_Scene, fName);
 			OnSceneLoaded.Dispatch();
-
-			light = m_Scene->CreateEntity("Light");
-			light.AddComponent<TransformComponent>();
 		}
 
 	}
@@ -611,9 +601,6 @@ namespace TituEngine
 			m_Scene = new Scene();
 			SceneSerializer::DeserializeScene(m_Scene, path.string());
 			OnSceneLoaded.Dispatch();
-
-			light = m_Scene->CreateEntity("Light");
-			light.AddComponent<TransformComponent>();
 		}
 
 	}

@@ -129,6 +129,11 @@ namespace TituEngine
 					m_SelectedEntity.AddComponent<ModelRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
+				else if (ImGui::MenuItem("Light Component"))
+				{
+					m_SelectedEntity.AddComponent<LightComponent>();
+					ImGui::CloseCurrentPopup();
+				}
 
 				ImGui::EndPopup();
 			}
@@ -157,6 +162,11 @@ namespace TituEngine
 				ComponentPanelDrawer::DrawComponent(e, mrC);
 			}
 
+			if (e.HasComponent<LightComponent>())
+			{
+				LightComponent& lc = e.GetComponent<LightComponent>();
+				ComponentPanelDrawer::DrawComponent(e, lc);
+			}
 		}
 
 		ImGui::End();

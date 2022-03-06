@@ -281,6 +281,7 @@ namespace TituEngine
 						out.flush();
 						out.close();
 					}
+					TE_CORE_INFO("ShaderCompiled: " + stage);
 				}
 			}
 		}
@@ -416,6 +417,7 @@ namespace TituEngine
 		}
 
 		glDeleteProgram(m_RendererID);
+		m_RendererID = 0;
 
 		glShaderIDs.clear();
 

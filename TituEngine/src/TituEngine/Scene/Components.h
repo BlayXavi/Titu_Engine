@@ -14,6 +14,8 @@
 #include "TituEngine/Renderer/Texture.h"
 #include "TituEngine/Renderer/Mesh.h"
 
+#include "TituEngine/Renderer/LightingData.h"
+
 namespace TituEngine
 {
 	struct Component
@@ -72,6 +74,7 @@ namespace TituEngine
 		glm::vec3 GetTranslation() const { return Translation; }
 		glm::vec3 GetRotation() const { return Rotation; }
 		glm::vec3 GetScale() const { return Scale; }
+		glm::vec3 GetForward() const { return glm::normalize(Transform[1]); }
 
 		operator glm::mat4& () { return Transform; }
 		operator glm::mat4* () { return &Transform; }
@@ -87,12 +90,9 @@ namespace TituEngine
 		void UpdateTransform()
 		{
 			glm::mat4 rotation = glm::toMat4(glm::quat(Rotation));
-
 			Transform = glm::translate(glm::mat4(1.0f), Translation)
 				* rotation
 				* glm::scale(glm::mat4(1.0f), Scale);
-
-			std::cout << Transform[3].x << " " << Transform[3].y << " " << Transform[3].z << std::endl;
 		}
 
 		glm::mat4 Transform{ 1.0f };
@@ -137,7 +137,7 @@ namespace TituEngine
 	private:
 	};
 
-	struct ModelRendererComponent : public Component 
+	struct ModelRendererComponent : public Component
 	{
 		const char* PrettyName = "Model Renderer Components";
 
@@ -145,7 +145,7 @@ namespace TituEngine
 		ModelRendererComponent(const Entity& e) : Component(e), m_Model(nullptr) { }
 		ModelRendererComponent(const Entity& e, std::string& model) : Component(e) { SetModel(model); };
 		ModelRendererComponent(const Entity& e, Model* model) : Component(e) { SetModel(model); };
-		ModelRendererComponent(const Entity& e, ModelRendererComponent& model) : Component(e) 
+		ModelRendererComponent(const Entity& e, ModelRendererComponent& model) : Component(e)
 		{
 			m_Model = model.GetModel();
 			std::vector<TituEngine::Material*>& mats = model.GetMaterials();
@@ -177,6 +177,21 @@ namespace TituEngine
 
 		TituEngine::Model* m_Model;
 		std::vector<TituEngine::Material*> m_Materials;
+	};
+
+	struct LightComponent : public Component
+	{
+		const char* PrettyName = "Point Light Component";
+
+		LightComponent() = default;
+		LightComponent(const Entity& e) : Component(e), Color(glm::vec4(1.0f)), LightType(LightType::DIRECTIONAL_LIGHT) { };
+		LightComponent(const Entity& e, const glm::vec4& color, const LightType& lightType) : Component(e), Color(color), LightType(lightType) { };
+		LightComponent(const Entity& e, LightComponent& plc) : Component(e) { Color = plc.Color; };
+
+		glm::vec4 Color;
+		float Intensity;
+		LightType LightType;
+
 	};
 
 	class TituEditorLayer; //temp

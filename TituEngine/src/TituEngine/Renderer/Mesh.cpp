@@ -175,37 +175,6 @@ namespace TituEngine
 				indices.push_back(face.mIndices[j]);
 		}
 
-		//// process material
-		//if (mesh->mMaterialIndex >= 0)
-		//{
-
-		//	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		//	std::cout << scene->mNumMaterials << "  " << mesh->mMaterialIndex << std::endl;
-		//	
-		//	std::vector<Texture2D*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-		//	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		//	std::vector<Texture2D*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-		//	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		//	
-		//}
-
 		return Mesh::Create(vertices, indices);
 	}
-
-	//std::vector<Texture2D*> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
-	//{
-	//	std::vector<Texture2D*> textures;
-	//	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-	//	{
-	//		aiString str;
-	//		mat->GetTexture(type, i, &str);
-
-	//		std::string filename = std::string(str.C_Str());
-	//		//filename = s_DefaultAssetPath_Texture2D.string() + "\\" + m_ModelNameNoExtension + "\\" + filename;
-
-	//		//Texture2D* texture = Texture2D::Create(filename.c_str());
-	//		//textures.push_back(texture);
-	//	}
-	//	return textures;
-	//}
 }

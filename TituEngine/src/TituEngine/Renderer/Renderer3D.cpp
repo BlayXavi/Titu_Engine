@@ -8,18 +8,15 @@
 namespace TituEngine
 {
 
-	struct LightingData
-	{
-		float AmbientLightIntensity = 0.2f;
-		glm::vec4 AmbientLightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		glm::vec3 LightPos = glm::vec3(0.0f, 0.0f, 10.0f);
-		glm::vec4 LightColor = glm::vec4(0.9f, 0.9f, 0.9f, 1.0f);
-	};
-
-	static LightingData s_LightingData;
+	uint32_t Renderer3D::s_PointLightCount = 0;
+	uint32_t Renderer3D::s_DirectionalLightCount = 0;
 
 	UniformBuffer* ModelMatrixBuffer;
-	UniformBuffer* LightingDataBuffer;
+
+	UniformBuffer* PointLightBuffer;
+
+	DirectionalLightData DirectionalLightsArray[DIRECTIONAL_LIGHTS_SIZE];
+	PointLightData PointLightsArray[POINT_LIGHTS_SIZE];
 
 	void Renderer3D::Shutdown()
 	{
@@ -28,16 +25,13 @@ namespace TituEngine
 	void Renderer3D::Init()
 	{
 		ModelMatrixBuffer = UniformBuffer::Create(sizeof(glm::mat4) + 16, 1);
-		LightingDataBuffer = UniformBuffer::Create(16 * 4, 2);
+
+		PointLightBuffer = UniformBuffer::Create(4 + ((POINT_LIGHTS_SIZE) * (16 + 16)), 2);
 	}
 
 	void Renderer3D::BeginScene()
 	{
-		//LightingDataBuffer->SetData(&s_LightingData.AmbientLightColor, sizeof(LightingData)); -> Oh god. 2 Hours to see the f****g alingment
-		LightingDataBuffer->SetData(&s_LightingData.AmbientLightIntensity, 4, 0);
-		LightingDataBuffer->SetData(&s_LightingData.AmbientLightColor, 16, 16 * 1);
-		LightingDataBuffer->SetData(&s_LightingData.LightPos, 16, 16 * 2);
-		LightingDataBuffer->SetData(&s_LightingData.LightColor, 16, 16 * 3);
+
 	}
 
 	void Renderer3D::DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const uint32_t& entityID)
@@ -58,17 +52,55 @@ namespace TituEngine
 			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials(), entityID);
 	}
 
+	void Renderer3D::UploadLightDataToGPU()
+	{
+		uint32_t pointLightStride = PointLightData::GetUniformBufferStride();
+		for (size_t i = 0; i < s_PointLightCount; i++)
+		{
+			PointLightBuffer->SetData(&PointLightsArray[i].Position, 16, (32 * i));
+			PointLightBuffer->SetData(&PointLightsArray[i].Color, 16, (32 * i) + 16);
+		}
+		PointLightBuffer->SetData(&s_PointLightCount, 4, 32 * POINT_LIGHTS_SIZE);
+	}
+
 	void Renderer3D::UpdateModelMatrix(const glm::mat4& modelMatrix)
 	{
 		ModelMatrixBuffer->SetData(&modelMatrix, sizeof(glm::mat4));
 	}
 
-	void Renderer3D::SetLightPosition(const glm::vec3& pos)
+	void Renderer3D::UploadLight(const LightComponent& light, const TransformComponent& transform)
 	{
-		s_LightingData.LightPos = pos;
+		switch (light.LightType)
+		{
+		case LightType::DIRECTIONAL_LIGHT:
+		{
+			DirectionalLightData* dLightData = &DirectionalLightsArray[s_DirectionalLightCount];
+			dLightData->Color = light.Color;
+			dLightData->Direction = transform.GetForward();
+			dLightData->Intensity = light.Intensity;
+			s_DirectionalLightCount++;
+			break;
+
+		}
+		case LightType::POINT_LIGHT:
+		{
+			PointLightData* pLightData = &PointLightsArray[s_PointLightCount];
+			pLightData->Color = light.Color;
+			glm::vec3 pos = transform.GetTranslation();
+			pLightData->Position = glm::vec4(pos.x, pos.y, pos.z, 1.0f);
+			s_PointLightCount++;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
 	}
 
 	void Renderer3D::EndScene()
 	{
+		s_PointLightCount = 0;
+		s_DirectionalLightCount = 0;
 	}
 }

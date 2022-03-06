@@ -61,6 +61,16 @@ namespace TituEngine
 		Renderer3D::BeginScene();
 		{
 			TE_PROFILE_PROFILE_SCOPE("Render3D::BeginDraw");
+
+			auto groupL = m_Registry.view<TransformComponent, LightComponent>();
+			for (auto entity : groupL)
+			{
+				auto& [transform, light] = groupL.get<TransformComponent, LightComponent>(entity);
+				Renderer3D::UploadLight(light, transform);
+			}
+
+			Renderer3D::UploadLightDataToGPU();
+
 			//Render
 			auto group = m_Registry.view<TransformComponent, ModelRendererComponent>();
 			for (auto entity : group)

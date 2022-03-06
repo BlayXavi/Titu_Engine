@@ -204,7 +204,7 @@ namespace TituEngine
 		{
 			Material* mat = materials[i];
 
-			ImGui::Button(mat->GetShader()->GetName().c_str(), ImVec2(160.0f, 0.0f));
+			ImGui::Button(mat->GetShader()->GetName().c_str(), ImVec2(260.0f, 0.0f));
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_SCENE_SHADER"))
@@ -218,17 +218,16 @@ namespace TituEngine
 				}
 				ImGui::EndDragDropTarget();
 			}
-			
+
 			if (mat->GetShader() != nullptr)
 			{
-				ImGui::SameLine();
 				if (ImGui::Button("Recompile"))
 				{
 					mat->GetShader()->Recompile();
 				}
 			}
 
-			std::vector<Texture2D*>& textures = const_cast<std::vector<Texture2D*>&>(mat->GetTextures()); 
+			std::vector<Texture2D*>& textures = const_cast<std::vector<Texture2D*>&>(mat->GetTextures());
 			for (size_t j = 0; j < textures.size(); j++)
 			{
 				Texture2D** tex = &textures[j];
@@ -245,6 +244,34 @@ namespace TituEngine
 					}
 				}
 			}
+		}
+	}
+
+	template<>
+	void ComponentPanelDrawer::DrawComponentInternal<LightComponent>(Entity& e, LightComponent& lightComponent)
+	{
+		glm::vec4& color = lightComponent.Color;
+
+		ImGui::ColorEdit4("Color", (float*)&color);
+
+		const char* items[] = { "Directional Light", "Point Light" };
+		int itemIndex = (int)lightComponent.LightType;
+		const char* comboPreview = items[itemIndex];
+		if (ImGui::BeginCombo("Light Type", comboPreview, 0))
+		{
+			for (size_t i = 0; i < 2; i++)
+			{
+				const bool selected = (itemIndex == 2);
+				if (ImGui::Selectable(items[i], selected))
+				{
+					itemIndex = i;
+					lightComponent.LightType = (LightType)itemIndex;
+				}
+
+				if (selected)
+					ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
 		}
 	}
 
