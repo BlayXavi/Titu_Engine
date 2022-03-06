@@ -5,8 +5,8 @@ Entities:
       Tag: Empty_Entity
     TransformComponent:
       Translation: [0, 0, -10]
-      Rotation: [1.57079637, 0, 1.57079637]
-      Scale: [10, 1, 10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
     ModelRendererComponent:
       AssetPath: assets\meshes\primitives\plane.obj
       Materials:
@@ -19,8 +19,8 @@ Entities:
     TagComponent:
       Tag: Light2
     TransformComponent:
-      Translation: [-1, 0, 1.5]
-      Rotation: [0, 0, 0]
+      Translation: [-8.77103615, -7.22752762, 1.5]
+      Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     LightComponent:
       Color: [1, 0, 0, 1]
@@ -29,23 +29,144 @@ Entities:
     TagComponent:
       Tag: Backpack
     TransformComponent:
-      Translation: [0, 0, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
+      Translation: [0, 0, -4]
+      Rotation: [0, 0, 0]
+      Scale: [3, 3, 3]
     ModelRendererComponent:
       AssetPath: assets\meshes\backpack\backpack.obj
       Materials:
-        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong.glsl
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
           Textures:
             - assets\textures2D\backpack\diffuse.jpg
             - assets\textures2D\backpack\specular.jpg
+            - assets\textures2D\backpack\normal.png
   - Entity: 123
     TagComponent:
       Tag: Light
     TransformComponent:
-      Translation: [1, 0, 1.5]
-      Rotation: [0, -0, 0]
+      Translation: [4.71760035, 3.45684242, 1.50000048]
+      Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     LightComponent:
       Color: [0, 0.102274656, 1, 1]
       Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-20, 0, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-20, 20, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [0, 20, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [20, 20, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [20, 0, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [20, -20, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [0, -20, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-20, -20, -10]
+      Rotation: [1.57079625, -0, 1.57079625]
+      Scale: [9.99999905, 0.999999881, 9.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg

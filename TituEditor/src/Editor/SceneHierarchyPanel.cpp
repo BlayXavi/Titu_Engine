@@ -74,6 +74,11 @@ namespace TituEngine
 					DeselectEntity();
 				m_Context->DestroyEntity(e);
 			}
+			else if (ImGui::MenuItem("Duplicate Entity"))
+			{
+				Entity copyE = m_Context->CreateCopy(e);
+				m_SelectedEntity = copyE;
+			}
 			ImGui::EndPopup();
 		}
 

@@ -30,6 +30,24 @@ namespace TituEngine
 		return e;
 	}
 
+	Entity Scene::CreateCopy(Entity blueprint)
+	{
+		Entity copy = CreateEntity(blueprint.GetComponent<TagComponent>());
+
+		if (blueprint.HasComponent<TransformComponent>())
+			copy.AddComponent<TransformComponent>(blueprint.GetComponent<TransformComponent>());
+		if (blueprint.HasComponent<CameraComponent>())
+			copy.AddComponent<CameraComponent>(blueprint.GetComponent<CameraComponent>());
+		if (blueprint.HasComponent<SpriteRendererComponent>())
+			copy.AddComponent<SpriteRendererComponent>(blueprint.GetComponent<SpriteRendererComponent>());
+		if (blueprint.HasComponent<ModelRendererComponent>())
+			copy.AddComponent<ModelRendererComponent>(blueprint.GetComponent<ModelRendererComponent>());
+		if (blueprint.HasComponent<LightComponent>())
+			copy.AddComponent<LightComponent>(blueprint.GetComponent<LightComponent>());
+
+		return copy;
+	}
+
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
