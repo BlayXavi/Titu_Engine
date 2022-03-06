@@ -21,16 +21,12 @@ namespace TituEngine
 		glm::vec4 Color;
 		glm::vec3 Direction;
 		float Intensity;
-
-		static uint32_t GetUniformBufferStride() { return 36; }
 	};
 
 	struct PointLightData
 	{
 		glm::vec4 Color;
 		glm::vec4 Position;
-
-		static uint32_t GetUniformBufferStride() { return 32; }
 	};
 }
 #endif

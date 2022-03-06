@@ -54,8 +54,7 @@ namespace TituEngine
 
 	void Renderer3D::UploadLightDataToGPU()
 	{
-		uint32_t pointLightStride = PointLightData::GetUniformBufferStride();
-		for (size_t i = 0; i < s_PointLightCount; i++)
+		for (uint32_t i = 0; i < s_PointLightCount; i++) 
 		{
 			PointLightBuffer->SetData(&PointLightsArray[i].Position, 16, (32 * i));
 			PointLightBuffer->SetData(&PointLightsArray[i].Color, 16, (32 * i) + 16);

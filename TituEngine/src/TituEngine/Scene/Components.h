@@ -184,8 +184,8 @@ namespace TituEngine
 		const char* PrettyName = "Point Light Component";
 
 		LightComponent() = default;
-		LightComponent(const Entity& e) : Component(e), Color(glm::vec4(1.0f)), LightType(LightType::DIRECTIONAL_LIGHT) { };
-		LightComponent(const Entity& e, const glm::vec4& color, const LightType& lightType) : Component(e), Color(color), LightType(lightType) { };
+		LightComponent(const Entity& e) : Component(e), Color(glm::vec4(1.0f)), LightType(LightType::DIRECTIONAL_LIGHT), Intensity(1.0f) { };
+		LightComponent(const Entity& e, const glm::vec4& color, const LightType& lightType) : Component(e), Color(color), LightType(lightType), Intensity(1.0f) { };
 		LightComponent(const Entity& e, LightComponent& plc) : Component(e) { Color = plc.Color; LightType = plc.LightType; Intensity = plc.Intensity; };
 
 		glm::vec4 Color;

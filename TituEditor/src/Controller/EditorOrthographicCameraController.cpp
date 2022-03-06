@@ -31,7 +31,7 @@ void EditorOrthographicCameraController::SetPosition(const glm::vec3& position)
 	m_EditorCamera->SetPosition(position);
 }
 
-void EditorOrthographicCameraController::OnUpdate(Timestep ts)
+void EditorOrthographicCameraController::OnUpdate(Timestep ts, bool processScroll)
 {
 	TE_PROFILE_PROFILE_FUNC();
 
@@ -87,7 +87,7 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 		std::pair<float, float> mouseDelta = Input::GetMouseDeltaPosition();
 		if (mouseButton == 0)
 		{
-			
+
 		}
 		else if (mouseButton == 1)
 		{
@@ -107,27 +107,28 @@ void EditorOrthographicCameraController::OnUpdate(Timestep ts)
 		m_EditorCamera->LookAt(eye, center);
 	}
 
-	float scrollDelta = Input::GetScrollDelta();
-
-	if (m_EditorCamera->GetProjectionType() == Camera::Projection::ORTHOGRAPHIC)
+	if (processScroll)
 	{
-		float m_ZoomLevel = m_EditorCamera->GetOrthographicSize();
-		m_ZoomLevel -= scrollDelta;
-		m_EditorCamera->SetOrthographicSize(m_ZoomLevel);
+		float scrollDelta = Input::GetScrollDelta();
+
+		if (m_EditorCamera->GetProjectionType() == Camera::Projection::ORTHOGRAPHIC)
+		{
+			float m_ZoomLevel = m_EditorCamera->GetOrthographicSize();
+			m_ZoomLevel -= scrollDelta;
+			m_EditorCamera->SetOrthographicSize(m_ZoomLevel);
+		}
+		else
+		{
+			glm::vec3 eye = m_EditorCamera->GetPosition();
+			glm::vec3 center = m_EditorCamera->GetCenter();
+			glm::vec3 dir = m_EditorCamera->GetDirection();
+
+			eye -= dir * scrollDelta;
+			center -= dir * scrollDelta;
+
+			m_EditorCamera->LookAt(eye, center);
+		}
 	}
-	else
-	{
-		glm::vec3 eye = m_EditorCamera->GetPosition();
-		glm::vec3 center = m_EditorCamera->GetCenter();
-		glm::vec3 dir = m_EditorCamera->GetDirection();
-
-		eye -= dir * scrollDelta;
-		center -= dir * scrollDelta;
-
-		m_EditorCamera->LookAt(eye, center);
-	}
-
-
 }
 
 void EditorOrthographicCameraController::SetCamera(TransformedCamera* camera)

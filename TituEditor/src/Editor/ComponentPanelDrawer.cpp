@@ -231,7 +231,7 @@ namespace TituEngine
 			for (size_t j = 0; j < textures.size(); j++)
 			{
 				Texture2D** tex = &textures[j];
-				ImGui::ImageButton((ImTextureID)(*tex)->GetRendererID(), ImVec2(160.0f, 160.0f));
+				ImGui::ImageButton((ImTextureID)(uint64_t)(*tex)->GetRendererID(), ImVec2(160.0f, 160.0f));
 				{
 					if (ImGui::BeginDragDropTarget())
 					{
@@ -264,7 +264,7 @@ namespace TituEngine
 				const bool selected = (itemIndex == 2);
 				if (ImGui::Selectable(items[i], selected))
 				{
-					itemIndex = i;
+					itemIndex = (int)i;
 					lightComponent.LightType = (LightType)itemIndex;
 				}
 

@@ -42,6 +42,8 @@ void main()
 //--------------------------------FRAGMENT---------------------
 #version 450 core
 
+const int MAX_LIGHTS = 8;
+
 layout(location = 0) out vec4 color;
 layout(location = 1) out int colorId;
 
@@ -61,7 +63,7 @@ struct PointLight
 
 layout(std140, binding = 2) uniform PointLightsArray
 {
-	PointLight pointLights[8];
+	PointLight pointLights[MAX_LIGHTS];
 	int pointLightCount;
 };
 

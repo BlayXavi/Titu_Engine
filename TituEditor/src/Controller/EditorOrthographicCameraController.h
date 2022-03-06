@@ -21,7 +21,7 @@ public:
 
 	~EditorOrthographicCameraController();
 
-	void OnUpdate(Timestep ts);
+	void OnUpdate(Timestep ts, bool processScroll = true);
 	void OnEvent(Event& e);
 
 	void SetCamera(TransformedCamera* camera);
