@@ -119,6 +119,16 @@ namespace YAML
 		}
 	};
 
+	template<>
+	struct convert<TituEngine::LightComponent>
+	{
+		static bool decode(const Node& node, TituEngine::LightComponent& component)
+		{
+			component.Color = node["Color"].as<glm::vec4>();
+			component.LightType = (TituEngine::LightType)node["Type"].as<int>();
+			return true;
+		}
+	};
 }
 
 namespace TituEngine
@@ -247,6 +257,20 @@ namespace TituEngine
 			out << YAML::Key << "Materials" << YAML::Value << materials;
 
 		out << YAML::EndMap;
+		return out;
+	}
+
+	YAML::Emitter& operator << (YAML::Emitter& out, const LightComponent& lc)
+	{
+		out << YAML::Key << "LightComponent";
+
+		out << YAML::BeginMap;
+
+		out << YAML::Key << "Color" << YAML::Value << lc.Color;
+		out << YAML::Key << "Type" << YAML::Value << (int)lc.LightType;
+
+		out << YAML::EndMap;
+
 		return out;
 	}
 

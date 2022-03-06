@@ -2,17 +2,35 @@ Scene: Scene Name
 Entities:
   - Entity: 123
     TagComponent:
-      Tag: Light
+      Tag: Empty_Entity
     TransformComponent:
-      Translation: [0, 0.75, 1.5]
+      Translation: [0, 0, -10]
+      Rotation: [1.57079637, 0, 1.57079637]
+      Scale: [10, 1, 10]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\brickwall\brickwall_diffuse.jpg
+            - ""
+            - assets\textures2D\brickwall\brickwall_normal.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Light2
+    TransformComponent:
+      Translation: [-1, 0, 1.5]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
+    LightComponent:
+      Color: [1, 0, 0, 1]
+      Type: 1
   - Entity: 123
     TagComponent:
       Tag: Backpack
     TransformComponent:
       Translation: [0, 0, 0]
-      Rotation: [0, 0, 0]
+      Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     ModelRendererComponent:
       AssetPath: assets\meshes\backpack\backpack.obj
@@ -20,3 +38,14 @@ Entities:
         - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong.glsl
           Textures:
             - assets\textures2D\backpack\diffuse.jpg
+            - assets\textures2D\backpack\specular.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Translation: [1, 0, 1.5]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [0, 0.102274656, 1, 1]
+      Type: 1

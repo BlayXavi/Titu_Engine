@@ -43,6 +43,11 @@ namespace TituEngine
 			ModelRendererComponent modelRenderer = e.GetComponent<ModelRendererComponent>();
 			out << modelRenderer;
 		}
+		if (e.HasComponent<LightComponent>())
+		{
+			LightComponent modelRenderer = e.GetComponent<LightComponent>();
+			out << modelRenderer;
+		}
 
 		out << YAML::EndMap;
 	}
@@ -122,6 +127,10 @@ namespace TituEngine
 				YAML::Node mrCNode = entity["ModelRendererComponent"];
 				if (mrCNode)
 					ModelRendererComponent& modelRendererComponent = deserializedEntt.AddComponent<ModelRendererComponent>(mrCNode.as<ModelRendererComponent>());
+
+				YAML::Node lCNode = entity["LightComponent"];
+				if (lCNode)
+					LightComponent& lightComponent = deserializedEntt.AddComponent<LightComponent>(lCNode.as<LightComponent>());
 
 			}
 
