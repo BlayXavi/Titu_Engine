@@ -36,7 +36,11 @@ namespace TituEngine
 
 	//---------------------------------  RENDERER  ---------------------------------
 	Framebuffer* Renderer::m_MainFramebuffer = nullptr;
+	Framebuffer* Renderer::m_GBuffer = nullptr;
+
 	FramebufferSpecs Renderer::m_MainFramebufferSpecs = FramebufferSpecs();
+	FramebufferSpecs Renderer::m_GBufferSpecs = FramebufferSpecs();
+
 	UniformBuffer* Renderer::m_CameraDataUnifformBuffer = nullptr;
 	
 	void Renderer::Init()
@@ -56,6 +60,13 @@ namespace TituEngine
 		m_MainFramebufferSpecs.Samples = 1;
 		m_MainFramebufferSpecs.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
 		m_MainFramebuffer = Framebuffer::Create(m_MainFramebufferSpecs);
+
+		m_GBufferSpecs.Width = 1280;
+		m_GBufferSpecs.Height = 720;
+		m_GBufferSpecs.Samples = 1;
+		m_GBufferSpecs.Attachments = 
+		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH };
+		m_GBuffer = Framebuffer::Create(m_GBufferSpecs);
 
 		m_CameraDataUnifformBuffer = UniformBuffer::Create(16 + 16 * 4, 0);
 	}
@@ -87,6 +98,15 @@ namespace TituEngine
 		m_MainFramebuffer->ClearAttachment(1, -1);
 	}
 
+	void Renderer::BeginFrameGBuffer()
+	{
+		m_GBuffer->ProcessDirty();
+
+		m_GBuffer->Bind();
+		RenderCommand::SetClearColor({ 0.3f, 0.2f, 0.4f, 1 });
+		RenderCommand::Clear();
+	}
+
 	void Renderer::UploadCameraDataToGPU()
 	{
 		Camera::ActiveCameraData activeCamData = Camera::GetActiveCamera();
@@ -99,6 +119,11 @@ namespace TituEngine
 	void Renderer::EndFrame()
 	{
 		m_MainFramebuffer->UnBind();
+	}
+
+	void Renderer::EndFrameGBuffer()
+	{
+		m_GBuffer->UnBind();
 	}
 
 	FramebufferSpecs Renderer::GetMainFramebufferSpecs()
@@ -116,14 +141,29 @@ namespace TituEngine
 		return m_MainFramebuffer->GetColorAttachment(index);
 	}
 
+	uint32_t Renderer::GetMainFramebufferDepthAttachment()
+	{
+		return m_MainFramebuffer->GetDepthAttachment();
+	}
+
 	uint32_t Renderer::GetMainFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y)
 	{
 		return m_MainFramebuffer->GetPixel(attachmentIndex, x, y);
 	}
 
+	uint32_t Renderer::GetGBufferDepthAttachment()
+	{
+		return m_GBuffer->GetDepthAttachment();
+	}
+
 	Framebuffer* Renderer::GetMainFramebuffer()
 	{
 		return m_MainFramebuffer;
+	}
+
+	Framebuffer* Renderer::GetGBuffer()
+	{
+		return m_GBuffer;
 	}
 
 	//-----------------------------------RENDER COMMAND------------------

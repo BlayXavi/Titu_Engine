@@ -14,9 +14,13 @@ namespace TituEngine
 		return new Material(shader);;
 	}
 
-	void Material::Bind() const
+	void Material::Bind(const Shader* overrideShader) const
 	{
-		m_Shader->Bind();
+		if (overrideShader == nullptr)
+			m_Shader->Bind();
+		else
+			overrideShader->Bind();
+
 		for (size_t i = 0; i < m_Textures.size(); i++)
 			m_Textures[i]->Bind(i);
 	}

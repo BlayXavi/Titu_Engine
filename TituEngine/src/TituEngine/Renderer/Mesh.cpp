@@ -34,12 +34,14 @@ namespace TituEngine
 		delete m_IndexBuffer;
 	}
 
-	void Mesh::Render(const glm::mat4& modelMatrix, const Material* material) const
+	void Mesh::Render(const glm::mat4& modelMatrix, const Material* material, const Shader* overrideShader) const
 	{
 		m_VertexArray->Bind();
-		material->Bind();
+		material->Bind(overrideShader);
 		RenderCommand::DrawIndexed(m_VertexArray);
 		material->UnBind();
+		if (overrideShader != nullptr)
+			overrideShader->Unbind();
 	}
 
 	void Mesh::Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
@@ -87,12 +89,12 @@ namespace TituEngine
 		return newModel;
 	}
 
-	void Model::Render(const glm::mat4& modelMatrix, const std::vector<Material*>& mats) const
+	void Model::Render(const glm::mat4& modelMatrix, const std::vector<Material*>& mats, const Shader* overrideShader) const
 	{
 		TE_ASSERT(m_Meshes.size() == mats.size(), "[Model.Render] Meshes vector has not the same size as Materials vector.");
 
 		for (size_t i = 0; i < m_Meshes.size(); i++)
-			m_Meshes[i]->Render(modelMatrix, mats[i]);
+			m_Meshes[i]->Render(modelMatrix, mats[i], overrideShader);
 	}
 
 	void Model::LoadModel()

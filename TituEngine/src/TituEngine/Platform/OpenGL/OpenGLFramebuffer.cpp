@@ -9,6 +9,12 @@ namespace TituEngine
 		return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	}
 
+	/// <summary>
+	/// Create multiples textures
+	/// </summary>
+	/// <param name="multisampled"></param>
+	/// <param name="count">How many textures to create</param>
+	/// <param name="outID">Where to store the number of textures created</param>
 	static void CreateTextures(bool multisampled, size_t count, uint32_t* outID)
 	{
 		glCreateTextures(TextureTarget(multisampled), (GLsizei)count, (GLuint*)outID);
@@ -78,6 +84,7 @@ namespace TituEngine
 		switch (format)
 		{
 		case FramebufferTextureFormat::RGBA8:			return GL_RGBA8;
+		case FramebufferTextureFormat::RGBA16:			return GL_RGBA16;
 		case FramebufferTextureFormat::RED_INTEGER_32:	return GL_R32I;
 		}
 
@@ -90,6 +97,7 @@ namespace TituEngine
 		switch (format)
 		{
 		case FramebufferTextureFormat::RGBA8:			return GL_RGBA;
+		case FramebufferTextureFormat::RGBA16:			return GL_RGBA;
 		case FramebufferTextureFormat::RED_INTEGER_32:	return GL_RED_INTEGER;
 		}
 
@@ -102,6 +110,7 @@ namespace TituEngine
 		switch (format)
 		{
 		case FramebufferTextureFormat::RGBA8:			return GL_UNSIGNED_BYTE;
+		case FramebufferTextureFormat::RGBA16:			return GL_FLOAT;
 		case FramebufferTextureFormat::RED_INTEGER_32:	return GL_INT;
 		}
 
@@ -226,8 +235,8 @@ namespace TituEngine
 
 		if (m_ColorAttachments.size() > 1)
 		{
-			TE_ASSERT(m_ColorAttachments.size() <= 4, "Error, m_ColorAttachments must be <= 4.");
-			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			TE_ASSERT(m_ColorAttachments.size() <= 6, "Error, m_ColorAttachments must be <= 6.");
+			GLenum buffers[6] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5 };
 			glDrawBuffers((GLsizei)m_ColorAttachments.size(), buffers); //https://stackoverflow.com/questions/51030120/concept-what-is-the-use-of-gldrawbuffer-and-gldrawbuffers/5103034
 		}
 		else if (m_ColorAttachments.empty())

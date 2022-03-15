@@ -99,22 +99,23 @@ namespace TituEngine
 			}
 		}
 		Renderer3D::EndScene();
+	}
 
+	void Scene::GBufferPass()
+	{
+		Renderer::BeginFrameGBuffer();
 
-		//Renderer3D::BeginScene(activeCamera.GetCamera(), viewProjectionMatrix);
-		//{
-		//	TE_PROFILE_PROFILE_SCOPE("3D::BeginDraw");
+		Renderer::UploadCameraDataToGPU();
 
-		//	//Render
-		//	/*auto group = m_Registry.group<ModelRendererComponent>(entt::get<ModelRendererComponent>);
-		//	for (auto entity : group)
-		//	{
-		//		auto& [transform, model] = group.get<TransformComponent, ModelRendererComponent>(entity);
-		//		Renderer3D::DrawModel(transform, model);
-		//	}*/
-		//}
-		//Renderer3D::EndScene();
+		auto group = m_Registry.view<TransformComponent, ModelRendererComponent>();
+		for (auto entity : group)
+		{
+			auto& [transform, modelRenderer] = group.get<TransformComponent, ModelRendererComponent>(entity);
 
+			Renderer3D::DrawModel(transform, modelRenderer, -1, ShaderUtilities::s_GBufferShader);
+		}
+
+		Renderer::EndFrameGBuffer();
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

@@ -143,6 +143,8 @@ namespace TituEngine
 			static bool show_ImGuiDemo = false;
 			static bool show_SnapValues = false;
 			static bool show_ContentBrowser = true;
+			static bool show_GBufferData = true;
+
 			//Dockspace Init
 			{
 				static bool dockspaceOpen = true;
@@ -472,6 +474,20 @@ namespace TituEngine
 				ImGui::End(); //Mouse Stats
 			}
 
+			if (show_GBufferData)
+			{
+				ImGui::Begin("GBuffer", &show_GBufferData);
+
+				std::vector<uint32_t> textures = Renderer::GetGBuffer()->GetAttachments();
+				for (size_t i = 0; i < textures.size(); i++)
+				{
+					uint64_t TexID = (uint64_t)textures[i];
+					ImGui::Image((void*)TexID, { 320.0f,  180.0f }, { 0, 1 }, { 1, 0 });
+				}
+
+				ImGui::End();
+			}
+
 			if (show_ImGuiDemo)
 				ImGui::ShowDemoWindow(&show_ImGuiDemo);
 
@@ -490,6 +506,8 @@ namespace TituEngine
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 			m_LastPixelIDHovered = Renderer::GetMainFramebufferPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		Renderer::EndFrame();
+
+		m_Scene->GBufferPass();
 
 		if (m_ViewPortHovered && !m_UsingGuizmo)
 			m_CameraController->OnUpdate(ts, m_ViewPortFocused);

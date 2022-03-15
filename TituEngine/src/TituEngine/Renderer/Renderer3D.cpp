@@ -34,22 +34,22 @@ namespace TituEngine
 
 	}
 
-	void Renderer3D::DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const uint32_t& entityID)
+	void Renderer3D::DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const uint32_t& entityID, const Shader* overrideShader)
 	{
 		UpdateModelMatrix(modelMatrix);
-		mesh->Render(modelMatrix, material);
+		mesh->Render(modelMatrix, material, overrideShader);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const uint32_t& entityID)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const uint32_t& entityID, const Shader* overrideShader)
 	{
 		UpdateModelMatrix(modelMatrix);
-		model->Render(modelMatrix, materials);
+		model->Render(modelMatrix, materials, overrideShader);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC, const uint32_t& entityID)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC, const uint32_t& entityID, const Shader* overrideShader)
 	{
 		if (modelRendererC.GetModel() != nullptr)
-			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials(), entityID);
+			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials(), entityID, overrideShader);
 	}
 
 	void Renderer3D::UploadLightDataToGPU()

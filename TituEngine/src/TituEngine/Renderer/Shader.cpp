@@ -34,6 +34,7 @@ namespace TituEngine
 
 	Shader* ShaderUtilities::s_ErrorShader = nullptr;
 	Shader* ShaderUtilities::s_DefaultShader = nullptr;
+	Shader* ShaderUtilities::s_GBufferShader = nullptr;
 
 	bool ShaderUtilities::s_Initialized = false;
 
@@ -45,6 +46,7 @@ namespace TituEngine
 		s_Initialized = true;
 		s_ErrorShader = Shader::Create("assets\\shaders\\testing\\ErrorShader.glsl");
 		s_DefaultShader = Shader::Create("assets\\shaders\\testing\\DefaultShader.glsl");
+		s_GBufferShader = Shader::Create("assets\\shaders\\testing\\GBufferPass.glsl");
 	}
 
 	void ShaderUtilities::Shutdown()

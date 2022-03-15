@@ -21,6 +21,8 @@ namespace TituEngine
 
 		void OnUpdate(Timestep ts);
 
+		void GBufferPass();
+
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		entt::registry m_Registry;

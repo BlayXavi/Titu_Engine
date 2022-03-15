@@ -49,20 +49,27 @@ namespace TituEngine
 		static void OnWindowResized(uint32_t width, uint32_t height);
 
 		static void BeginFrame();
+		static void BeginFrameGBuffer();
 		static void UploadCameraDataToGPU();
 		static void EndFrame();
+		static void EndFrameGBuffer();
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
 
 		static FramebufferSpecs GetMainFramebufferSpecs();
 		static void ResizeMainFramebuffer(const uint32_t& width, const uint32_t& height);
 		static uint32_t GetMainFramebufferColorAttachment(const uint32_t& index);
+		static uint32_t GetMainFramebufferDepthAttachment();
 		static uint32_t GetMainFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y);
+		static uint32_t GetGBufferDepthAttachment();
 		static Framebuffer* GetMainFramebuffer();
+		static Framebuffer* GetGBuffer();
 
 	private:
 		static Framebuffer* m_MainFramebuffer;
+		static Framebuffer* m_GBuffer;
 		static FramebufferSpecs m_MainFramebufferSpecs;
+		static FramebufferSpecs m_GBufferSpecs;
 
 		static UniformBuffer* m_CameraDataUnifformBuffer;
 	};

@@ -11,7 +11,7 @@ namespace TituEngine
 		virtual ~Material();
 
 		static Material* Create(Shader* shader);
-		void Bind() const;
+		void Bind(const Shader* overrideShader = nullptr) const;
 		void UnBind() const;
 		Shader* GetShader() const { return m_Shader; }
 

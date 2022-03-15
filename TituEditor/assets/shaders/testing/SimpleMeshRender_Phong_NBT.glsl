@@ -53,7 +53,6 @@ void main()
 	
 	vec4 vertexWorldPos = u_ModelMatrix * vec4(a_Position, 1.0f);
 
-
 	gl_Position = u_ModelViewProjectionMatrix * vertexWorldPos;
 
 	v_PointLightCount = pointLightCount;
