@@ -56,6 +56,8 @@ namespace TituEngine
 		static Shader* s_ErrorShader;
 		static Shader* s_DefaultShader;
 		static Shader* s_GBufferShader;
+		static Shader* s_GBufferShadingPass;
+
 		static void Init();
 		static void Shutdown();
 	private:

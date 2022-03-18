@@ -178,6 +178,12 @@ namespace TituEngine
 		return pixelData;
 	}
 
+	const void OpenGLFramebuffer::BindColorAttachments()
+	{
+		for (size_t i = 0; i < m_ColorAttachments.size(); i++)
+			glBindTextureUnit(i, m_ColorAttachments[i]);
+	}
+
 	const void OpenGLFramebuffer::ClearAttachment(uint32_t index, int value)
 	{
 		FramebufferTextureFormat format = m_ColorTextureFormats[index];

@@ -507,7 +507,7 @@ namespace TituEngine
 			m_LastPixelIDHovered = Renderer::GetMainFramebufferPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		Renderer::EndFrame();
 
-		m_Scene->GBufferPass();
+		m_Scene->DeferredGBufferPass();
 
 		if (m_ViewPortHovered && !m_UsingGuizmo)
 			m_CameraController->OnUpdate(ts, m_ViewPortFocused);

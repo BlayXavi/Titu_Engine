@@ -41,23 +41,23 @@ void main()
 
 const int MAX_LIGHTS = 8;
 
-layout(location = 0) out vec4 color;
-layout(location = 1) out vec4 color2;
-layout(location = 2) out vec4 color3;
+layout(location = 0) out vec4 positionColor;
+layout(location = 1) out vec4 normalsColor;
+layout(location = 2) out vec4 colorSpecularColor;
 
 layout (location = 0) in vec2 v_TexCoord;
 layout (location = 1) in vec3 v_VWPos;
 layout (location = 2) in vec3 v_Normal;
 
 layout (binding = 0) uniform sampler2D u_ColorTexture;
-layout (binding = 0) uniform sampler2D u_SpecularTexture;
+layout (binding = 1) uniform sampler2D u_SpecularTexture;
 
 void main()
 {
 	vec4 texColor = texture(u_ColorTexture, v_TexCoord);
 	float spec = texture(u_SpecularTexture, v_TexCoord).r;
 
-	color =  vec4(v_VWPos, 1.0f);
-	color2 =  vec4(normalize(v_Normal.xyz), 1.0f);
-	color3 =  vec4(texColor.xyz, spec);
+	positionColor =  vec4(v_VWPos, 1.0f);
+	normalsColor =  vec4(normalize(v_Normal.xyz), 1.0f);
+	colorSpecularColor =  vec4(texColor.xyz, 1.0f);
 }

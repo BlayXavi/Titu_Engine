@@ -46,6 +46,7 @@ namespace TituEngine
 	public:
 		static Mesh* Create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 		void Render(const glm::mat4& modelMatrix, const Material* material, const Shader* overrideShader = nullptr) const;
+		void Render(const Shader* shader);
 	};
 
 	class Model
@@ -55,7 +56,7 @@ namespace TituEngine
 		static Model* Create(const std::string& modelName);
 		void Render(const glm::mat4& modelMatrix, const std::vector<Material*>& mats, const Shader* overrideShader) const;
 		uint32_t GetMeshesCount() const { return (uint32_t)m_Meshes.size(); }
-
+		Mesh* GetMesh() { return m_Meshes[0]; }
 		std::filesystem::path GetAssetPath() { return m_Path; }
 
 	private:

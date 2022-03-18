@@ -10,6 +10,7 @@
 namespace TituEngine
 {
 	class Camera;
+	class Mesh;
 	class Framebuffer;
 	struct FramebufferSpecs;
 	class UniformBuffer;
@@ -64,6 +65,8 @@ namespace TituEngine
 		static uint32_t GetGBufferDepthAttachment();
 		static Framebuffer* GetMainFramebuffer();
 		static Framebuffer* GetGBuffer();
+		 
+		static Mesh* GetQuad();
 
 	private:
 		static Framebuffer* m_MainFramebuffer;
@@ -72,6 +75,8 @@ namespace TituEngine
 		static FramebufferSpecs m_GBufferSpecs;
 
 		static UniformBuffer* m_CameraDataUnifformBuffer;
+
+		static Mesh* Quad;
 	};
 
 	class RenderCommand
@@ -97,6 +102,4 @@ namespace TituEngine
 	private:
 		static RendererAPI* s_RendererAPI;
 	};
-
-
 }

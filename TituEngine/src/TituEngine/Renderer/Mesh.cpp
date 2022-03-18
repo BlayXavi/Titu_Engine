@@ -44,6 +44,14 @@ namespace TituEngine
 			overrideShader->Unbind();
 	}
 
+	void Mesh::Render(const Shader* shader)
+	{
+		m_VertexArray->Bind();
+		shader->Bind();
+		RenderCommand::DrawIndexed(m_VertexArray);
+		shader->Unbind();
+	}
+
 	void Mesh::Initialize(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 	{
 		m_VertexArray = VertexArray::Create();

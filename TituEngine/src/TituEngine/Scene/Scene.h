@@ -21,7 +21,8 @@ namespace TituEngine
 
 		void OnUpdate(Timestep ts);
 
-		void GBufferPass();
+		void DeferredGBufferPass();
+		void DeferredShadingPass();
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 

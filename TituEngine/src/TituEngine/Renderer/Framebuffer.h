@@ -50,7 +50,9 @@ namespace TituEngine
 		virtual const uint32_t GetColorAttachment(uint32_t index = 0) const = 0;
 		virtual const uint32_t GetDepthAttachment() const = 0;
 		virtual const uint32_t GetPixel(uint32_t attachmentIndex, int x, int y) = 0;
+
 		virtual const std::vector<uint32_t> GetAttachments() = 0;
+		virtual const void BindColorAttachments() = 0;
 
 		void SetDirty(const uint32_t& width, const uint32_t& height);
 		void ProcessDirty();

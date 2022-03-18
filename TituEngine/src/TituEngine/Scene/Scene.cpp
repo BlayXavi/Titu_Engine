@@ -4,6 +4,7 @@
 #include "Components.h"
 #include "TituEngine/Renderer/Renderer2D.h"
 #include "TituEngine/Renderer/Renderer3D.h"
+#include "TituEngine/Renderer/Framebuffer.h"
 
 namespace TituEngine
 {
@@ -101,7 +102,7 @@ namespace TituEngine
 		Renderer3D::EndScene();
 	}
 
-	void Scene::GBufferPass()
+	void Scene::DeferredGBufferPass()
 	{
 		Renderer::BeginFrameGBuffer();
 
@@ -115,7 +116,17 @@ namespace TituEngine
 			Renderer3D::DrawModel(transform, modelRenderer, -1, ShaderUtilities::s_GBufferShader);
 		}
 
+		DeferredShadingPass();
+
 		Renderer::EndFrameGBuffer();
+	}
+
+	void Scene::DeferredShadingPass()
+	{
+		Framebuffer* fb = Renderer::GetGBuffer();
+		fb->BindColorAttachments();
+
+		Renderer::GetQuad()->Render(ShaderUtilities::s_GBufferShadingPass);
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

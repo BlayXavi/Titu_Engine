@@ -43,6 +43,8 @@ namespace TituEngine
 
 	UniformBuffer* Renderer::m_CameraDataUnifformBuffer = nullptr;
 	
+	Mesh* Renderer::Quad = nullptr;
+
 	void Renderer::Init()
 	{
 		TE_PROFILE_PROFILE_FUNC();
@@ -65,10 +67,32 @@ namespace TituEngine
 		m_GBufferSpecs.Height = 720;
 		m_GBufferSpecs.Samples = 1;
 		m_GBufferSpecs.Attachments = 
-		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH };
+		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH };
 		m_GBuffer = Framebuffer::Create(m_GBufferSpecs);
 
 		m_CameraDataUnifformBuffer = UniformBuffer::Create(16 + 16 * 4, 0);
+
+		std::vector<Vertex> vertices;
+		Vertex v;
+		v.Position = glm::vec3(-1.0f, -1.0f, 0.0f); 
+		v.TexCoords = glm::vec2(0.0f, 0.0f);
+		vertices.emplace_back(v);
+		v.Position = glm::vec3(1.0f, -1.0f, 0.0f); 
+		v.TexCoords = glm::vec2(1.0f, 0.0f);
+		vertices.emplace_back(v);
+		v.Position = glm::vec3(1.0f, 1.0f, 0.0f); 
+		v.TexCoords = glm::vec2(1.0f, 1.0f);
+		vertices.emplace_back(v);
+		v.Position = glm::vec3(-1.0f, 1.0f, 0.0f); 
+		v.TexCoords = glm::vec2(0.0f, 1.0f);
+		vertices.emplace_back(v);
+
+		
+		std::vector<uint32_t> indices({ 0, 1, 2, 2, 3, 0 });
+
+		//Model* model = Model::Create("assets\\meshes\\backpack\\backpack.obj");
+		//Quad = model->GetMesh();
+		Quad = Mesh::Create(vertices, indices);
 	}
 
 	void Renderer::Shutdown()
@@ -103,7 +127,7 @@ namespace TituEngine
 		m_GBuffer->ProcessDirty();
 
 		m_GBuffer->Bind();
-		RenderCommand::SetClearColor({ 0.3f, 0.2f, 0.4f, 1 });
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 	}
 
@@ -164,6 +188,11 @@ namespace TituEngine
 	Framebuffer* Renderer::GetGBuffer()
 	{
 		return m_GBuffer;
+	}
+
+	Mesh* Renderer::GetQuad()
+	{
+		return Quad;
 	}
 
 	//-----------------------------------RENDER COMMAND------------------
