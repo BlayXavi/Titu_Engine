@@ -254,6 +254,11 @@ namespace TituEngine
 				{
 					ImGui::Begin("Render Stats", &show_rendererStats);
 
+					if (ImGui::Button("Recompile GBufferShadingPass"))
+						ShaderUtilities::s_GBufferShadingPass->Recompile();
+					if (ImGui::Button("Recompile GBufferPass"))
+						ShaderUtilities::s_GBufferShader->Recompile();
+
 					if (ImGui::Checkbox("Vsync", &m_VSync))
 						Application::Instance().GetWindow().SetVSync(m_VSync);
 
@@ -501,13 +506,12 @@ namespace TituEngine
 
 		currentTimeStep = ts;
 
+		m_Scene->DeferredGBufferPass();
 		Renderer::BeginFrame();
 		m_Scene->OnUpdate(ts);
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 			m_LastPixelIDHovered = Renderer::GetMainFramebufferPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		Renderer::EndFrame();
-
-		m_Scene->DeferredGBufferPass();
 
 		if (m_ViewPortHovered && !m_UsingGuizmo)
 			m_CameraController->OnUpdate(ts, m_ViewPortFocused);

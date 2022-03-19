@@ -2,13 +2,13 @@ Scene: Scene Name
 Entities:
   - Entity: 123
     TagComponent:
-      Tag: Light
+      Tag: Light2
     TransformComponent:
-      Translation: [4.71760035, 3.45684242, 1.50000048]
-      Rotation: [0, -0, 0]
+      Translation: [-1.14600718, 0.947280049, -0.564650476]
+      Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     LightComponent:
-      Color: [0, 0.102274656, 1, 1]
+      Color: [1, 0, 0, 1]
       Type: 1
   - Entity: 123
     TagComponent:
@@ -25,13 +25,3 @@ Entities:
             - assets\textures2D\backpack\diffuse.jpg
             - assets\textures2D\backpack\specular.jpg
             - assets\textures2D\backpack\normal.png
-  - Entity: 123
-    TagComponent:
-      Tag: Light2
-    TransformComponent:
-      Translation: [-8.77103615, -7.22752762, 1.5]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    LightComponent:
-      Color: [1, 0, 0, 1]
-      Type: 1

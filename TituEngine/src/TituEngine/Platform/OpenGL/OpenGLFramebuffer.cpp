@@ -84,7 +84,7 @@ namespace TituEngine
 		switch (format)
 		{
 		case FramebufferTextureFormat::RGBA8:			return GL_RGBA8;
-		case FramebufferTextureFormat::RGBA16:			return GL_RGBA16;
+		case FramebufferTextureFormat::RGBA16:			return GL_RGBA16F;
 		case FramebufferTextureFormat::RED_INTEGER_32:	return GL_R32I;
 		}
 

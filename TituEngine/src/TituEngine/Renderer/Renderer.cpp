@@ -67,7 +67,7 @@ namespace TituEngine
 		m_GBufferSpecs.Height = 720;
 		m_GBufferSpecs.Samples = 1;
 		m_GBufferSpecs.Attachments = 
-		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH };
+		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH };
 		m_GBuffer = Framebuffer::Create(m_GBufferSpecs);
 
 		m_CameraDataUnifformBuffer = UniformBuffer::Create(16 + 16 * 4, 0);

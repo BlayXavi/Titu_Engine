@@ -18,7 +18,7 @@ void main()
 
 const int MAX_LIGHTS = 8;
 
-layout(location = 3) out vec4 color;
+layout(location = 0) out vec4 color;
 
 layout(binding = 0) uniform sampler2D uPositionTexture;
 layout(binding = 1) uniform sampler2D uNormalTexture;
@@ -57,13 +57,13 @@ vec4 CalculatePointLight(PointLight pl, vec3 P, vec3 N, float SpecI)
 	float spec = pow(VDotR, 32);
 	vec4 specColor = pl.Color * (SpecI * spec);
 
-	return diffColor + specColor;
+	return diffColor;
 }
 
 void main()
 {
 	vec3 Position = texture(uPositionTexture, v_TexCoord).xyz;
-	vec3 Normal = texture(uNormalTexture, v_TexCoord).xyz;
+	vec3 Normal = normalize(texture(uNormalTexture, v_TexCoord).xyz);
 	vec4 Color = texture(uColorSpecularTexture, v_TexCoord);
 	float specI = Color.z;
 	Color = vec4(Color.xyz, 1.0f);
@@ -72,8 +72,8 @@ void main()
 	for(int i = 0; i < pointLightCount; i++)
 	{
 		PointLight pl = pointLights[i];
-		pointLightColor += CalculatePointLight(pl, Position, Normal, specI);
+		pointLightColor += CalculatePointLight(pl, Position, Normal, 0.0f);
 	}
 	
-	color = vec4(Color.xyz, 1.0f);
+	color = vec4(Color.xyz * (vec3(0.1f, 0.1f, 0.1f) + pointLightColor.xyz), 1.0f);
 }
