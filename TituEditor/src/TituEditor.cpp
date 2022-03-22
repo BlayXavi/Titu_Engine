@@ -505,12 +505,17 @@ namespace TituEngine
 		TE_PROFILE_PROFILE_FUNC();
 
 		currentTimeStep = ts;
-
+		
+		Renderer::BeginFrameGBuffer();
 		m_Scene->DeferredGBufferPass();
+
+		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
+			m_LastPixelIDHovered = Renderer::GetGFramebufferPixel(3, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
+
+		Renderer::EndFrameGBuffer();
+
 		Renderer::BeginFrame();
 		m_Scene->OnUpdate(ts);
-		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
-			m_LastPixelIDHovered = Renderer::GetMainFramebufferPixel(1, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 		Renderer::EndFrame();
 
 		if (m_ViewPortHovered && !m_UsingGuizmo)
@@ -588,7 +593,7 @@ namespace TituEngine
 		bool shortPress = pressedTimeDuration < 0.2f;
 		if ((!m_UsingGuizmo && !m_HoveringGuizmo) && m_ViewPortFocused && shortPress && e.GetMouseButton() == TE_MOUSE_BUTTON_1)
 		{
-			m_SceneHierarchyPanel.SetSelectedEntity(m_LastPixelIDHovered == 1 ? Entity() : Entity((entt::entity)m_LastPixelIDHovered, m_Scene));
+			m_SceneHierarchyPanel.SetSelectedEntity(m_LastPixelIDHovered == -1 ? Entity() : Entity((entt::entity)m_LastPixelIDHovered, m_Scene));
 		}
 
 		return false;

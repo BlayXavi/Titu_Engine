@@ -16,11 +16,13 @@ layout(std140, binding = 0) uniform Camera
 layout(std140, binding = 1) uniform ModelMatrix
 {
 	mat4 u_ModelMatrix;
+	int u_EntityID;
 };
 
 layout (location = 0) out vec2 v_TexCoord;
 layout (location = 1) out vec3 v_VWPos;
 layout (location = 2) out vec3 v_Normal;
+layout (location = 3) out flat int v_EntityID;
 
 void main()
 {
@@ -33,6 +35,7 @@ void main()
 	v_VWPos = vPos.xyz;
 
 	gl_Position = u_ModelViewProjectionMatrix * vPos;
+	v_EntityID = u_EntityID;
 }
 
 #type fragment
@@ -44,10 +47,12 @@ const int MAX_LIGHTS = 8;
 layout(location = 0) out vec4 positionColor;
 layout(location = 1) out vec4 normalsColor;
 layout(location = 2) out vec4 colorSpecularColor;
+layout(location = 3) out int entityIDColor;
 
 layout (location = 0) in vec2 v_TexCoord;
 layout (location = 1) in vec3 v_VWPos;
 layout (location = 2) in vec3 v_Normal;
+layout (location = 3) in flat int v_EntityID;
 
 layout (binding = 0) uniform sampler2D u_ColorTexture;
 layout (binding = 1) uniform sampler2D u_SpecularTexture;
@@ -60,4 +65,5 @@ void main()
 	positionColor =  vec4(v_VWPos, 1.0f);
 	normalsColor =  vec4(normalize(v_Normal.xyz), 1.0f);
 	colorSpecularColor =  vec4(texColor.xyz, 1.0f);
+	entityIDColor = v_EntityID;
 }

@@ -11,7 +11,7 @@ namespace TituEngine
 	uint32_t Renderer3D::s_PointLightCount = 0;
 	uint32_t Renderer3D::s_DirectionalLightCount = 0;
 
-	UniformBuffer* ModelMatrixBuffer;
+	UniformBuffer* ModelContextBuffer;
 
 	UniformBuffer* PointLightBuffer;
 
@@ -24,9 +24,8 @@ namespace TituEngine
 
 	void Renderer3D::Init()
 	{
-		ModelMatrixBuffer = UniformBuffer::Create(sizeof(glm::mat4) + 16, 1);
-
-		PointLightBuffer = UniformBuffer::Create(4 + ((POINT_LIGHTS_SIZE) * (16 + 16)), 2);
+		ModelContextBuffer = UniformBuffer::Create(/*EntityID*/ + sizeof(glm::mat4) /*ModelMatrix*/ + 4, 1);
+		PointLightBuffer = UniformBuffer::Create(4/*int->numOfLights*/ + ((POINT_LIGHTS_SIZE) * (16/*Position*/ + 16/*Color*/)), 2);
 	}
 
 	void Renderer3D::BeginScene()
@@ -34,19 +33,19 @@ namespace TituEngine
 
 	}
 
-	void Renderer3D::DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const uint32_t& entityID, const Shader* overrideShader)
+	void Renderer3D::DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const int32_t& entityID, const Shader* overrideShader)
 	{
-		UpdateModelMatrix(modelMatrix);
+		UploadModelContext(modelMatrix, entityID);
 		mesh->Render(modelMatrix, material, overrideShader);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const uint32_t& entityID, const Shader* overrideShader)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const int32_t& entityID, const Shader* overrideShader)
 	{
-		UpdateModelMatrix(modelMatrix);
+		UploadModelContext(modelMatrix, entityID);
 		model->Render(modelMatrix, materials, overrideShader);
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC, const uint32_t& entityID, const Shader* overrideShader)
+	void Renderer3D::DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC, const int32_t& entityID, const Shader* overrideShader)
 	{
 		if (modelRendererC.GetModel() != nullptr)
 			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials(), entityID, overrideShader);
@@ -62,9 +61,10 @@ namespace TituEngine
 		PointLightBuffer->SetData(&s_PointLightCount, 4, 32 * POINT_LIGHTS_SIZE);
 	}
 
-	void Renderer3D::UpdateModelMatrix(const glm::mat4& modelMatrix)
+	void Renderer3D::UploadModelContext(const glm::mat4& modelMatrix, const int32_t& entityID)
 	{
-		ModelMatrixBuffer->SetData(&modelMatrix, sizeof(glm::mat4));
+		ModelContextBuffer->SetData(&modelMatrix, sizeof(glm::mat4));
+		ModelContextBuffer->SetData(&entityID, 4, sizeof(glm::mat4));
 	}
 
 	void Renderer3D::UploadLight(const LightComponent& light, const TransformComponent& transform)

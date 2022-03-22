@@ -126,7 +126,7 @@ project "TituEngine"
 
 	filter "configurations:Debug"
 		defines "TE_ENABLE_ASSERTS"
-		defines "TE_ENABLE_PROFILER"
+		--defines "TE_ENABLE_PROFILER"
 		defines "TE_DEBUG"
 		runtime "Debug"
 		symbols "on"

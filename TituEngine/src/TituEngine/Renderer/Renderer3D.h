@@ -19,12 +19,12 @@ namespace TituEngine
 		static void BeginScene();
 		static void EndScene();
 
-		static void DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const uint32_t& entityID = -1, const Shader* overrideShader = nullptr);
-		static void DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const uint32_t& entityID = -1, const Shader* overrideShader = nullptr);
-		static void DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC, const uint32_t& entityID = -1, const Shader* overrideShader = nullptr);
+		static void DrawMesh(const glm::mat4& modelMatrix, const Mesh* mesh, const Material* material, const int32_t& entityID = -1, const Shader* overrideShader = nullptr);
+		static void DrawModel(const glm::mat4& modelMatrix, const Model* model, std::vector<Material*>& materials, const int32_t& entityID = -1, const Shader* overrideShader = nullptr);
+		static void DrawModel(const glm::mat4& modelMatrix, ModelRendererComponent& modelRendererC, const int32_t& entityID = -1, const Shader* overrideShader = nullptr);
 
 		static void UploadLightDataToGPU();
-		static void UpdateModelMatrix(const glm::mat4& modelMatrix);
+		static void UploadModelContext(const glm::mat4& modelMatrix, const int32_t& entityID = -1);
 		static void UploadLight(const LightComponent& light, const TransformComponent& transform);
 
 	private:

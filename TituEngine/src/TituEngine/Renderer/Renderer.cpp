@@ -67,7 +67,7 @@ namespace TituEngine
 		m_GBufferSpecs.Height = 720;
 		m_GBufferSpecs.Samples = 1;
 		m_GBufferSpecs.Attachments = 
-		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH };
+		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
 		m_GBuffer = Framebuffer::Create(m_GBufferSpecs);
 
 		m_CameraDataUnifformBuffer = UniformBuffer::Create(16 + 16 * 4, 0);
@@ -129,6 +129,7 @@ namespace TituEngine
 		m_GBuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
+		m_GBuffer->ClearAttachment(3, -1);
 	}
 
 	void Renderer::UploadCameraDataToGPU()
@@ -158,6 +159,7 @@ namespace TituEngine
 	void Renderer::ResizeMainFramebuffer(const uint32_t& width, const uint32_t& height)
 	{
 		m_MainFramebuffer->SetDirty(width, height);
+		m_GBuffer->SetDirty(width, height);
 	}
 
 	uint32_t Renderer::GetMainFramebufferColorAttachment(const uint32_t& index)
@@ -173,6 +175,11 @@ namespace TituEngine
 	uint32_t Renderer::GetMainFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y)
 	{
 		return m_MainFramebuffer->GetPixel(attachmentIndex, x, y);
+	}
+
+	uint32_t Renderer::GetGFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y)
+	{
+		return m_GBuffer->GetPixel(attachmentIndex, x, y);
 	}
 
 	uint32_t Renderer::GetGBufferDepthAttachment()

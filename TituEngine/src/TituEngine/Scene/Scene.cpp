@@ -107,7 +107,6 @@ namespace TituEngine
 
 	void Scene::DeferredGBufferPass()
 	{
-		Renderer::BeginFrameGBuffer();
 
 		Renderer::UploadCameraDataToGPU();
 
@@ -116,10 +115,8 @@ namespace TituEngine
 		{
 			auto& [transform, modelRenderer] = group.get<TransformComponent, ModelRendererComponent>(entity);
 
-			Renderer3D::DrawModel(transform, modelRenderer, -1, ShaderUtilities::s_GBufferShader);
+			Renderer3D::DrawModel(transform, modelRenderer, (int32_t)entity, ShaderUtilities::s_GBufferShader);
 		}
-
-		Renderer::EndFrameGBuffer();
 	}
 
 	void Scene::DeferredShadingPass()

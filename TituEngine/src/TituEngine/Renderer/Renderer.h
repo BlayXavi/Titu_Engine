@@ -62,6 +62,7 @@ namespace TituEngine
 		static uint32_t GetMainFramebufferColorAttachment(const uint32_t& index);
 		static uint32_t GetMainFramebufferDepthAttachment();
 		static uint32_t GetMainFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y);
+		static uint32_t GetGFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y);
 		static uint32_t GetGBufferDepthAttachment();
 		static Framebuffer* GetMainFramebuffer();
 		static Framebuffer* GetGBuffer();
