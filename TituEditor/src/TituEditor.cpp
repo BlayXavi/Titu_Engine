@@ -372,13 +372,14 @@ namespace TituEngine
 				if (m_ViewPortPanelSize.x != m_ContentRegionAvail.x || m_ViewPortPanelSize.y != m_ContentRegionAvail.y)
 				{
 					m_ViewPortPanelSize = { m_ContentRegionAvail.x, m_ContentRegionAvail.y };
-					Renderer::ResizeMainFramebuffer((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					Renderer::ResizeFramebuffer(Renderer::FramebufferType::ColorFramebuffer, (uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
+					Renderer::ResizeFramebuffer(Renderer::FramebufferType::GBuffer, (uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 
 					m_EditorCamera->SetViewportSize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 					m_Scene->OnViewportResize((uint32_t)m_ViewPortPanelSize.x, (uint32_t)m_ViewPortPanelSize.y);
 				}
 
-				uint64_t textureID = (uint64_t)Renderer::GetMainFramebufferColorAttachment(0);
+				uint64_t textureID = (uint64_t)Renderer::GetFramebufferColorAttachment(Renderer::FramebufferType::ColorFramebuffer, 0);
 				ImGui::Image((void*)textureID, { m_ViewPortPanelSize.x,  m_ViewPortPanelSize.y }, { 0, 1 }, { 1, 0 });
 				if (ImGui::BeginDragDropTarget())
 				{
@@ -483,7 +484,7 @@ namespace TituEngine
 			{
 				ImGui::Begin("GBuffer", &show_GBufferData);
 
-				std::vector<uint32_t> textures = Renderer::GetGBuffer()->GetAttachments();
+				std::vector<uint32_t> textures = Renderer::GetFramebuffer(Renderer::FramebufferType::GBuffer)->GetAttachments();
 				for (size_t i = 0; i < textures.size(); i++)
 				{
 					uint64_t TexID = (uint64_t)textures[i];
@@ -506,16 +507,21 @@ namespace TituEngine
 
 		currentTimeStep = ts;
 		
-		Renderer::BeginFrameGBuffer();
+		Renderer::BeginFrame();
+
+		Renderer::PrepareGBuffer();
+
 		m_Scene->DeferredGBufferPass();
 
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
-			m_LastPixelIDHovered = Renderer::GetGFramebufferPixel(3, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
+			m_LastPixelIDHovered = Renderer::GetFramebufferPixel(Renderer::FramebufferType::GBuffer, 3, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
 
-		Renderer::EndFrameGBuffer();
+		Renderer::UnbindGBuffer();
 
-		Renderer::BeginFrame();
+		Renderer::PrepareColorBuffer();
 		m_Scene->OnUpdate(ts);
+		Renderer::UnbindColorBuffer();
+
 		Renderer::EndFrame();
 
 		if (m_ViewPortHovered && !m_UsingGuizmo)

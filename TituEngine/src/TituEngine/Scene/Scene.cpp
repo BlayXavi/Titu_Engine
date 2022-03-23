@@ -107,7 +107,6 @@ namespace TituEngine
 
 	void Scene::DeferredGBufferPass()
 	{
-
 		Renderer::UploadCameraDataToGPU();
 
 		auto group = m_Registry.view<TransformComponent, ModelRendererComponent>();
@@ -121,7 +120,7 @@ namespace TituEngine
 
 	void Scene::DeferredShadingPass()
 	{
-		Framebuffer* fb = Renderer::GetGBuffer();
+		Framebuffer* fb = Renderer::GetFramebuffer(Renderer::FramebufferType::GBuffer);
 		fb->BindColorAttachments();
 
 		Renderer::GetQuad()->Render(ShaderUtilities::s_GBufferShadingPass);

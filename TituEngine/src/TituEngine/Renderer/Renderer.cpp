@@ -35,8 +35,7 @@ namespace TituEngine
 	}
 
 	//---------------------------------  RENDERER  ---------------------------------
-	Framebuffer* Renderer::m_MainFramebuffer = nullptr;
-	Framebuffer* Renderer::m_GBuffer = nullptr;
+	std::unordered_map<Renderer::FramebufferType, Framebuffer*> Renderer::s_FramebufferMap;
 
 	FramebufferSpecs Renderer::m_MainFramebufferSpecs = FramebufferSpecs();
 	FramebufferSpecs Renderer::m_GBufferSpecs = FramebufferSpecs();
@@ -61,14 +60,16 @@ namespace TituEngine
 		m_MainFramebufferSpecs.Height = 720;
 		m_MainFramebufferSpecs.Samples = 1;
 		m_MainFramebufferSpecs.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
-		m_MainFramebuffer = Framebuffer::Create(m_MainFramebufferSpecs);
+		Framebuffer* m_MainFramebuffer = Framebuffer::Create(m_MainFramebufferSpecs);
+		s_FramebufferMap[FramebufferType::ColorFramebuffer] = m_MainFramebuffer;
 
 		m_GBufferSpecs.Width = 1280;
 		m_GBufferSpecs.Height = 720;
 		m_GBufferSpecs.Samples = 1;
 		m_GBufferSpecs.Attachments = 
 		{ FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA16, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER_32, FramebufferTextureFormat::DEPTH };
-		m_GBuffer = Framebuffer::Create(m_GBufferSpecs);
+		Framebuffer* m_GBuffer = Framebuffer::Create(m_GBufferSpecs);
+		s_FramebufferMap[FramebufferType::GBuffer] = m_GBuffer;
 
 		m_CameraDataUnifformBuffer = UniformBuffer::Create(16 + 16 * 4, 0);
 
@@ -105,6 +106,43 @@ namespace TituEngine
 		RenderCommand::Shutdown();
 		Renderer2D::Shutdown();
 		Renderer3D::Shutdown();
+
+		for(auto& fb : s_FramebufferMap)
+		{
+			delete fb.second;
+			fb.second = nullptr;
+		}
+
+	}
+
+	void Renderer::PrepareColorBuffer()
+	{
+		Framebuffer* ColorBuffer = Renderer::GetFramebuffer(Renderer::FramebufferType::ColorFramebuffer);
+		ColorBuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
+		ColorBuffer->ClearAttachment(1, -1);
+	}
+
+	void Renderer::UnbindColorBuffer()
+	{
+		Framebuffer* ColorBuffer = Renderer::GetFramebuffer(Renderer::FramebufferType::ColorFramebuffer);
+		ColorBuffer->UnBind();
+	}
+
+	void Renderer::PrepareGBuffer()
+	{
+		Framebuffer* GBuffer = Renderer::GetFramebuffer(Renderer::FramebufferType::GBuffer);
+		GBuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
+		GBuffer->ClearAttachment(3, -1);
+	}
+
+	void Renderer::UnbindGBuffer()
+	{
+		Framebuffer* GBuffer = Renderer::GetFramebuffer(Renderer::FramebufferType::GBuffer);
+		GBuffer->UnBind();
 	}
 
 	void Renderer::OnWindowResized(uint32_t width, uint32_t height)
@@ -114,22 +152,8 @@ namespace TituEngine
 
 	void Renderer::BeginFrame()
 	{
-		m_MainFramebuffer->ProcessDirty();
-
-		m_MainFramebuffer->Bind();
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		RenderCommand::Clear();
-		m_MainFramebuffer->ClearAttachment(1, -1);
-	}
-
-	void Renderer::BeginFrameGBuffer()
-	{
-		m_GBuffer->ProcessDirty();
-
-		m_GBuffer->Bind();
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		RenderCommand::Clear();
-		m_GBuffer->ClearAttachment(3, -1);
+		for (auto& fb : s_FramebufferMap)
+			fb.second->ProcessDirty();
 	}
 
 	void Renderer::UploadCameraDataToGPU()
@@ -143,12 +167,6 @@ namespace TituEngine
 
 	void Renderer::EndFrame()
 	{
-		m_MainFramebuffer->UnBind();
-	}
-
-	void Renderer::EndFrameGBuffer()
-	{
-		m_GBuffer->UnBind();
 	}
 
 	FramebufferSpecs Renderer::GetMainFramebufferSpecs()
@@ -156,45 +174,24 @@ namespace TituEngine
 		return m_MainFramebufferSpecs;
 	}
 
-	void Renderer::ResizeMainFramebuffer(const uint32_t& width, const uint32_t& height)
+	void Renderer::ResizeFramebuffer(const FramebufferType& fbType, const uint32_t& width, const uint32_t& height)
 	{
-		m_MainFramebuffer->SetDirty(width, height);
-		m_GBuffer->SetDirty(width, height);
+		s_FramebufferMap[fbType]->SetDirty(width, height);
 	}
 
-	uint32_t Renderer::GetMainFramebufferColorAttachment(const uint32_t& index)
+	uint32_t Renderer::GetFramebufferColorAttachment(const FramebufferType& fbType, const uint32_t& index)
 	{
-		return m_MainFramebuffer->GetColorAttachment(index);
+		return s_FramebufferMap[fbType]->GetColorAttachment(index);
 	}
 
-	uint32_t Renderer::GetMainFramebufferDepthAttachment()
+	uint32_t Renderer::GetFramebufferDepthAttachment(const FramebufferType& fbType)
 	{
-		return m_MainFramebuffer->GetDepthAttachment();
+		return s_FramebufferMap[fbType]->GetDepthAttachment();
 	}
 
-	uint32_t Renderer::GetMainFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y)
+	uint32_t Renderer::GetFramebufferPixel(const FramebufferType& fbType, uint32_t attachmentIndex, uint32_t x, uint32_t y)
 	{
-		return m_MainFramebuffer->GetPixel(attachmentIndex, x, y);
-	}
-
-	uint32_t Renderer::GetGFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y)
-	{
-		return m_GBuffer->GetPixel(attachmentIndex, x, y);
-	}
-
-	uint32_t Renderer::GetGBufferDepthAttachment()
-	{
-		return m_GBuffer->GetDepthAttachment();
-	}
-
-	Framebuffer* Renderer::GetMainFramebuffer()
-	{
-		return m_MainFramebuffer;
-	}
-
-	Framebuffer* Renderer::GetGBuffer()
-	{
-		return m_GBuffer;
+		return s_FramebufferMap[fbType]->GetPixel(attachmentIndex, x, y);
 	}
 
 	Mesh* Renderer::GetQuad()

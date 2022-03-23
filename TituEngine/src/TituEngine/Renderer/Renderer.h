@@ -1,6 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <unordered_map>
+
 #include "VertexArray.h"
 #include "TituEngine/Core/Core.h"
 
@@ -45,33 +47,42 @@ namespace TituEngine
 	{
 	public:
 
+		enum class FramebufferType
+		{
+			ColorFramebuffer = 0,
+			GBuffer = 1,
+		};
+
+		static std::unordered_map<FramebufferType, Framebuffer*> s_FramebufferMap;
+
 		static void Init();
 		static void Shutdown();
 		static void OnWindowResized(uint32_t width, uint32_t height);
 
 		static void BeginFrame();
-		static void BeginFrameGBuffer();
 		static void UploadCameraDataToGPU();
 		static void EndFrame();
-		static void EndFrameGBuffer();
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPIID(); }
 
 		static FramebufferSpecs GetMainFramebufferSpecs();
-		static void ResizeMainFramebuffer(const uint32_t& width, const uint32_t& height);
-		static uint32_t GetMainFramebufferColorAttachment(const uint32_t& index);
-		static uint32_t GetMainFramebufferDepthAttachment();
-		static uint32_t GetMainFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y);
-		static uint32_t GetGFramebufferPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y);
-		static uint32_t GetGBufferDepthAttachment();
-		static Framebuffer* GetMainFramebuffer();
-		static Framebuffer* GetGBuffer();
-		 
+
+		static void ResizeFramebuffer(const FramebufferType& fbType, const uint32_t& width, const uint32_t& height);
+
+		static uint32_t GetFramebufferColorAttachment(const FramebufferType& fbType, const uint32_t& index);
+		static uint32_t GetFramebufferDepthAttachment(const FramebufferType& fbType);
+		static uint32_t GetFramebufferPixel(const FramebufferType& fbType, uint32_t attachmentIndex, uint32_t x, uint32_t y);
+		
+		static void PrepareColorBuffer();
+		static void UnbindColorBuffer();
+		static void PrepareGBuffer();
+		static void UnbindGBuffer();
+
+		static Framebuffer* GetFramebuffer(const Renderer:: FramebufferType& fbType) { return s_FramebufferMap[fbType]; }
+
 		static Mesh* GetQuad();
 
 	private:
-		static Framebuffer* m_MainFramebuffer;
-		static Framebuffer* m_GBuffer;
 		static FramebufferSpecs m_MainFramebufferSpecs;
 		static FramebufferSpecs m_GBufferSpecs;
 
