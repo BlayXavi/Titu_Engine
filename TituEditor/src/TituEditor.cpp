@@ -69,7 +69,7 @@ namespace TituEngine
 		FramebufferSpecs fbSpecs = Renderer::GetMainFramebufferSpecs();
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_EditorCamera->LookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f));
-		m_EditorCamera->SetNearPlane(0.001f);
+		m_EditorCamera->SetNearPlane(1.0f);
 		m_EditorCamera->SetFarPlane(1000.0f);
 		m_EditorCamera->SetViewportSize(fbSpecs.Width, fbSpecs.Height);
 		m_EditorCamera->SetAsActiveCamera();
