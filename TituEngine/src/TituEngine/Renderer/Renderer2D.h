@@ -40,26 +40,6 @@ namespace TituEngine
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID = -1);
 		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& size, const SpriteRendererComponent& spriteRendererC, const uint32_t& entityID = -1);
 
-		struct RenderStats
-		{
-		public:
-			static int inline GetDrawCalls() { return DrawCalls; }
-			static int inline GetQuads() { return Quads; }
-			static int inline GetVertices() { return Quads * VERTEX_PER_QUAD; }
-			static void IncreaseDrawCalls() { DrawCalls++; }
-			static void IncreaseQuads() { Quads++; }
-
-			static void Reset()
-			{
-				DrawCalls = 0;
-				Quads = 0;
-			}
-
-		private:
-			static int DrawCalls;
-			static int Quads;
-		};
-
 	private:
 		static void AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, SubTexture2D* const tex, const glm::vec2& tiling, const int32_t& entityID = 0);
 		static void AddVertices(const glm::mat4 transform, const glm::vec4& color, SubTexture2D* const tex, const glm::vec2& tiling, const int32_t& entityID = 0);

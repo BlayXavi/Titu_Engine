@@ -81,7 +81,6 @@ namespace TituEngine
 		{
 			TE_PROFILE_PROFILE_SCOPE("Render3D::BeginDraw");
 
-
 			auto groupL = m_Registry.view<TransformComponent, LightComponent>();
 			for (auto entity : groupL)
 			{
@@ -90,18 +89,9 @@ namespace TituEngine
 			}
 
 			Renderer3D::UploadLightDataToGPU();
-
 			DeferredShadingPass();
-
-			////Render
-			//auto group = m_Registry.view<TransformComponent, ModelRendererComponent>();
-			//for (auto entity : group)
-			//{
-			//	auto& [transform, modelRenderer] = group.get<TransformComponent, ModelRendererComponent>(entity);
-
-			//	Renderer3D::DrawModel(transform, modelRenderer);
-			//}
 		}
+
 		Renderer3D::EndScene();
 	}
 

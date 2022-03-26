@@ -19,6 +19,9 @@
 namespace TituEngine
 {
 
+	uint32_t RenderStats::s_DrawCalls = 0;
+	uint32_t RenderStats::s_Vertices = 0;
+
 	//---------------------------------RENDERER API---------------------------------
 	RendererAPI::API RendererAPI::s_RendererAPIID = API::OpenGL;
 	
@@ -152,6 +155,8 @@ namespace TituEngine
 
 	void Renderer::BeginFrame()
 	{
+		RenderStats::Reset();
+
 		for (auto& fb : s_FramebufferMap)
 			fb.second->ProcessDirty();
 	}
@@ -201,6 +206,5 @@ namespace TituEngine
 
 	//-----------------------------------RENDER COMMAND------------------
 	RendererAPI* RenderCommand::s_RendererAPI = RendererAPI::Create();
-
 	
 }

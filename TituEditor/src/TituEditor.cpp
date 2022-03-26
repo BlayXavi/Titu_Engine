@@ -299,9 +299,8 @@ namespace TituEngine
 						sprintf_s(overlay, "MS Avg: %f", m_AverageMS);
 						ImGui::PlotHistogram("ms", debugMS, FPS_DEBUG_COUNT, 0, overlay, 0.0f, m_AverageMS * 1.5f, ImVec2(0, 80.0f));
 
-						ImGui::Text("Batches [%d]", Renderer2D::RenderStats::GetDrawCalls());
-						ImGui::Text("Quads [%d]", Renderer2D::RenderStats::GetQuads());
-						ImGui::Text("Vertices [%d]", Renderer2D::RenderStats::GetVertices());
+						ImGui::Text("DrawCalls [%d]", RenderStats::GetDrawCalls());
+						ImGui::Text("Vertices [%d]", RenderStats::GetVertices());
 					}
 
 					ImGui::End(); //Render Stats

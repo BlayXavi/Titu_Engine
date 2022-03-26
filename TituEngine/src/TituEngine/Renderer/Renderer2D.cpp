@@ -48,9 +48,6 @@ namespace TituEngine
 
 	static Renderer2DData s_Data;
 
-	int Renderer2D::RenderStats::DrawCalls = 0;
-	int Renderer2D::RenderStats::Quads = 0;
-
 	void Renderer2D::Init()
 	{
 		TE_PROFILE_PROFILE_FUNC();
@@ -122,7 +119,6 @@ namespace TituEngine
 	{
 		TE_PROFILE_PROFILE_FUNC();
 
-		RenderStats::Reset();
 		ResetBatchingData();
 	}
 
@@ -147,7 +143,6 @@ namespace TituEngine
 
 			s_Data.BatchRenderingShader->Bind();
 			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.FrameQuadCount * INDICES_PER_QUAD);
-			RenderStats::IncreaseDrawCalls();
 			ResetBatchingData();
 		}
 	}
@@ -195,7 +190,6 @@ namespace TituEngine
 		}
 
 		s_Data.FrameQuadCount++;
-		RenderStats::IncreaseQuads();
 	}
 
 	void Renderer2D::AddVertices(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color, SubTexture2D* tex, const glm::vec2& tiling, const int32_t& entityID)

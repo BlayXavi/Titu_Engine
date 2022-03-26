@@ -17,6 +17,28 @@ namespace TituEngine
 	struct FramebufferSpecs;
 	class UniformBuffer;
 
+	struct RenderStats
+	{
+	public:
+		static uint32_t inline GetDrawCalls() { return s_DrawCalls; }
+		static uint32_t inline GetVertices() { return s_Vertices; }
+		static void NotifyDrawCall(const uint32_t& vertices)
+		{
+			s_DrawCalls++;
+			s_Vertices += vertices;
+		}
+
+		static void Reset()
+		{
+			s_DrawCalls = 0; 
+			s_Vertices = 0;
+		}
+
+	private:
+		static uint32_t s_DrawCalls;
+		static uint32_t s_Vertices;
+	};
+
 	class RendererAPI
 	{
 	public:
