@@ -8,7 +8,7 @@ namespace TituEngine
 {
 
 #define DIRECTIONAL_LIGHTS_SIZE 4
-#define POINT_LIGHTS_SIZE 8
+#define POINT_LIGHTS_SIZE 64
 
 	enum class LightType
 	{

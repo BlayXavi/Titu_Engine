@@ -57,11 +57,16 @@ namespace TituEngine
 		}
 	};
 
+	void ModifyPointer(uint8_t* pointer, void* context)
+	{
+		int** pointerInt = reinterpret_cast<int**>(pointer);
+		*pointerInt = static_cast<int*>(context);
+		std::cout << "Inside Func: " << **pointerInt << std::endl;
+	}
 
 	TituEditorLayer::TituEditorLayer()
 		: Layer("TituEditor Layer"), m_SelectedTransformManipulation(TRANSFORM_MANIPULATION_OPERATION::TRANSLATE)
 	{
-
 		m_EditorCamera = new TransformedCamera();
 		m_EditorCamera->SetProjectionType(Camera::Projection::PERSPECTIVE);
 		m_EditorCamera->SetFOV(90.0f);
@@ -506,22 +511,14 @@ namespace TituEngine
 
 		currentTimeStep = ts;
 		
-		Renderer::BeginFrame();
-
-		Renderer::PrepareGBuffer();
-
-		m_Scene->DeferredGBufferPass();
-
+		m_Scene->OnUpdate(currentTimeStep);
+		m_Scene->RenderScene();
+		
+		Framebuffer* GBuffer = Renderer::GetFramebuffer(Renderer::FramebufferType::GBuffer);
+		GBuffer->Bind();
 		if (m_MouseViewportPosYInverted.x >= 0 && m_MouseViewportPosYInverted.y >= 0 && m_MouseViewportPosYInverted.x < (int)m_ContentRegionAvail.x && m_MouseViewportPosYInverted.y < (int)m_ContentRegionAvail.y)
 			m_LastPixelIDHovered = Renderer::GetFramebufferPixel(Renderer::FramebufferType::GBuffer, 3, m_MouseViewportPosYInverted.x, m_MouseViewportPosYInverted.y);
-
-		Renderer::UnbindGBuffer();
-
-		Renderer::PrepareColorBuffer();
-		m_Scene->OnUpdate(ts);
-		Renderer::UnbindColorBuffer();
-
-		Renderer::EndFrame();
+		GBuffer->UnBind();
 
 		if (m_ViewPortHovered && !m_UsingGuizmo)
 			m_CameraController->OnUpdate(ts, m_ViewPortFocused);

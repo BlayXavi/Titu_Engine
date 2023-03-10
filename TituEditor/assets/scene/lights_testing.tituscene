@@ -1,0 +1,121 @@
+Scene: Scene Name
+Entities:
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-51.1371498, 2.83108425, -27.9531269]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [1, 0.607594907, 0, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-2.65743208, 1.38637888, 20.970129]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [1, 0, 0.962025642, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-21.6394806, 1.38637888, 28.9853725]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [0, 0.810126543, 1, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [19.1236515, 1.38637733, 15.9013596]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [0.999989986, 0.999993026, 1, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-42.4789314, 0.889431953, 19.2117558]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [0.0773806572, 1, 0, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [0, 2.83108497, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [1, 0.988095224, 0, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Backpack
+    TransformComponent:
+      Translation: [-42.8401222, 6.53704119, -30.4920158]
+      Rotation: [0, 0.618070364, 0]
+      Scale: [2.99999905, 3, 2.99999905]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\backpack\backpack.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_NBT.glsl
+          Textures:
+            - assets\textures2D\backpack\diffuse.jpg
+            - assets\textures2D\backpack\specular.jpg
+            - assets\textures2D\backpack\normal.png
+  - Entity: 123
+    TagComponent:
+      Tag: Plane
+    TransformComponent:
+      Translation: [-1.70413685, 0, 1.65444231]
+      Rotation: [0, 0, 0]
+      Scale: [58.7831841, 1, 41.4733772]
+    ModelRendererComponent:
+      AssetPath: assets\meshes\primitives\plane.obj
+      Materials:
+        - ShaderPath: assets\shaders\testing\SimpleMeshRender_Phong_ColorSpecular_Normal.glsl
+          Textures:
+            - ""
+            - ""
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-21.3075199, 2.83108473, -19.9455452]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [0, 0.178575039, 1, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [31.0510406, 2.83108425, -19.2154884]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [1, 0, 0, 1]
+      Type: 1
+  - Entity: 123
+    TagComponent:
+      Tag: Empty_Entity
+    TransformComponent:
+      Translation: [-27.1453438, 2.83108449, 1.24700928]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Color: [0.0773806572, 1, 0, 1]
+      Type: 1

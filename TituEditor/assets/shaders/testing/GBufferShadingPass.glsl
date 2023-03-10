@@ -16,7 +16,7 @@ void main()
 //--------------------------------FRAGMENT---------------------
 #version 450 core
 
-const int MAX_LIGHTS = 8;
+const int MAX_LIGHTS = 64;
 
 layout(location = 0) out vec4 color;
 

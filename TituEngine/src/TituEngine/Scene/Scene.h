@@ -20,13 +20,16 @@ namespace TituEngine
 		void DestroyEntity(Entity entity);
 
 		void OnUpdate(Timestep ts);
-
-		void DeferredGBufferPass();
-		void DeferredShadingPass();
+		void RenderScene();
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		entt::registry m_Registry;
+	private:
+		void DeferredGBufferPass();
+		void DeferredShadingPass();
+		void ForwardRenderingPass();
+
 	private:
 
 		friend class Entity;

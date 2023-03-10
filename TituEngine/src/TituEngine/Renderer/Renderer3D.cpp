@@ -51,6 +51,19 @@ namespace TituEngine
 			DrawModel(modelMatrix, modelRendererC.GetModel(), modelRendererC.GetMaterials(), entityID, overrideShader);
 	}
 
+	void Renderer3D::DrawPrimitive(Primitive primitive, const glm::mat4& modelMatrix, std::vector<Material*>& materials, const int32_t& entityID, const Shader* overrideShader)
+	{
+		Model* model = nullptr;
+		if (primitive == Primitive::Cube)
+			model = Renderer3DUtilities::s_CubePrimitive;
+		else if (primitive == Primitive::Plane)
+			model = Renderer3DUtilities::s_PlanePrimitive;
+		else if (primitive == Primitive::Sphere)
+			model = Renderer3DUtilities::s_SpherePrimitive;
+
+		DrawModel(modelMatrix, model, materials, entityID, overrideShader);
+	}
+
 	void Renderer3D::UploadLightDataToGPU()
 	{
 		for (uint32_t i = 0; i < s_PointLightCount; i++) 
@@ -101,5 +114,24 @@ namespace TituEngine
 	{
 		s_PointLightCount = 0;
 		s_DirectionalLightCount = 0;
+	}
+	//--------------------Renderer3DUtilities--------------------
+
+	Model* Renderer3DUtilities::s_SpherePrimitive = nullptr;
+	Model* Renderer3DUtilities::s_CubePrimitive = nullptr;
+	Model* Renderer3DUtilities::s_PlanePrimitive = nullptr;
+
+	void Renderer3DUtilities::Init()
+	{
+		s_SpherePrimitive = Model::Create("assets\\meshes\\primitives\\sphere.obj");
+		s_CubePrimitive = Model::Create("assets\\meshes\\primitives\\cube.obj");
+		s_PlanePrimitive = Model::Create("assets\\meshes\\primitives\\plane.obj");
+	}
+
+	void Renderer3DUtilities::Shutdown()
+	{
+		delete s_SpherePrimitive;
+		delete s_CubePrimitive;
+		delete s_PlanePrimitive;
 	}
 }

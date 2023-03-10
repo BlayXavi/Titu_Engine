@@ -18,6 +18,7 @@
 
 namespace TituEngine
 {
+	//---------------------------------RenderStats API---------------------------------
 
 	uint32_t RenderStats::s_DrawCalls = 0;
 	uint32_t RenderStats::s_Vertices = 0;
@@ -156,6 +157,8 @@ namespace TituEngine
 	void Renderer::BeginFrame()
 	{
 		RenderStats::Reset();
+
+		Renderer::UploadCameraDataToGPU();
 
 		for (auto& fb : s_FramebufferMap)
 			fb.second->ProcessDirty();

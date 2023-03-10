@@ -61,12 +61,20 @@ namespace TituEngine
 			{
 				nsc.Instance->OnUpdate(ts);
 			});
+	}
 
-		Renderer::UploadCameraDataToGPU();
+	void Scene::RenderScene()
+	{
 
-		Renderer2D::BeginScene();
+		Renderer::BeginFrame();
+
+		DeferredGBufferPass();
+
+		Renderer::PrepareColorBuffer();
+
 		{
-			TE_PROFILE_PROFILE_SCOPE("Render2D::BeginDraw");
+			TE_PROFILE_PROFILE_SCOPE("Render2D::Draw");
+			Renderer2D::BeginScene();
 			auto group = m_Registry.view<TransformComponent, SpriteRendererComponent>();
 			for (auto entity : group)
 			{
@@ -74,12 +82,12 @@ namespace TituEngine
 
 				Renderer2D::DrawQuad(transform, sprite, (int32_t)entity);
 			}
+			Renderer2D::EndScene();
 		}
-		Renderer2D::EndScene();
 
-		Renderer3D::BeginScene();
 		{
-			TE_PROFILE_PROFILE_SCOPE("Render3D::BeginDraw");
+			TE_PROFILE_PROFILE_SCOPE("Render3D::Draw");
+			Renderer3D::BeginScene();
 
 			auto groupL = m_Registry.view<TransformComponent, LightComponent>();
 			for (auto entity : groupL)
@@ -89,15 +97,22 @@ namespace TituEngine
 			}
 
 			Renderer3D::UploadLightDataToGPU();
+
 			DeferredShadingPass();
+			ForwardRenderingPass();
+			Renderer3D::EndScene();
 		}
 
-		Renderer3D::EndScene();
+
+		Renderer::UnbindColorBuffer();
+
+		Renderer::EndFrame();
+
 	}
 
 	void Scene::DeferredGBufferPass()
 	{
-		Renderer::UploadCameraDataToGPU();
+		Renderer::PrepareGBuffer();
 
 		auto group = m_Registry.view<TransformComponent, ModelRendererComponent>();
 		for (auto entity : group)
@@ -106,6 +121,8 @@ namespace TituEngine
 
 			Renderer3D::DrawModel(transform, modelRenderer, (int32_t)entity, ShaderUtilities::s_GBufferShader);
 		}
+
+		Renderer::UnbindGBuffer();
 	}
 
 	void Scene::DeferredShadingPass()
@@ -114,6 +131,15 @@ namespace TituEngine
 		fb->BindColorAttachments();
 
 		Renderer::GetQuad()->Render(ShaderUtilities::s_GBufferShadingPass);
+	}
+
+	void Scene::ForwardRenderingPass()
+	{
+		auto groupL = m_Registry.view<TransformComponent, LightComponent>();
+		for (auto entity : groupL)
+		{
+			auto& [transform, light] = groupL.get<TransformComponent, LightComponent>(entity);
+		}
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
